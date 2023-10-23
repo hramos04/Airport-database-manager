@@ -1,4 +1,4 @@
-CFLAGS=-Wall -Iincludes
+CFLAGS=-Wall -Iinclude
 
 #exemplo
 programa-principal: src/programa-principal.o
