@@ -5,7 +5,7 @@
 
 
 
-int Hash( char *id) {
+int HashUser( char *id) {
     int hash = 0;
     while (*id) {
         hash += *id;
@@ -15,14 +15,14 @@ int Hash( char *id) {
 }
 
 // Função para inicializar a tabela hash
-void InitializeTable(hash_user h) {
+void InitializeTableUser(HashTableUser h) {
     int i;
     for (i = 0; i < HASHSIZE; ++i)
         h[i] = NULL;
 }
 
-User *RetrieveUser(hash_user h, char *id) {
-	int i = Hash(id);
+User *RetrieveUser(HashTableUser h, char *id) {
+	 int i = HashUser(id);
 	 User *res;
 	for(res = h[i]; res; res = res->next) {
 		if(strcmp(res->id, id) == 0) {
@@ -31,7 +31,7 @@ User *RetrieveUser(hash_user h, char *id) {
 	}
 	return NULL;
 }
-
+/*
 void InsertReserva(hash_user h, char *id, char *reserva_id, char *hotel_id, char *hotel_name, char *hotel_stars, char *city_tax, char *hotel_address, char *begin_date, char *end_date, char *price_per_night, char *includes_breakfast, char *room_details, char *rating, char *comment) {
     // Encontrar o usuário na tabela hash
     User *user = RetrieveUser(h, id);
@@ -61,13 +61,13 @@ void InsertReserva(hash_user h, char *id, char *reserva_id, char *hotel_id, char
     nova_reserva->next = user->reservas;
     user->reservas = nova_reserva;
 }
-
+*/
 // Função para inserir na tabela hash usando encadeamento separado em caso de colisão
-void InsertTable(hash_user h, char *id, char *nome, char *email, char *phone_number, char *birth_date, char *sex, char *passport, char *country_code, char *address, char *account_creation, char *pay_method, char *account_status) {
+void InsertTableUser(HashTableUser h, char *id, char *nome, char *email, char *phone_number, char *birth_date, char *sex, char *passport, char *country_code, char *address, char *account_creation, char *pay_method, char *account_status) {
     
     
     
-    int i = Hash(id);
+    int i = HashUser(id);
 
     // Criar novo usuário
     User *novo_usuario = (User *)malloc(sizeof(User));
@@ -97,7 +97,7 @@ void InsertTable(hash_user h, char *id, char *nome, char *email, char *phone_num
     }
 }
 
-
+/*
 void InsertPassenger(hash_user h, char *id, char *voo_id) {
     // Encontrar o usuário na tabela hash
     User *user = RetrieveUser(h, id);
@@ -118,6 +118,7 @@ void InsertPassenger(hash_user h, char *id, char *voo_id) {
     user->voos = nova_voo;
 }
 
+
 void InsertScheduleDepartureDateByVooId(hash_user h, char *voo_id, char *schedule_departure_date) {
     for (int i = 0; i < HASHSIZE; ++i) {
         User *user = h[i];
@@ -137,17 +138,17 @@ void InsertScheduleDepartureDateByVooId(hash_user h, char *voo_id, char *schedul
     // Se o voo não foi encontrado, apenas imprima uma mensagem (ou pode optar por não imprimir nada)
     printf("Voo com ID %s não encontrado. Ignorando.\n", voo_id);
 }
+*/
 
-
-void Printhash_user(hash_user h) {
+void PrintHashUser(HashTableUser h) {
     for (int i = 0; i < HASHSIZE; ++i) {
         User *aux = h[i];
         while (aux) {
             printf("ID: %s, Nome: %s, Email: %s, Phone: %s, Birth Date: %s, Sex: %s, Passport: %s, Country Code: %s, Address: %s, Account Creation: %s, Pay Method: %s, Account Status: %s\n",
-                aux->id, aux->nome, aux->email, aux->phone_number,
-                aux->birth_date, aux->sex, aux->passport, aux->country_code,
-                aux->address, aux->account_creation, aux->pay_method, aux->account_status);
-
+                   aux->id, aux->nome, aux->email, aux->phone_number,
+                   aux->birth_date, aux->sex, aux->passport, aux->country_code,
+                   aux->address, aux->account_creation, aux->pay_method, aux->account_status);
+/*
             // Adicionar código para imprimir os elementos da lista ligada de reservas
             Reserva *reserva_aux = aux->reservas;
             while (reserva_aux) {
@@ -166,7 +167,7 @@ void Printhash_user(hash_user h) {
                 // Avançar para o próximo nó na lista ligada de voos
                 voo_aux = voo_aux->next;
             }
-
+*/
             aux = aux->next;
         }
     }

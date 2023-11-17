@@ -6,13 +6,13 @@
 
 int main(int argc, char *argv[]) {
 	
-    hash_user minhaTabela;
-    InitializeTable(minhaTabela);
+    HashTableUser minhaTabela;
+    InitializeTableUser(minhaTabela);
     
      // Leitura e parsing do ficheiro "users.csv"
 	char *csv_users = (char*)malloc(256);
 	strcpy(csv_users, argv[1]);
-	strcat(csv_users, "/users.csv");
+	strcat(csv_users, "/teste.csv");
 	
 	char *csv_reservas = (char*)malloc(256);
 	strcpy(csv_reservas, argv[1]);
@@ -23,12 +23,12 @@ int main(int argc, char *argv[]) {
 	strcat(csv_passageiros, "/passengers.csv");
 
     process_csv_file(csv_users, minhaTabela, parse_users_csv);
-    process_csv_file(csv_reservas, minhaTabela, parse_reservations_csv);
-    process_csv_file(csv_passageiros, minhaTabela, parse_passengers_csv);
+    /*process_csv_file(csv_reservas, minhaTabela, parse_reservations_csv);
+    process_csv_file(csv_passageiros, minhaTabela, parse_passengers_csv);*/
 
     // Imprimir conteúdo da tabela hash
     printf("Conteúdo da Tabela Hash:\n");
-    Printhash_user(minhaTabela);
+    PrintHashUser(minhaTabela);
 
     return 0;
 }
