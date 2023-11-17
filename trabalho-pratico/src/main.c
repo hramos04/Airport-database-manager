@@ -22,14 +22,14 @@ int main(int argc, char *argv[]) {
 	strcpy(csv_passageiros, argv[1]);
 	strcat(csv_passageiros, "/passengers.csv");
 
-    //char *csv_voos = (char*)malloc(256);
-	//strcpy(csv_voos, argv[1]);
-	//strcat(csv_voos, "/flights.csv");
+    char *csv_voos = (char*)malloc(256);
+	strcpy(csv_voos, argv[1]);
+	strcat(csv_voos, "/flights.csv");
 
     process_csv_file(csv_users, minhaTabela, parse_users_csv);
     process_csv_file(csv_reservas, minhaTabela, parse_reservations_csv);
-    //process_csv_file(csv_passageiros, minhaTabela, parse_passengers_csv);
-    //process_csv_file(csv_voos, minhaTabela, parse_flights_csv);
+    process_csv_file(csv_passageiros, minhaTabela, parse_passengers_csv);
+    process_csv_file(csv_voos, minhaTabela, parse_flights_csv);
 
     // Imprimir conteúdo da tabela hash
     printf("Conteúdo da Tabela Hash:\n");
