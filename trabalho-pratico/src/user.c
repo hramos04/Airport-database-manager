@@ -127,12 +127,18 @@ void InsertPassenger(hash_user h, char *id, char *voo_id) {
 
 
 void InsertScheduleDepartureDateByVooId(hash_user h, char *voo_id, char *schedule_departure_date) {
+    if (voo_id == NULL || schedule_departure_date == NULL) {
+        // Se voo_id ou schedule_departure_date forem NULL, não faça nada
+        
+        return;
+    }
+
     for (int i = 0; i < HASHSIZE; ++i) {
         User *user = h[i];
         while (user) {
             Voo *voo_aux = user->voos;
             while (voo_aux) {
-                if (strcmp(voo_aux->voo_id, voo_id) == 0) {
+                if (voo_aux->voo_id != NULL && strcmp(voo_aux->voo_id, voo_id) == 0) {
                     // Encontrou o voo correspondente
                     voo_aux->schedule_departure_date = strdup(schedule_departure_date);
                     return;
@@ -141,10 +147,10 @@ void InsertScheduleDepartureDateByVooId(hash_user h, char *voo_id, char *schedul
             }
             user = user->next;
         }
+        
     }
-    // Se o voo não foi encontrado, apenas imprima uma mensagem (ou pode optar por não imprimir nada)
-    printf("Voo com ID %s não encontrado. Ignorando.\n", voo_id);
 }
+
 
 
 

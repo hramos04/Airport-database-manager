@@ -475,7 +475,7 @@ void parse_flights_csv(hash_user h, char *line) {
     schedule_departure_date = malloc(35);
 
     // Modifique o formato para ler apenas o "id" e o "schedule_departure_date"
-    sscanf(line, "%[^;];%*[^;];%*[^;];%*[^;];%*[^;];%*[^;];%[^;];%[^;]", voo_id, schedule_departure_date);
+    sscanf(line, "%[^;];%*[^;]", voo_id, schedule_departure_date);
 
     printf("Line: %s\n", line);
     printf("Voo ID: %s\n", voo_id);
