@@ -296,9 +296,152 @@ int compare_begin_with_end(char *string1, char *string2) {
     return 0; // begin não é anterior a end
 }
 
+void parse_users_csv(hash_user h, char *line) {
+    char *id = NULL, *name = NULL, *email = NULL, *phone_number = NULL, *birth_date = NULL,
+         *sex = NULL, *passport = NULL, *country_code = NULL, *address = NULL, *account_creation = NULL,
+         *pay_method = NULL, *account_status = NULL;
+
+    // Allocating memory for the arguments.
+    
+  
+    id = (char*)malloc(sizeof(char) * 100);
+    name = (char*)malloc(sizeof(char) * 100);
+    email = (char*)malloc(sizeof(char) * 100);
+    phone_number = (char*)malloc(sizeof(char) * 100);
+    birth_date = (char*)malloc(sizeof(char) * 100);
+    sex = (char*)malloc(sizeof(char) * 100);
+    passport = (char*)malloc(sizeof(char) * 100);
+    country_code = (char*)malloc(sizeof(char) * 100);
+    address = (char*)malloc(sizeof(char) * 100);
+    account_creation = (char*)malloc(sizeof(char) * 100);
+    pay_method = (char*)malloc(sizeof(char) * 100);
+    account_status = (char*)malloc(sizeof(char) * 100);
+    
+
+    // Reading and dissecting the line
+    sscanf(line, "%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]",
+           id, name, email, phone_number, birth_date, sex, passport, country_code, address, account_creation, pay_method, account_status);
+         
+	
+	//   
+    // Checking if the information is invalid
+    account_status[strlen(account_status)-1] = '\0';
+    if ( valid_date_hour(account_creation) == 0 || valid_date(birth_date) == 0 || compare_birth_with_account_cr(birth_date,account_creation)==0 || valid_email(email)==0 ||is_non_empty_string(id) == 0 || is_non_empty_string(name) == 0 || is_non_empty_string(phone_number) == 0 || is_non_empty_string(sex) == 0 ||valid_sex(sex)==0 ||is_non_empty_string(passport) == 0 || is_non_empty_string(address) == 0 || is_non_empty_string(pay_method) == 0 || valid_country_code(country_code) == 0|| valid_account_status(account_status) == 0 || valid_pay_method(pay_method) == 0) {
+        // Abre o arquivo para escrita, cria se não existir
+        FILE *invalidFile = fopen("Resultados/users_errors.csv", "a+");
+
+        if (invalidFile != NULL) {
+        // Escreve a entrada inválida no arquivo
+        fprintf(invalidFile, "%s\n", line);
+
+        // Fecha o arquivo
+        fclose(invalidFile);
+    }
+        
+        // Freeing the arguments if the line is invalid
+        free(id);
+        free(name);
+        free(email);
+        free(phone_number);
+        free(birth_date);
+        free(sex);
+        free(passport);
+        free(country_code);
+        free(address);
+        free(account_creation);
+        free(pay_method);
+        free(account_status);
+        return;
+    }
 
 
-//void parse_reservas_csv(hash_user hoteis, hash_userUsers users, char *line) {
-	 //InsertTableUsers(h, id, name, email, phone_number, birth_date, sex, passport, country_code, address, account_creation, pay_method, account_status);
-	 //InsertTableHoteis(h, id, name, email, phone_number, birth_date, sex, passport, country_code, address, account_creation, pay_method, account_status);
-//}
+
+    // Inserting into the hash table
+    InsertTable(h, id, name, email, phone_number, birth_date, sex, passport, country_code, address, account_creation, pay_method, account_status);
+    // Freeing the arguments
+    free(id);
+    free(name);
+    free(email);
+    free(phone_number);
+    free(birth_date);
+    free(sex);
+    free(passport);
+    free(country_code);
+    free(address);
+    free(account_creation);
+    free(pay_method);
+    free(account_status);
+}
+
+
+void parse_reservations_csv(hash_user h,char *line){
+    
+    char *id = NULL, *user_id = NULL, *hotel_id = NULL, *hotel_name = NULL, *hotel_stars = NULL, 
+    *city_tax = NULL, *address = NULL, *begin_date = NULL, *end_date = NULL, *price_per_night = NULL,
+    *includes_breakfast = NULL, *room_details = NULL, *rating = NULL, *comment = NULL;
+    
+    id = malloc(35);
+    user_id = malloc(35);
+    hotel_id = malloc(35);
+    hotel_name = malloc(35);
+    hotel_stars = malloc(5);
+    city_tax = malloc(5);
+    address = malloc(50);
+    begin_date = malloc(10);
+    end_date = malloc(10);
+    price_per_night = malloc(5);
+    includes_breakfast = malloc(5);
+    room_details = malloc(35);
+    rating = malloc(5);
+    comment = malloc(50);
+        
+    sscanf(line, "%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", id, user_id, hotel_id, hotel_name, hotel_stars, city_tax, address, begin_date, end_date, price_per_night, includes_breakfast, room_details, rating, comment);
+    
+    if(is_non_empty_string(id) == 0 || is_non_empty_string(user_id) == 0 || is_non_empty_string(hotel_id) == 0 ||is_non_empty_string(hotel_name) == 0 || is_non_empty_string(address) == 0 || valid_rating(rating)==0 || valid_breakfast(includes_breakfast)==0 || valid_price(price_per_night)==0 || valid_tax(city_tax)==0 || valid_stars(hotel_stars)==0 || compare_begin_with_end(begin_date, end_date)==0 || valid_date(begin_date)==0|| valid_date(end_date)==0){ // falta apenas meter as datas direitas
+    // Abre o arquivo para escrita, cria se não existir
+        FILE *invalidFile = fopen("Resultados/reservations_errors.csv", "a+");
+
+        if (invalidFile != NULL) {
+        // Escreve a entrada inválida no arquivo
+        fprintf(invalidFile, "%s\n", line);
+
+        // Fecha o arquivo
+        fclose(invalidFile);
+        }
+    
+    // Freeing the arguments   
+        free(id);
+        free(user_id);
+        free(hotel_id);
+        free(hotel_name);
+        free(hotel_stars);
+        free(city_tax);
+        free(address);
+        free(begin_date);
+        free(end_date);
+        free(price_per_night);
+        free(includes_breakfast);
+        free(room_details);
+        free(rating);
+        free(comment);
+        
+        return;
+    }
+
+    InsertReserva(h, user_id, id, hotel_id, hotel_name, hotel_stars, city_tax, address, begin_date, end_date, price_per_night, includes_breakfast, room_details, rating, comment); 
+    free(id);
+    free(user_id);
+    free(hotel_id);
+    free(hotel_name);
+    free(hotel_stars);
+    free(city_tax);
+    free(address);
+    free(begin_date);
+    free(end_date);
+    free(price_per_night);
+    free(includes_breakfast);
+    free(room_details);
+    free(rating);
+    free(comment);
+}
+
