@@ -79,3 +79,5 @@ void Printhash_user(hash_user h);
 
 //Função que vai buscar um User á HashTable através do seu ID
 User *RetrieveUser(hash_user h, char *id);
+
+#endif //USER_H

@@ -303,7 +303,7 @@ void parse_users_csv(hash_user h, char *line) {
 
     // Allocating memory for the arguments.
     
-  
+
     id = (char*)malloc(sizeof(char) * 100);
     name = (char*)malloc(sizeof(char) * 100);
     email = (char*)malloc(sizeof(char) * 100);
@@ -320,8 +320,8 @@ void parse_users_csv(hash_user h, char *line) {
 
     // Reading and dissecting the line
     sscanf(line, "%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]",
-           id, name, email, phone_number, birth_date, sex, passport, country_code, address, account_creation, pay_method, account_status);
-         
+        id, name, email, phone_number, birth_date, sex, passport, country_code, address, account_creation, pay_method, account_status);
+        
 	
 	//   
     // Checking if the information is invalid

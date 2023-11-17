@@ -22,14 +22,14 @@ void InitializeTable(hash_user h) {
 }
 
 User *RetrieveUser(hash_user h, char *id) {
-	 int i = Hash(id);
+	int i = Hash(id);
 	 User *res;
-	 for(res = h[i]; res; res = res->next) {
-		 if(strcmp(res->id, id) == 0) {
-			 return res;
-		 }
-	 }
-	 return NULL;
+	for(res = h[i]; res; res = res->next) {
+		if(strcmp(res->id, id) == 0) {
+			return res;
+		}
+	}
+	return NULL;
 }
 
 void InsertReserva(hash_user h, char *id, char *reserva_id, char *hotel_id, char *hotel_name, char *hotel_stars, char *city_tax, char *hotel_address, char *begin_date, char *end_date, char *price_per_night, char *includes_breakfast, char *room_details, char *rating, char *comment) {
@@ -144,15 +144,15 @@ void Printhash_user(hash_user h) {
         User *aux = h[i];
         while (aux) {
             printf("ID: %s, Nome: %s, Email: %s, Phone: %s, Birth Date: %s, Sex: %s, Passport: %s, Country Code: %s, Address: %s, Account Creation: %s, Pay Method: %s, Account Status: %s\n",
-                   aux->id, aux->nome, aux->email, aux->phone_number,
-                   aux->birth_date, aux->sex, aux->passport, aux->country_code,
-                   aux->address, aux->account_creation, aux->pay_method, aux->account_status);
+                aux->id, aux->nome, aux->email, aux->phone_number,
+                aux->birth_date, aux->sex, aux->passport, aux->country_code,
+                aux->address, aux->account_creation, aux->pay_method, aux->account_status);
 
             // Adicionar código para imprimir os elementos da lista ligada de reservas
             Reserva *reserva_aux = aux->reservas;
             while (reserva_aux) {
                 printf("  Reserva ID: %s, Hotel ID: %s, Hotel Name: %s, ... (outros campos da reserva)\n",
-                       reserva_aux->reserva_id, reserva_aux->hotel_id, reserva_aux->hotel_name);
+                    reserva_aux->reserva_id, reserva_aux->hotel_id, reserva_aux->hotel_name);
 
                 // Avançar para o próximo nó na lista ligada de reservas
                 reserva_aux = reserva_aux->next;
