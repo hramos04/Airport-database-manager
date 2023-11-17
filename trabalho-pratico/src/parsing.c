@@ -6,7 +6,7 @@
 #include "parsing.h"
 #define MAX_LINE_LENGTH 1024
 #include "user.h"
-
+//#include "aerport.h"
 
 int valid_date(char *string) {
     if (strlen(string) != 10) {
@@ -300,7 +300,7 @@ int compare_begin_with_end(char *string1, char *string2) {
 
 
 ///FUNÇÕES PARA INSERIR NA HASH TABLE DOS USERS 
-void parse_users_csv(HashTableUser u, char *line) {
+void parse_users_csv(hash_user h, char *line) {
     char *id = NULL, *name = NULL, *email = NULL, *phone_number = NULL, *birth_date = NULL,
          *sex = NULL, *passport = NULL, *country_code = NULL, *address = NULL, *account_creation = NULL,
          *pay_method = NULL, *account_status = NULL;
@@ -361,7 +361,7 @@ void parse_users_csv(HashTableUser u, char *line) {
 
 
     // Inserting into the hash table
-    InsertTableUser(u, id, name, email, phone_number, birth_date, sex, passport, country_code, address, account_creation, pay_method, account_status);
+    InsertTable(h, id, name, email, phone_number, birth_date, sex, passport, country_code, address, account_creation, pay_method, account_status);
     // Freeing the arguments
     free(id);
     free(name);
@@ -377,8 +377,8 @@ void parse_users_csv(HashTableUser u, char *line) {
     free(account_status);
 }
 
-/*
-void parse_reservations_csv(HashTableReservation r,char *line){
+
+void parse_reservations_csv(hash_user h,char *line){
     
     char *id = NULL, *user_id = NULL, *hotel_id = NULL, *hotel_name = NULL, *hotel_stars = NULL, 
     *city_tax = NULL, *address = NULL, *begin_date = NULL, *end_date = NULL, *price_per_night = NULL,
@@ -432,7 +432,7 @@ void parse_reservations_csv(HashTableReservation r,char *line){
         return;
     }
 
-    InsertTableReservation(r, user_id, id, hotel_id, hotel_name, hotel_stars, city_tax, address, begin_date, end_date, price_per_night, includes_breakfast, room_details, rating, comment); 
+    InsertReserva(h, user_id, id, hotel_id, hotel_name, hotel_stars, city_tax, address, begin_date, end_date, price_per_night, includes_breakfast, room_details, rating, comment); 
     free(id);
     free(user_id);
     free(hotel_id);
@@ -449,7 +449,7 @@ void parse_reservations_csv(HashTableReservation r,char *line){
     free(comment);
 }
 
-void parse_passengers_csv(HashTablePassenger p, char *line) {
+void parse_passengers_csv(hash_user h, char *line) {
     char *voo_id = NULL, *user_id = NULL;
 
     voo_id = malloc(35);
@@ -460,14 +460,14 @@ void parse_passengers_csv(HashTablePassenger p, char *line) {
     printf("Line: %s\n", line);
     printf("Voo ID: %s\n", voo_id);
     printf("User ID: %s\n", user_id);
-    InsertTablePassenger(p, user_id, voo_id);
+    InsertPassenger(h, user_id, voo_id);
 
     // Libere a memória alocada
     free(voo_id);
     free(user_id);
 }
 
-void parse_flights_csv(HashTableFlight f, char *line) {
+void parse_flights_csv(hash_user h, char *line) {
     char *voo_id = NULL, *schedule_departure_date = NULL;
 
     voo_id = malloc(35);
@@ -480,15 +480,17 @@ void parse_flights_csv(HashTableFlight f, char *line) {
     printf("Voo ID: %s\n", voo_id);
     printf("Schedule Departure Date: %s\n", schedule_departure_date);
 
-    InsertHashFlight(f, voo_id, schedule_departure_date);
+    InsertScheduleDepartureDateByVooId(h, voo_id, schedule_departure_date);
 
     // Libere a memória alocada
     free(voo_id);
     free(schedule_departure_date);
 }
-*/
 
-void process_csv_file(const char* filename, HashTableUser u, void (*parse_function)(HashTableUser, char*)) {
+
+
+
+void process_csv_file(const char* filename, hash_user h, void (*parse_function)(hash_user, char*)) {
     FILE* fp = fopen(filename, "r");
 
     if (!fp) {
@@ -503,11 +505,10 @@ void process_csv_file(const char* filename, HashTableUser u, void (*parse_functi
         buffer[strcspn(buffer, "\n")] = '\0';
 
         // Chama a função de parsing correspondente
-        parse_function(u, buffer);
+        parse_function(h, buffer);
     }
 
     // Fecha o arquivo
     fclose(fp);
 }
-
 
