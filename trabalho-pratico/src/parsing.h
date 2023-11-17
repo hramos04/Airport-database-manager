@@ -20,5 +20,5 @@ int valid_price(char *string);
 int valid_rating(char *string);
 int compare_begin_with_end(char *string1, char *string2);
 int is_non_empty_string(char *string);
-ß
+
 #endif  // PARSING_H
