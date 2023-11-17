@@ -1,6 +1,6 @@
 #ifndef USER_H
 #define USER_H
-#define HASHSIZE 10050 // Tamanho da tabela hash
+#define HASHSIZE 20011 // Tamanho da tabela hash
 
 
 //Estrutura da lista ligada 

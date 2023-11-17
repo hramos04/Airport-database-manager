@@ -5,12 +5,14 @@
 
 
 
-int Hash( char *id) {
-    int hash = 0;
-    while (*id) {
-        hash += *id;
-        ++id;
+int Hash(char *id) {
+    unsigned long hash = 5381;
+    int c;
+
+    while ((c = *id++)) {
+        hash = ((hash << 5) + hash) + c; // hash * 33 + c
     }
+
     return hash % HASHSIZE;
 }
 
