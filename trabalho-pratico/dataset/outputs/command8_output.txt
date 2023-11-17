@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 TAP Air Portugal;Airbus A320;LIS;MAD;2022/10/11 15:18:59;2022/10/11 16:28:59;71;900
+=======
+TAP Air Portugal;Airbus A320;LIS;MAD;2022/10/11 15:18:59;2022/10/11 16:28:59;71;900
+>>>>>>> bcc2025849d22a44aa5f7d6a70aec04f23a55fd6

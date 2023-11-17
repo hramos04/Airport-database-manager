@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 HTL904;Chiado Plaza Hotel;3;2023/09/01;2023/09/03;False;2;306.000
+=======
+HTL904;Chiado Plaza Hotel;3;2023/09/01;2023/09/03;False;2;306.000
+>>>>>>> bcc2025849d22a44aa5f7d6a70aec04f23a55fd6

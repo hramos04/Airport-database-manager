@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 --- 1 ---
 airline: Transavia
 plane_model: Airbus A320
@@ -7,3 +8,14 @@ schedule_departure_date: 2023/05/06 17:15:55
 schedule_arrival_date: 2023/05/06 19:35:55
 passengers: 83
 delay: 0
+=======
+--- 1 ---
+airline: Transavia
+plane_model: Airbus A320
+origin: AMS
+destination: NCE
+schedule_departure_date: 2023/05/06 17:15:55
+schedule_arrival_date: 2023/05/06 19:35:55
+passengers: 83
+delay: 0
+>>>>>>> bcc2025849d22a44aa5f7d6a70aec04f23a55fd6
