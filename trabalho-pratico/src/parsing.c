@@ -7,6 +7,7 @@
 #define MAX_LINE_LENGTH 1024
 #include "user.h"
 
+
 int valid_date(char *string) {
     if (strlen(string) != 10) {
         return 0;
@@ -296,6 +297,9 @@ int compare_begin_with_end(char *string1, char *string2) {
     return 0; // begin não é anterior a end
 }
 
+
+
+///FUNÇÕES PARA INSERIR NA HASH TABLE DOS USERS 
 void parse_users_csv(hash_user h, char *line) {
     char *id = NULL, *name = NULL, *email = NULL, *phone_number = NULL, *birth_date = NULL,
          *sex = NULL, *passport = NULL, *country_code = NULL, *address = NULL, *account_creation = NULL,
@@ -445,22 +449,45 @@ void parse_reservations_csv(hash_user h,char *line){
     free(comment);
 }
 
-
 void parse_passengers_csv(hash_user h, char *line) {
     char *voo_id = NULL, *user_id = NULL;
 
     voo_id = malloc(35);
     user_id = malloc(35);
 
-    sscanf(line, "%[^;];%[^\n]", voo_id, user_id);
+    sscanf(line, "%[^;];%[^\r\n]", voo_id, user_id);
 
-    // Corrija a ordem dos argumentos ao chamar InsertPassenger
-    InsertPassenger(h, voo_id, user_id);
+    printf("Line: %s\n", line);
+    printf("Voo ID: %s\n", voo_id);
+    printf("User ID: %s\n", user_id);
+    InsertPassenger(h, user_id, voo_id);
 
     // Libere a memória alocada
     free(voo_id);
     free(user_id);
 }
+
+void parse_flights_csv(hash_user h, char *line) {
+    char *voo_id = NULL, *schedule_departure_date = NULL;
+
+    voo_id = malloc(35);
+    schedule_departure_date = malloc(35);
+
+    // Modifique o formato para ler apenas o "id" e o "schedule_departure_date"
+    sscanf(line, "%[^;];%*[^;];%*[^;];%*[^;];%*[^;];%*[^;];%[^;];%[^;]", voo_id, schedule_departure_date);
+
+    printf("Line: %s\n", line);
+    printf("Voo ID: %s\n", voo_id);
+    printf("Schedule Departure Date: %s\n", schedule_departure_date);
+
+    InsertScheduleDepartureDateByVooId(h, voo_id, schedule_departure_date);
+
+    // Libere a memória alocada
+    free(voo_id);
+    free(schedule_departure_date);
+}
+
+
 
 
 void process_csv_file(const char* filename, hash_user h, void (*parse_function)(hash_user, char*)) {
@@ -484,4 +511,5 @@ void process_csv_file(const char* filename, hash_user h, void (*parse_function)(
     // Fecha o arquivo
     fclose(fp);
 }
+
 
