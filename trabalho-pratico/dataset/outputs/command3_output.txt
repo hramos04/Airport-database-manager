@@ -1,5 +1,0 @@
-<<<<<<< HEAD
-Lia Garcia;F;27;PT;RQ468696;11;6;3034.800
-=======
-Lia Garcia;F;27;PT;RQ468696;11;6;3034.800
->>>>>>> bcc2025849d22a44aa5f7d6a70aec04f23a55fd6

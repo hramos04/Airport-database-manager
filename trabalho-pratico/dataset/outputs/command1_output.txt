@@ -1,5 +1,0 @@
-<<<<<<< HEAD
-Jéssica Tavares;F;63;PT;ZE466021;11;5;2365.200
-=======
-Jéssica Tavares;F;63;PT;ZE466021;11;5;2365.200
->>>>>>> bcc2025849d22a44aa5f7d6a70aec04f23a55fd6

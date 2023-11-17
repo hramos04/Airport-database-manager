@@ -1,5 +1,0 @@
-<<<<<<< HEAD
-HTL1404;Spree Riverfront Hotel;4;2021/07/20;2021/07/23;True;3;618.000
-=======
-HTL1404;Spree Riverfront Hotel;4;2021/07/20;2021/07/23;True;3;618.000
->>>>>>> bcc2025849d22a44aa5f7d6a70aec04f23a55fd6
