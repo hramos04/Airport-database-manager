@@ -117,3 +117,57 @@ void InsertPassenger(hash_user h, char *id, char *voo_id) {
     nova_voo->next = user->voos;
     user->voos = nova_voo;
 }
+
+void InsertScheduleDepartureDateByVooId(hash_user h, char *voo_id, char *schedule_departure_date) {
+    for (int i = 0; i < HASHSIZE; ++i) {
+        User *user = h[i];
+        while (user) {
+            Voo *voo_aux = user->voos;
+            while (voo_aux) {
+                if (strcmp(voo_aux->voo_id, voo_id) == 0) {
+                    // Encontrou o voo correspondente
+                    voo_aux->schedule_departure_date = strdup(schedule_departure_date);
+                    return;
+                }
+                voo_aux = voo_aux->next;
+            }
+            user = user->next;
+        }
+    }
+    // Se o voo não foi encontrado, apenas imprima uma mensagem (ou pode optar por não imprimir nada)
+    printf("Voo com ID %s não encontrado. Ignorando.\n", voo_id);
+}
+
+
+void Printhash_user(hash_user h) {
+    for (int i = 0; i < HASHSIZE; ++i) {
+        User *aux = h[i];
+        while (aux) {
+            printf("ID: %s, Nome: %s, Email: %s, Phone: %s, Birth Date: %s, Sex: %s, Passport: %s, Country Code: %s, Address: %s, Account Creation: %s, Pay Method: %s, Account Status: %s\n",
+                   aux->id, aux->nome, aux->email, aux->phone_number,
+                   aux->birth_date, aux->sex, aux->passport, aux->country_code,
+                   aux->address, aux->account_creation, aux->pay_method, aux->account_status);
+
+            // Adicionar código para imprimir os elementos da lista ligada de reservas
+            Reserva *reserva_aux = aux->reservas;
+            while (reserva_aux) {
+                printf("  Reserva ID: %s, Hotel ID: %s, Hotel Name: %s, ... (outros campos da reserva)\n",
+                       reserva_aux->reserva_id, reserva_aux->hotel_id, reserva_aux->hotel_name);
+
+                // Avançar para o próximo nó na lista ligada de reservas
+                reserva_aux = reserva_aux->next;
+            }
+
+            // Adicionar código para imprimir os elementos da lista ligada de voos
+            Voo *voo_aux = aux->voos;
+            while (voo_aux) {
+                printf("  Voo ID: %s, Schedule Departure Date: %s\n", voo_aux->voo_id, voo_aux->schedule_departure_date);
+
+                // Avançar para o próximo nó na lista ligada de voos
+                voo_aux = voo_aux->next;
+            }
+
+            aux = aux->next;
+        }
+    }
+}
