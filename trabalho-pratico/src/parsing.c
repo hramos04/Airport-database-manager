@@ -330,7 +330,7 @@ void parse_users_csv(hash_user h, char *line) {
 	//   
     // Checking if the information is invalid
     account_status[strlen(account_status)-1] = '\0';
-    if ( valid_date_hour(account_creation) == 0 || valid_date(birth_date) == 0 || compare_birth_with_account_cr(birth_date,account_creation)==0 || valid_email(email)==0 ||is_non_empty_string(id) == 0 || is_non_empty_string(name) == 0 || is_non_empty_string(phone_number) == 0 || is_non_empty_string(sex) == 0 ||valid_sex(sex)==0 ||is_non_empty_string(passport) == 0 || is_non_empty_string(address) == 0 || is_non_empty_string(pay_method) == 0 || valid_country_code(country_code) == 0|| valid_account_status(account_status) == 0 || valid_pay_method(pay_method) == 0) {
+    if ( valid_date_hour(account_creation) == 0 || valid_date(birth_date) == 0 || compare_birth_with_account_cr(birth_date,account_creation)==0 || valid_email(email)==0 ||is_non_empty_string(id) == 0 || is_non_empty_string(name) == 0 || is_non_empty_string(phone_number) == 0 || is_non_empty_string(sex) == 0 ||valid_sex(sex)==0 ||is_non_empty_string(passport) == 0 || is_non_empty_string(address) == 0 || is_non_empty_string(pay_method) == 0 || valid_country_code(country_code) == 0|| valid_account_status(account_status) == 0 || valid_pay_method(pay_method) == 0) { 
         // Abre o arquivo para escrita, cria se não existir
         FILE *invalidFile = fopen("Resultados/users_errors.csv", "a+");
 
@@ -358,7 +358,7 @@ void parse_users_csv(hash_user h, char *line) {
         return;
     }
 
-
+    printf("Line: %s\n", line);
 
     // Inserting into the hash table
     InsertTable(h, id, name, email, phone_number, birth_date, sex, passport, country_code, address, account_creation, pay_method, account_status);
@@ -375,6 +375,7 @@ void parse_users_csv(hash_user h, char *line) {
     free(account_creation);
     free(pay_method);
     free(account_status);
+    
 }
 
 
@@ -403,15 +404,15 @@ void parse_reservations_csv(hash_user h,char *line){
     
     if(is_non_empty_string(id) == 0 || is_non_empty_string(user_id) == 0 || is_non_empty_string(hotel_id) == 0 ||is_non_empty_string(hotel_name) == 0 || is_non_empty_string(address) == 0 || valid_rating(rating)==0 || valid_breakfast(includes_breakfast)==0 || valid_price(price_per_night)==0 || valid_tax(city_tax)==0 || valid_stars(hotel_stars)==0 || compare_begin_with_end(begin_date, end_date)==0 || valid_date(begin_date)==0|| valid_date(end_date)==0){ // falta apenas meter as datas direitas
     // Abre o arquivo para escrita, cria se não existir
-        FILE *invalidFile = fopen("Resultados/reservations_errors.csv", "a+");
+        //FILE *invalidFile = fopen("Resultados/reservations_errors.csv", "a+");
 
-        if (invalidFile != NULL) {
+        //if (invalidFile != NULL) {
         // Escreve a entrada inválida no arquivo
-        fprintf(invalidFile, "%s\n", line);
+        //fprintf(invalidFile, "%s\n", line);
 
         // Fecha o arquivo
-        fclose(invalidFile);
-        }
+        //fclose(invalidFile);
+        
     
     // Freeing the arguments   
         free(id);
