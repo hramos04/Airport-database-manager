@@ -12,7 +12,7 @@ users: 0
 flights: 1
 passengers: 88
 unique_passengers: 88
-reservations: 47
+reservations: 46
 
 --- 3 ---
 day: 4
@@ -28,7 +28,7 @@ users: 0
 flights: 1
 passengers: 85
 unique_passengers: 85
-reservations: 50
+reservations: 48
 
 --- 5 ---
 day: 7
@@ -36,7 +36,7 @@ users: 0
 flights: 3
 passengers: 170
 unique_passengers: 168
-reservations: 82
+reservations: 77
 
 --- 6 ---
 day: 8
@@ -44,7 +44,7 @@ users: 0
 flights: 2
 passengers: 125
 unique_passengers: 125
-reservations: 66
+reservations: 62
 
 --- 7 ---
 day: 9
@@ -52,7 +52,7 @@ users: 0
 flights: 1
 passengers: 68
 unique_passengers: 68
-reservations: 37
+reservations: 35
 
 --- 8 ---
 day: 10
@@ -60,7 +60,7 @@ users: 0
 flights: 1
 passengers: 64
 unique_passengers: 64
-reservations: 35
+reservations: 34
 
 --- 9 ---
 day: 12
@@ -68,7 +68,7 @@ users: 0
 flights: 1
 passengers: 114
 unique_passengers: 114
-reservations: 57
+reservations: 56
 
 --- 10 ---
 day: 13
@@ -76,7 +76,7 @@ users: 0
 flights: 1
 passengers: 54
 unique_passengers: 54
-reservations: 32
+reservations: 31
 
 --- 11 ---
 day: 14
@@ -84,7 +84,7 @@ users: 0
 flights: 2
 passengers: 228
 unique_passengers: 228
-reservations: 124
+reservations: 116
 
 --- 12 ---
 day: 15
@@ -92,7 +92,7 @@ users: 0
 flights: 3
 passengers: 230
 unique_passengers: 225
-reservations: 118
+reservations: 110
 
 --- 13 ---
 day: 18
@@ -100,7 +100,7 @@ users: 0
 flights: 2
 passengers: 182
 unique_passengers: 180
-reservations: 86
+reservations: 84
 
 --- 14 ---
 day: 19
@@ -108,7 +108,7 @@ users: 0
 flights: 4
 passengers: 272
 unique_passengers: 270
-reservations: 136
+reservations: 131
 
 --- 15 ---
 day: 20
@@ -116,7 +116,7 @@ users: 0
 flights: 2
 passengers: 147
 unique_passengers: 146
-reservations: 73
+reservations: 70
 
 --- 16 ---
 day: 21
@@ -124,7 +124,7 @@ users: 0
 flights: 3
 passengers: 228
 unique_passengers: 228
-reservations: 120
+reservations: 111
 
 --- 17 ---
 day: 22
@@ -132,4 +132,4 @@ users: 0
 flights: 1
 passengers: 89
 unique_passengers: 89
-reservations: 86
+reservations: 84

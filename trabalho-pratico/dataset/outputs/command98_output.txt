@@ -92,7 +92,7 @@ users: 0
 flights: 350
 passengers: 26642
 unique_passengers: 8887
-reservations: 14720
+reservations: 13982
 
 --- 13 ---
 year: 2022
@@ -100,7 +100,7 @@ users: 0
 flights: 355
 passengers: 27510
 unique_passengers: 8957
-reservations: 15224
+reservations: 14472
 
 --- 14 ---
 year: 2023
@@ -108,4 +108,4 @@ users: 0
 flights: 245
 passengers: 19175
 unique_passengers: 8266
-reservations: 10396
+reservations: 9904
