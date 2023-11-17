@@ -445,3 +445,43 @@ void parse_reservations_csv(hash_user h,char *line){
     free(comment);
 }
 
+
+void parse_passengers_csv(hash_user h, char *line) {
+    char *voo_id = NULL, *user_id = NULL;
+
+    voo_id = malloc(35);
+    user_id = malloc(35);
+
+    sscanf(line, "%[^;];%[^\n]", voo_id, user_id);
+
+    // Corrija a ordem dos argumentos ao chamar InsertPassenger
+    InsertPassenger(h, voo_id, user_id);
+
+    // Libere a memória alocada
+    free(voo_id);
+    free(user_id);
+}
+
+
+void process_csv_file(const char* filename, hash_user h, void (*parse_function)(hash_user, char*)) {
+    FILE* fp = fopen(filename, "r");
+
+    if (!fp) {
+        printf("Can't open file: %s\n", filename);
+        return;
+    }
+
+    char buffer[MAX_LINE_LENGTH];
+
+    while (fgets(buffer, MAX_LINE_LENGTH, fp)) {
+        // Remover o caractere de nova linha (\n) do final da linha
+        buffer[strcspn(buffer, "\n")] = '\0';
+
+        // Chama a função de parsing correspondente
+        parse_function(h, buffer);
+    }
+
+    // Fecha o arquivo
+    fclose(fp);
+}
+
