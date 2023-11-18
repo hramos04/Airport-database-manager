@@ -5,6 +5,7 @@
 #include "reserva.h"
 #include "voo.h"
 
+//int compare_date(char *d1, char *d2);
 int is_non_empty_string(char *string);
 void parse_users_csv(hash_user h, char *line);
 void parse_reservations_csv(hash_user h, char *line);

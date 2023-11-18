@@ -330,9 +330,21 @@ int calcularDiferencaSegundos(char *datetime1, char *datetime2) {
     return diferencaSegundos;
 }
 
-int compare_date(){
-    return 0;
+/*
+int compare_date(char *d1, char *d2){
+    int ano1, mes1,dia1;
+	int ano2, mes2,dia2;
+	sscanf(d1, "%d/%d/%d", &ano1, &mes1, &dia1);
+	sscanf(d2, "%d/%d/%d", &ano2, &mes2, &dia2);
+	if(ano1==ano2 && mes1==mes2 && dia1<=dia2)
+		return 0;
+	else if(ano1==ano2 && mes1<=mes2)
+		return 0;
+	else if(ano1<=ano2)
+		return 0;
+	else return -1;
 }
+*/
 
 int valid_rating(char *string) {
     if (string[0] == '\0') {

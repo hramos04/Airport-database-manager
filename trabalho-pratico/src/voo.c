@@ -66,27 +66,28 @@ int InsertPassengerVoo(hash_voos h, KeyType k) {
 	 return 0;
 }
 
-/*Hotel *RetrieveAeroporto(hash_hoteis h, KeyType k) {
-	 int i = HashHoteis(k);
-	 Hotel *res;
+/*
+Aeroporto *RetrieveAeroporto(hash_aeroportos h, KeyType k) {
+	 int i = HashAeroportos(k);
+	 Aeroporto *res;
 	 for(res = h[i]; res; res = res->next) {
-		 if(strcmp(res->hotel_id, k) == 0) {
+		 if(strcmp(res->name, k) == 0) {
 			 return res;
 		 }
 	 }
 	 return NULL;
-}*/
+}
 
-/*void InsertTableHoteis(hash_hoteis h, KeyType k, ReservaResumo *reserva) {
-    int i = HashHoteis(k);
+void InsertTableAeroportos(hash_aeroportos h, KeyType k, Aeroporto *aeroporto, VooResumo *voo) {
+    int i = HashAeroportos(k);
     
-    Hotel *aux = RetrieveHotel(h, k);
+    Aeroporto *aux = RetrieveAeroporto(h, k);
     if(!aux) {
-		Hotel *novo_hotel = (Hotel *)malloc(sizeof(Hotel));
-		novo_hotel->hotel_id = strdup(k);
-		novo_hotel->next = NULL;
-		novo_hotel->next_resumo = NULL;
-		aux = novo_hotel;
+		Aeroporto*novo_aeroporto = (Aeroporto *)malloc(sizeof(Aeroporto));
+		novo_aeroporto->name = strdup(k);
+		novo_aeroporto->next = NULL;
+		novo_aeroporto->next_resumo = NULL;
+		aux = novo_aeroporto;
 		if (h[i] == NULL) {
 			h[i] = aux;
 		}
@@ -95,9 +96,10 @@ int InsertPassengerVoo(hash_voos h, KeyType k) {
 			h[i] = aux;
 		}
 	}
-	reserva->next_resumo = aux->next_resumo;
-	aux->next_resumo = reserva;
-}*/
+	voo->next_voo = aux->next_resumo;
+	aux->next_resumo = voo;
+}
+*/
 
 
 void InsertTableVoos(hash_voos h, KeyType k, Voo *voo) {
@@ -127,29 +129,21 @@ void Printhash_voo(hash_voos h) {
 }
 
 
-/*void Printhash_hoteis(hash_hoteis h) {
-	int total_hoteis = 0;
+/*
+void Printhash_aeroportos(hash_aeroportos h) {
+	int total_aeroportos= 0;
     for (int i = 0; i < HASHSIZE; ++i) {
-        Hotel *aux = h[i];
-        
+        Aeroporto *aux = h[i];
         while(aux) {
-			
-			int total_reservas_hotel = 0;
-			ReservaResumo *reserva = aux->next_resumo;
-			while(reserva) {
-				total_reservas_hotel++;
-				printf("Resumo: %s\n",reserva->id);
-				reserva = reserva->next_resumo;
-			}
-			printf("ZZZ: %s, Reservas: %d\n",aux->hotel_id, total_reservas_hotel);
-			
+			printf("Aeroporto: %s\n", aux->name);
 			aux = aux->next;
-			total_hoteis++;
+			total_aeroportos++;
 		}
         
     }
-    printf("Total Hoteis: %d\n",total_hoteis);
-}*/
+    printf("Total Aeroportos: %d\n",total_aeroportos);
+}
+*/
 
 
 
