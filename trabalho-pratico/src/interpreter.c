@@ -51,7 +51,7 @@ void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, 
 	if(user) {
 		if((strcasecmp(user->account_status, "active") == 0 )) {
 			if(f == 1) {
-				fprintf(fp_output, "--- 1 ---name: %ssex: %sage: %dcountry_code: %s\npassport: %snumber_of_flights: %dnumber_of_reservations: %dtotal_spent: %.3f",user->nome,user->sex, calculaIdade(user->birth), user->country,user->passport,user->total_voos, user->total_reservas, user->total_gasto);
+				fprintf(fp_output, "--- 1 ---name: %ssex: %sage: %dcountry_code: %spassport: %snumber_of_flights: %dnumber_of_reservations: %dtotal_spent: %.3f",user->nome,user->sex, calculaIdade(user->birth), user->country,user->passport,user->total_voos, user->total_reservas, user->total_gasto);
 			}
 			else {
 				fprintf(fp_output, "%s;%s;%d;%s;%s;%d;%d;%.3f\n",user->nome,user->sex, calculaIdade(user->birth), user->country,user->passport,user->total_voos, user->total_reservas, user->total_gasto);
