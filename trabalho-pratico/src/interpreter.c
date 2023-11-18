@@ -54,7 +54,7 @@ void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, 
 				fprintf(fp_output, "--- 1 ---\nname: %s\nsex: %s\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f",user->nome,user->sex, calculaIdade(user->birth), user->country,user->passport,user->total_voos, user->total_reservas, user->total_gasto);
 			}
 			else {
-				fprintf(fp_output, "%s;%s;%d;%s;%s;%d;%d;%.3f",user->nome,user->sex, calculaIdade(user->birth), user->country,user->passport,user->total_voos, user->total_reservas, user->total_gasto);
+				fprintf(fp_output, "%s;%s;%d;%s;%s;%d;%d;%.3f\n",user->nome,user->sex, calculaIdade(user->birth), user->country,user->passport,user->total_voos, user->total_reservas, user->total_gasto);
 			}
 		}
 	}
@@ -70,7 +70,7 @@ void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, 
 	else if(reserva) {
 		reserva->includes_breakfast[0] = toupper(reserva->includes_breakfast[0]);
 		if(f == 1) {
-			fprintf(fp_output, " --- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f",reserva->hotel_id, reserva->hotel_name, reserva->hotel_stars, reserva->begin_date, reserva->end_date, reserva->includes_breakfast, reserva->total_noites, reserva->total_gasto);
+			fprintf(fp_output, "--- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f",reserva->hotel_id, reserva->hotel_name, reserva->hotel_stars, reserva->begin_date, reserva->end_date, reserva->includes_breakfast, reserva->total_noites, reserva->total_gasto);
 		}
 		else {
 			fprintf(fp_output, "%s;%s;%s;%s;%s;%s;%d;%.3f",reserva->hotel_id, reserva->hotel_name, reserva->hotel_stars, reserva->begin_date, reserva->end_date, reserva->includes_breakfast, reserva->total_noites, reserva->total_gasto);
@@ -109,10 +109,10 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
 					if(q2->tipo == 2) {
 						if(f == 1) {
 							if(i == 1) {
-								fprintf(fp_output, "--- %d ---\nidd: %s\ndate: %s\n",i,q2->id,data);
+								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
 							}
 							else {
-								fprintf(fp_output, "\n--- %d ---\nidd: %s\ndate: %s\n",i,q2->id,data);
+								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
 							}
 							
 						}
