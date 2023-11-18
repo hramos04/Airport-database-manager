@@ -3,17 +3,19 @@
 #include <string.h>
 #include "user.h"
 
-
-
-int Hash(char *id) {
-    unsigned long hash = 5381;
-    int c;
-
-    while ((c = *id++)) {
-        hash = ((hash << 5) + hash) + c; // hash * 33 + c
+int Hash(KeyType k) {
+    int i = 0;
+    unsigned h = 0;
+    while (k[i] != '\0') {
+        h += k[i];
+        h += (h << 10);
+        h ^= (h >> 6);
+        i++;
     }
-
-    return hash % HASHSIZE;
+    h += (h << 3);
+    h ^= (h >> 11);
+    h += (h << 15);
+    return h % HASHSIZE;
 }
 
 // Função para inicializar a tabela hash
@@ -23,171 +25,140 @@ void InitializeTable(hash_user h) {
         h[i] = NULL;
 }
 
-User *RetrieveUser(hash_user h, char *id) {
-	 int i = Hash(id);
+User *RetrieveUser(hash_user h, KeyType k) {
+	 int i = Hash(k);
 	 User *res;
 	 for(res = h[i]; res; res = res->next) {
-		 if(strcmp(res->id, id) == 0) {
+		 if(strcmp(res->id, k) == 0) {
 			 return res;
 		 }
 	 }
 	 return NULL;
 }
 
-
-
-
-void InsertReserva(hash_user h, char *id, char *reserva_id, char *hotel_id, char *hotel_name, char *hotel_stars, char *city_tax, char *hotel_address, char *begin_date, char *end_date, char *price_per_night, char *includes_breakfast, char *room_details, char *rating, char *comment) {
-    // Encontrar o usuário na tabela hash
-    User *user = RetrieveUser(h, id);
-
-    if (user == NULL) {
-        return;
-    }
-
-    // Criação da nova reserva
-    Reserva *nova_reserva = (Reserva *)malloc(sizeof(Reserva));
-    nova_reserva->reserva_id = strdup(reserva_id);
-    nova_reserva->hotel_id = strdup(hotel_id);
-    nova_reserva->hotel_name = strdup(hotel_name);
-    nova_reserva->hotel_stars = strdup(hotel_stars);
-    nova_reserva->city_tax = strdup(city_tax);
-    nova_reserva->hotel_address = strdup(hotel_address);
-    nova_reserva->begin_date = strdup(begin_date);
-    nova_reserva->end_date = strdup(end_date);
-    nova_reserva->price_per_night = strdup(price_per_night);
-    nova_reserva->includes_breakfast = includes_breakfast;
-    nova_reserva->room_details = strdup(room_details);
-    nova_reserva->rating = strdup(rating);
-    nova_reserva->comment = strdup(comment);
-    nova_reserva->next = NULL;
-
-    // Adiciona a nova reserva no início da lista de reservas do usuário
-    nova_reserva->next = user->reservas;
-    user->reservas = nova_reserva;
-}
-
-
-
 // Função para inserir na tabela hash usando encadeamento separado em caso de colisão
-void InsertTable(hash_user h, char *id, char *nome, char *email, char *phone_number, char *birth_date, char *sex, char *passport, char *country_code, char *address, char *account_creation, char *pay_method, char *account_status) {
-    
-    
-    
-    int i = Hash(id);
-
-    // Criar novo usuário
-    User *novo_usuario = (User *)malloc(sizeof(User));
-    novo_usuario->id = strdup(id);
-    novo_usuario->nome = strdup(nome);
-    novo_usuario->email = strdup(email);
-    novo_usuario->phone_number = strdup(phone_number);
-    novo_usuario->birth_date = strdup(birth_date);
-    novo_usuario->sex = strdup(sex);
-    novo_usuario->passport = strdup(passport);
-    novo_usuario->country_code = strdup(country_code);
-    novo_usuario->address = strdup(address);
-    novo_usuario->account_creation = strdup(account_creation);
-    novo_usuario->pay_method = strdup(pay_method);
-    novo_usuario->account_status = strdup(account_status);
-    novo_usuario->next = NULL;
-
-    // Lidar com colisões usando encadeamento separado
+void InsertTable(hash_user h, KeyType k, User *user) {
+    int i = Hash(k);
     if (h[i] == NULL) {
-        // Se o slot estiver vazio, apenas insira o novo usuário
-        h[i] = novo_usuario;
-        printf("inseri: %s\n",novo_usuario->id);
-    } else {
-        // Se houver colisão, adicione o novo usuário no início da lista
-        novo_usuario->next = h[i];
-        h[i] = novo_usuario;
+        h[i] = user;
+    }
+    else {
+        user->next = h[i];
+        h[i] = user;
     }
 }
 
+void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
+	User *aux = RetrieveUser(h, k);
+	if(!aux) {
+		return;
+	}
+	while(aux) {
+		if(strcmp(k, aux->id) == 0) {
+			break;
+		}
+		aux = aux->next;
+	}
+	
+	if(aux) {
+		aux->total_reservas++;
+		aux->total_gasto += q2->total_gasto;
+		Q2 *currentQ2 = aux->q2;
+		Q2 *prevQ2 = NULL;
+		
+		while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) > 0) {
+			prevQ2 = currentQ2;
+			currentQ2 = currentQ2->next;
+		}
 
-void InsertPassenger(hash_user h, char *id, char *voo_id) {
-    // Encontrar o usuário na tabela hash
-    User *user = RetrieveUser(h, id);
-
-    if (user == NULL) {
-        // Usuário não encontrado na tabela hash
-        printf("Usuário com ID %s não encontrado.\n", id);
-        return;
-    }
-
-    // Criação da nova reserva
-    Voo *nova_voo = (Voo *)malloc(sizeof(Voo));
-    nova_voo->voo_id = strdup(voo_id);
-    nova_voo->next = NULL;
-
-    // Adiciona a nova reserva no início da lista de reservas do usuário
-    nova_voo->next = user->voos;
-    user->voos = nova_voo;
+		if (prevQ2 == NULL) {
+			// Inserir no início
+			q2->next = aux->q2;
+			aux->q2 = q2;
+		} else {
+			// Inserir no meio ou no final
+			prevQ2->next = q2;
+			q2->next = currentQ2;
+		}
+	}
 }
 
+void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
+	User *aux = RetrieveUser(h, k);
+	if(!aux) {
+		return;
+	}
+	while(aux) {
+		if(strcmp(k, aux->id) == 0) {
+			break;
+		}
+		aux = aux->next;
+	}
+	
+	if(aux) {
+		aux->total_voos++;
+		Q2 *currentQ2 = aux->q2;
+		Q2 *prevQ2 = NULL;
+		
+		while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) > 0) {
+			prevQ2 = currentQ2;
+			currentQ2 = currentQ2->next;
+		}
 
-void InsertScheduleDepartureDateByVooId(hash_user h, char *voo_id, char *schedule_departure_date) {
-    if (voo_id == NULL || schedule_departure_date == NULL) {
-        // Se voo_id ou schedule_departure_date forem NULL, não faça nada
-        
-        return;
-    }
-
-    for (int i = 0; i < HASHSIZE; ++i) {
-        User *user = h[i];
-        while (user) {
-            Voo *voo_aux = user->voos;
-            while (voo_aux) {
-                if (voo_aux->voo_id != NULL && strcmp(voo_aux->voo_id, voo_id) == 0) {
-                    // Encontrou o voo correspondente
-                    voo_aux->schedule_departure_date = strdup(schedule_departure_date);
-                    return;
-                }
-                voo_aux = voo_aux->next;
-            }
-            user = user->next;
-        }
-        
-    }
+		if (prevQ2 == NULL) {
+			// Inserir no início
+			q2->next = aux->q2;
+			aux->q2 = q2;
+		} else {
+			// Inserir no meio ou no final
+			prevQ2->next = q2;
+			q2->next = currentQ2;
+		}
+		/*if(aux->q2 == NULL) {
+			aux->q2 = q2;
+		}
+		else {
+			q2->next = aux->q2;
+			aux->q2 = q2;
+		}*/
+	
+	}
 }
-
-
-
 
 
 void Printhash_user(hash_user h) {
+	int total_users = 0;
+	int total_reservas_validas = 0;
     for (int i = 0; i < HASHSIZE; ++i) {
         User *aux = h[i];
         while (aux) {
-            printf("ID: %s, Nome: %s, Email: %s, Phone: %s, Birth Date: %s, Sex: %s, Passport: %s, Country Code: %s, Address: %s, Account Creation: %s, Pay Method: %s, Account Status: %s\n",
-                   aux->id, aux->nome, aux->email, aux->phone_number,
-                   aux->birth_date, aux->sex, aux->passport, aux->country_code,
-                   aux->address, aux->account_creation, aux->pay_method, aux->account_status);
-
-            // Adicionar código para imprimir os elementos da lista ligada de reservas
-            Reserva *reserva_aux = aux->reservas;
-            while (reserva_aux) {
-                printf("  Reserva ID: %s, Hotel ID: %s, Hotel Name: %s, ... (outros campos da reserva)\n",
-                       reserva_aux->reserva_id, reserva_aux->hotel_id, reserva_aux->hotel_name);
-
-                // Avançar para o próximo nó na lista ligada de reservas
-                reserva_aux = reserva_aux->next;
-            }
-
-            // Adicionar código para imprimir os elementos da lista ligada de voos
-            Voo *voo_aux = aux->voos;
-            while (voo_aux) {
-                printf("  Voo ID: %s, Schedule Departure Date: %s\n", voo_aux->voo_id, voo_aux->schedule_departure_date);
-
-                // Avançar para o próximo nó na lista ligada de voos
-                voo_aux = voo_aux->next;
-            }
-
+			if(strcmp(aux->id, "LGARCIA1208") !=0) {
+				printf("Existe\n");
+			}
+            Q2 *rr = aux->q2;
+            int total_reservas = 0;
+            
+            //printf("\n\nPos: %d, ID: %s, Nome: %s, Email: %s, Phone: %s, Birth: %s, Sex: %s, Passport: %s, Country: %s, Adrress: %s, Account: %s, Pay: %s, Status: %s\n", i, aux->id, aux->nome, aux->email, aux->phone, aux->birth, aux->sex, aux->passport, aux->country, aux->address, aux->account_creation, aux->pay_method, aux->account_status);
+            
+            while(rr) {
+				printf("%s, %s, %d\n",rr->id, rr->data, rr->tipo);
+				total_reservas++;
+				total_reservas_validas++;
+				rr = rr->next;
+			}
+			if(total_reservas > 0) {
+				
+				//printf("Total Reservas: %d\n",total_reservas);
+			}
+			
+            
             aux = aux->next;
+            total_users++;
         }
     }
+    printf("Total Users: %d\n",total_users);
+    printf("Total Reservas Global: %d\n",total_reservas_validas);
 }
-
 
 
 
