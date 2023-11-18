@@ -200,6 +200,7 @@ void q4(hash_hoteis h_hoteis, char *argv, int f, FILE *fp_output) {
 	
 }
 
+/*
 void q5(hash_aeroportos h_aeroportos,hash_voos h_voos, char *argv, int f, FILE *fp_output){
 	int i = 1;
 	Aeroporto *aux = RetrieveAeroporto(h_aeroportos,argv);
@@ -229,17 +230,9 @@ void q5(hash_aeroportos h_aeroportos,hash_voos h_voos, char *argv, int f, FILE *
 			info = info->next_voo;
 		}
 	}
+}*/
 
-
-
-
-
-
-
-
-}
-
-int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, hash_aeroportos h_aeroportos, FILE *fp_output) {
+int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, FILE *fp_output) {
 	int argc = 0;
 	char **args = split(linha, &argc);
 	int f = 0;
@@ -258,9 +251,10 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 	else if(strcmp(args[0], "4") == 0 || strcmp(args[0], "4F") == 0) {
 		q4(h_hoteis, args[1], f, fp_output);
 	}
+	/*
 	else if(strcmp(args[0], "5") == 0 || strcmp(args[0], "5F") == 0) {
 		q5(h_aeroportos, h_voos, args[3], f, fp_output);
-	}
+	}*/
 	
 	
 	return 1;

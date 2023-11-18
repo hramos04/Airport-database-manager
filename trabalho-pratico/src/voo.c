@@ -66,6 +66,7 @@ int InsertPassengerVoo(hash_voos h, KeyType k) {
 	 return 0;
 }
 
+/*
 Aeroporto *RetrieveAeroporto(hash_aeroportos h, KeyType k) {
 	 int i = HashAeroportos(k);
 	 Aeroporto *res;
@@ -97,7 +98,7 @@ void InsertTableAeroportos(hash_aeroportos h, KeyType k, Aeroporto *aeroporto, V
 	}
 	voo->next_voo = aux->next_resumo;
 	aux->next_resumo = voo;
-}
+}*/
 
 
 void InsertTableVoos(hash_voos h, KeyType k, Voo *voo) {
@@ -126,7 +127,7 @@ void Printhash_voo(hash_voos h) {
     printf("Total Voos: %d\n",total_voos);
 }
 
-
+/*
 void Printhash_aeroportos(hash_aeroportos h) {
 	int total_aeroportos= 0;
     for (int i = 0; i < HASHSIZE; ++i) {
@@ -140,7 +141,7 @@ void Printhash_aeroportos(hash_aeroportos h) {
     }
     printf("Total Aeroportos: %d\n",total_aeroportos);
 }
-
+*/
 
 
 
