@@ -1,13 +1,13 @@
 # COMPILER
 
 CC := gcc
-LIBS := -ltermcap
+LIBS := 
 CFLAGS := -Wall -Wextra -pedantic-errors -O2 -Iinclude
 
 # OBJECT CODE
 
 OBJS_UTILS := $(patsubst %.c, %.o, $(wildcard src/*.c))
-#OBJS_TESTS := $(patsubst %.c, %.o, $(wildcard src/tests/*.c))
+OBJS_TESTS := $(patsubst %.c, %.o, $(wildcard src/tests/*.c))
 #OBJS_FETCH := $(patsubst %.c, %.o, $(wildcard src/fetch/*.c))
 OBJS_PARSER := $(patsubst %.c, %.o, $(wildcard src/parsing/*.c))
 #OBJS_QUERIES := $(patsubst %.c, %.o, $(wildcard src/queries/*.c))
@@ -18,7 +18,7 @@ OBJS_ALL := $(OBJS_UTILS) $(OBJS_TESTS) $(OBJS_FETCH) $(OBJS_PARSER) $(OBJS_QUER
 # TARGETS
 
 TARGET := programa-principal
-#TARGET_TESTS := programa-testes
+TARGET_TESTS := programa-testes
 
 # Folders
 
