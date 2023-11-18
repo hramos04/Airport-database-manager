@@ -425,10 +425,10 @@ void process_users_csv(hash_user h, char *ficheiro) {
 		for(j=0, i++; linha[i] != ';' && linha[i] != '\0'; i++, j++) {
 			account_status[j] = linha[i];
 		}
-		account_status[j-1] = '\0';
+		account_status[j] = '\0';
 		
 		
-		if (valid_date_hour(account_creation) == 0 || valid_date(birth) == 0 || compare_birth_with_account_cr(birth,account_creation)==0 || valid_email(email)==0 ||is_non_empty_string(id) == 0 || is_non_empty_string(nome) == 0 || is_non_empty_string(phone) == 0 || is_non_empty_string(sex) == 0 ||valid_sex(sex)==0 ||is_non_empty_string(passport) == 0 || is_non_empty_string(address) == 0 || is_non_empty_string(pay_method) == 0 || valid_country_code(country) == 0 || valid_account_status(account_status) == 0) {
+		if (valid_date_hour(account_creation) == 0 || valid_date(birth) == 0 || compare_birth_with_account_cr(birth,account_creation)==0 || valid_email(email)==0 ||is_non_empty_string(id) == 0 || is_non_empty_string(nome) == 0 || is_non_empty_string(phone) == 0 || is_non_empty_string(sex) == 0 ||valid_sex(sex)==0 ||is_non_empty_string(passport) == 0 || is_non_empty_string(address) == 0 || is_non_empty_string(pay_method) == 0 ||valid_country_code(country) == 0) {
 			if (invalidFile != NULL) {
 				fprintf(invalidFile, "%s\n", linha);
 			}
@@ -629,21 +629,17 @@ void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
 			user[j] = linha[i];
 		}
 		user[j-1] = '\0';
-			Voo *voo = RetrieveVoo(h_voos, flight);
-		  User *aux = RetrieveUser(h, user);
+		Voo *voo = RetrieveVoo(h_voos, flight);
+		User *aux = RetrieveUser(h, user);
 		  
-		  if(voo && aux) {
-			  //printf("%s, %s\n",aux->id, aux->account_status);
+		if(voo && aux) {
 			Q2 *q2 = (Q2*)malloc(sizeof(Q2));
 			q2->data = strdup(voo->schedule_departure_date);
 			q2->tipo = 2; //voo
 			q2->id = strdup(voo->id);
 			InsertVooUser(h, user, q2);
 			InsertPassengerVoo(h_voos, voo->id);
-		  }
-		
-		  
-		  
+		}
 	}
 	
 	

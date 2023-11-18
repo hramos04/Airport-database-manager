@@ -66,7 +66,7 @@ void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
 		Q2 *currentQ2 = aux->q2;
 		Q2 *prevQ2 = NULL;
 		
-		while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) > 0) {
+		while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) >= 0) {
 			prevQ2 = currentQ2;
 			currentQ2 = currentQ2->next;
 		}
@@ -100,7 +100,7 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
 		Q2 *currentQ2 = aux->q2;
 		Q2 *prevQ2 = NULL;
 		
-		while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) > 0) {
+		while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) >= 0) {
 			prevQ2 = currentQ2;
 			currentQ2 = currentQ2->next;
 		}

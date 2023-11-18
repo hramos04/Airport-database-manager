@@ -68,10 +68,8 @@ Hotel *RetrieveHotel(hash_hoteis h, KeyType k) {
 }
 
 double GetRatingByHotel(hash_hoteis h, KeyType k) {
-	
 	Hotel *aux = RetrieveHotel(h, k);
-	
-	
+	if(aux) {
 		double total_rating = 0;;
 		int total_opinioes = 0;
 		ReservaResumo *reserva = aux->next_resumo;
@@ -88,7 +86,7 @@ double GetRatingByHotel(hash_hoteis h, KeyType k) {
 			
 			return total_rating/total_opinioes;
 		}
-	
+	}
 	return -1;
 }
 

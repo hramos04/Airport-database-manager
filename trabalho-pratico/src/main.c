@@ -39,35 +39,38 @@ int main(int argc, char *argv[]) {
 	char *csv_passengers = (char*)malloc(256);
 	strcpy(csv_passengers, argv[1]);
 	strcat(csv_passengers, "/passengers.csv");
-	
+
     process_users_csv(h_users, csv_users);
     process_reservas_csv(h_users, h_hoteis, h_reservas, csv_reservas);
     process_voos_csv(h_users, h_aeroportos, h_voos, csv_voos);
     process_passengers_csv(h_users, h_voos, csv_passengers);
 	
 	
-	
 	FILE *fp = fopen(argv[2], "r");
+	FILE *fp_output = NULL;
 	int i = 1;
 	char str_i[100];
+	char destination_folder[1024];
 	if(fp) {
-		while((fgets(linha, 1024, fp)) != NULL) {
-			linha[strlen(linha)-2] = '\0';
-			char *destination_folder = (char*)malloc(256);
+		while(fgets(linha, sizeof(linha), fp) != NULL) {
+			size_t comp = strlen(linha);
+			if(comp > 0 && linha[comp-1] == '\n') {
+				linha[comp-1] = '\0';
+			}
+			if(comp > 1 && linha[comp-2] == '\r') {
+				linha[comp-2] = '\0';
+			}
 			strcpy(destination_folder, "Resultados/command");
 			sprintf(str_i, "%d",i);
 			strcat(destination_folder, str_i);
 			strcat(destination_folder, "_output.txt");
-			FILE *fp_output = fopen(destination_folder, "w");
+			fp_output = fopen(destination_folder, "w");
 			comando(linha, h_users, h_voos, h_reservas, h_hoteis, fp_output);
 			fclose(fp_output);
-			free(destination_folder);
 			i++;
 		}
 		fclose(fp);
 	}
-    
-    
 
     return 0;
 }
