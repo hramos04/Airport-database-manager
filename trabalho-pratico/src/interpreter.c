@@ -5,7 +5,6 @@
 #include "user.h"
 #include "voo.h"
 #include "reserva.h"
-#include "parsing.h"
 
 #define CURRENT_YEAR 2023
 #define CURRENT_MONTH 10
@@ -81,24 +80,26 @@ void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, 
 }
 
 void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
+	char data[100];
 	User *user = RetrieveUser(h_users, argv[1]);
 	int i = 1;
 	if(user && (strcasecmp(user->account_status, "active") == 0 )) {
 		Q2 *q2 = user->q2;
 		while(q2) {
+			remover_horas(q2->data, data);
 			if(argc == 3) {
 				if(strcmp(argv[2], "reservations") == 0) {
 					if(q2->tipo == 1) {
 						if(f == 1) {
 							if(i == 1) {
-								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,q2->id,q2->data);
+								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
 							}
 							else {
-								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,q2->id,q2->data);
+								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
 							}
 						}
 						else {
-							fprintf(fp_output, "%s;%s\n",q2->id,q2->data);
+							fprintf(fp_output, "%s;%s\n",q2->id,data);
 						}
 						i++;
 						
@@ -108,15 +109,15 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
 					if(q2->tipo == 2) {
 						if(f == 1) {
 							if(i == 1) {
-								fprintf(fp_output, "--- %d ---\nidd: %s\ndate: %s\n",i,q2->id,q2->data);
+								fprintf(fp_output, "--- %d ---\nidd: %s\ndate: %s\n",i,q2->id,data);
 							}
 							else {
-								fprintf(fp_output, "\n--- %d ---\nidd: %s\ndate: %s\n",i,q2->id,q2->data);
+								fprintf(fp_output, "\n--- %d ---\nidd: %s\ndate: %s\n",i,q2->id,data);
 							}
 							
 						}
 						else {
-							fprintf(fp_output,"%s;%s\n",q2->id,q2->data);
+							fprintf(fp_output,"%s;%s\n",q2->id,data);
 						}
 						i++;
 					}
@@ -126,30 +127,30 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
 				if(q2->tipo == 1) {
 					if(f == 1) {
 						if(i == 1) {
-							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, q2->id,q2->data);
+							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, q2->id,data);
 						}
 						else {
-							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, q2->id,q2->data);
+							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, q2->id,data);
 						}
 						
 					}
 					else {
-						fprintf(fp_output,"%s;%s;reservation\n",q2->id,q2->data);
+						fprintf(fp_output,"%s;%s;reservation\n",q2->id,data);
 					}
 					
 				}
 				else {
 					if(f == 1) {
 						if(i == 1) {
-							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i, q2->id,q2->data);
+							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i, q2->id,data);
 						}
 						else {
-							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i, q2->id,q2->data);
+							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i, q2->id,data);
 						}
 						
 					}
 					else {
-						fprintf(fp_output,"%s;%s;flight\n",q2->id,q2->data);
+						fprintf(fp_output,"%s;%s;flight\n",q2->id,data);
 					}
 				}
 				i++;
@@ -200,38 +201,6 @@ void q4(hash_hoteis h_hoteis, char *argv, int f, FILE *fp_output) {
 	
 }
 
-/*
-void q5(hash_aeroportos h_aeroportos,hash_voos h_voos, char *argv, int f, FILE *fp_output){
-	int i = 1;
-	Aeroporto *aux = RetrieveAeroporto(h_aeroportos,argv);
-
-	if(aux) {
-		VooResumo *voo = aux-> next_resumo;
-		while(voo){
-			Voo *info = RetrieveVoo(h_voos, voo->id);
-			if(f==1){
-				if(i==1){
-					if(compare_date(argv[2],info->schedule_departure_date)==0 && compare_date(info->schedule_arrival_date,argv[3])==0){
-						fprintf(fp_output, "--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\airline: %s\nplane_model: %s\n",i, info->id, info->schedule_departure_date, info->destination, info->airline, info->plane_model);
-					}
-				}
-				else {
-					if(compare_date(argv[2],info->schedule_departure_date)==0 && compare_date(info->schedule_arrival_date,argv[3])==0){
-						fprintf(fp_output, "\n--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\airline: %s\nplane_model: %s\n",i, info->id, info->schedule_departure_date, info->destination, info->airline, info->plane_model);
-					}	
-				}
-			}
-			else {
-				if(compare_date(argv[2],info->schedule_departure_date)==0 && compare_date(info->schedule_arrival_date,argv[3])==0){
-						fprintf(fp_output, "%s;%s;%s;%s;%s\n",info->id, info->schedule_departure_date, info->destination, info->airline, info->plane_model);
-				}
-			}
-			i++;
-			info = info->next_voo;
-		}
-	}
-}*/
-
 int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, FILE *fp_output) {
 	int argc = 0;
 	char **args = split(linha, &argc);
@@ -251,10 +220,6 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 	else if(strcmp(args[0], "4") == 0 || strcmp(args[0], "4F") == 0) {
 		q4(h_hoteis, args[1], f, fp_output);
 	}
-	/*
-	else if(strcmp(args[0], "5") == 0 || strcmp(args[0], "5F") == 0) {
-		q5(h_aeroportos, h_voos, args[3], f, fp_output);
-	}*/
 	
 	
 	return 1;

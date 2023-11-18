@@ -132,9 +132,6 @@ void Printhash_user(hash_user h) {
     for (int i = 0; i < HASHSIZE; ++i) {
         User *aux = h[i];
         while (aux) {
-			if(strcmp(aux->id, "LGARCIA1208") !=0) {
-				printf("Existe\n");
-			}
             Q2 *rr = aux->q2;
             int total_reservas = 0;
             
