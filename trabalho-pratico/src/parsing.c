@@ -275,9 +275,11 @@ int calcularDiasDatas(char *d1, char *d2) {
 }
 
 
+//strcasecmp(string, "DEBIT_CARD") == 0
+
 
 int valid_breakfast(char *string){
-    if(!strcmp(string,"true") || !strcmp(string,"t") || !strcmp(string,"1") || !strcmp(string,"false") || !strcmp(string,"f") || !strcmp(string,"0") || !strcmp(string,"")) return 1;
+    if(!strcasecmp(string,"true")  || !strcasecmp(string,"t") || !strcmp(string,"1") || !strcasecmp(string,"false") || !strcasecmp(string,"f") || !strcmp(string,"0") || !strcmp(string,"")) return 1;
     return 0;
 }
 
@@ -551,7 +553,7 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 		}
 		else {
 			User *k_user = RetrieveUser(h, user_id);
-			if(k_user && (strcasecmp(k_user->account_status, "active") == 0 )) {
+			if(k_user  ) {//(strcasecmp(k_user->account_status, "active") == 0 )
 				Reserva *nova_reserva = (Reserva *)malloc(sizeof(Reserva));
 			nova_reserva->id = strdup(id);
 			nova_reserva->user_id = strdup(user_id);
@@ -577,7 +579,7 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 			novo_resumo->end_date = strdup(end_date);
 			novo_resumo->user_id = strdup(user_id);
 			novo_resumo->rating = strtod(rating, &endptr);
-			novo_resumo->total_price = 1;
+			novo_resumo->total_price = calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) + ( ((calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) / 100)* strtod(nova_reserva->city_tax, &endptr)));
 			novo_resumo->next_resumo = NULL;
 
 			
