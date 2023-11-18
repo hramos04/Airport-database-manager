@@ -2,29 +2,14 @@
 #define PARSING_H
 
 #include "user.h"
-//#include "aerport.h"
+#include "reserva.h"
+#include "voo.h"
 
-int valid_date(char *string);
-int valid_date_hour(char *string);
-int valid_email(char *string);
-int valid_country_code(char *string);
-int valid_account_status(char *string);
-int valid_pay_method(char *string);
-int valid_seat_numbers(char *string, char *string1);
-int valid_aeroport(char *string);
-int valid_stars(char *string);
-int valid_id(char *string);
-int valid_phone_number(char *string);
-int valid_breakfast(char *string);
-int valid_tax(char *string);
-int valid_price(char *string);
-int valid_rating(char *string);
-int compare_begin_with_end(char *string1, char *string2);
 int is_non_empty_string(char *string);
 void parse_users_csv(hash_user h, char *line);
 void parse_reservations_csv(hash_user h, char *line);
-void parse_passengers_csv(hash_user h, char *line);
-void parse_flights_csv(hash_user h, char *line);
-void process_csv_file(const char* filename, hash_user h, void (*parse_function)(hash_user, char*));
-
+void process_users_csv(hash_user h, char *ficheiro);
+void process_reservas_csv(hash_user h, hash_hoteis h_hoteis,hash_reservas h_reservas, char *ficheiro);
+void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voos, char *ficheiro);
+void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro);
 #endif  // PARSING_H
