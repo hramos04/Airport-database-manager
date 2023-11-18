@@ -330,21 +330,9 @@ int calcularDiferencaSegundos(char *datetime1, char *datetime2) {
     return diferencaSegundos;
 }
 
-/*
-int compare_date(char *d1, char *d2){
-    int ano1, mes1,dia1;
-	int ano2, mes2,dia2;
-	sscanf(d1, "%d/%d/%d", &ano1, &mes1, &dia1);
-	sscanf(d2, "%d/%d/%d", &ano2, &mes2, &dia2);
-
-	if(ano1==ano2 && mes1==mes2 && dia1<=dia2)
-		return 0;
-	else if(ano1==ano2 && mes1<=mes2)
-		return 0;
-	else if(ano1<=ano2)
-		return 0;
-	else return -1;
-}*/
+int compare_date(){
+    return 0;
+}
 
 int valid_rating(char *string) {
     if (string[0] == '\0') {
@@ -374,7 +362,13 @@ void process_users_csv(hash_user h, char *ficheiro) {
 	char country[MAX_LINE_LENGTH], address[MAX_LINE_LENGTH], account_creation[MAX_LINE_LENGTH], pay_method[MAX_LINE_LENGTH], account_status[MAX_LINE_LENGTH];
 	while((fgets(linha, 1024, fp)) != NULL) {
 		
-		linha[strlen(linha)-1] = '\0';
+		size_t comp = strlen(linha);
+		if(comp > 0 && linha[comp-1] == '\n') {
+			linha[comp-1] = '\0';
+		}
+		if(comp > 1 && linha[comp-2] == '\r') {
+			linha[comp-2] = '\0';
+		}
 		int i=0, j=0;
 		for(j=0; linha[i] != ';'; i++, j++) {
 			id[j] = linha[i];
@@ -428,19 +422,18 @@ void process_users_csv(hash_user h, char *ficheiro) {
 		}
 		account_creation[j] = '\0';
 		
-		for(j=0, i++; linha[i] != ';' && linha[i] != '\0'; i++, j++) {
+		for(j=0, i++; linha[i] != ';' && linha[i] != '\0' && linha[i] != '\r'; i++, j++) {
 			pay_method[j] = linha[i];
 		}
 		pay_method[j] = '\0';
 		
 		
-		for(j=0, i++; linha[i] != ';' && linha[i] != '\0'; i++, j++) {
+		for(j=0, i++; linha[i] != ';' && linha[i] != '\0' && linha[i] != '\r'; i++, j++) {
 			account_status[j] = linha[i];
 		}
 		account_status[j] = '\0';
 		
-		
-		if (valid_date_hour(account_creation) == 0 || valid_date(birth) == 0 || compare_birth_with_account_cr(birth,account_creation)==0 || valid_email(email)==0 ||is_non_empty_string(id) == 0 || is_non_empty_string(nome) == 0 || is_non_empty_string(phone) == 0 || is_non_empty_string(sex) == 0 ||valid_sex(sex)==0 ||is_non_empty_string(passport) == 0 || is_non_empty_string(address) == 0 || is_non_empty_string(pay_method) == 0 ||valid_country_code(country) == 0) {
+		if (valid_date_hour(account_creation) == 0 || valid_date(birth) == 0 || compare_birth_with_account_cr(birth,account_creation)==0 || valid_email(email)==0 ||is_non_empty_string(id) == 0 || is_non_empty_string(nome) == 0 || is_non_empty_string(phone) == 0 || is_non_empty_string(sex) == 0 ||valid_sex(sex)==0 ||is_non_empty_string(passport) == 0 || is_non_empty_string(address) == 0 || is_non_empty_string(pay_method) == 0 ||valid_country_code(country) == 0 ||valid_account_status(account_status) == 0) {
 			if (invalidFile != NULL) {
 				fprintf(invalidFile, "%s\n", linha);
 			}
@@ -473,7 +466,6 @@ void process_users_csv(hash_user h, char *ficheiro) {
 }
 
 
-
 void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_reservas, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/reservations_errors.csv", "w");
@@ -482,8 +474,14 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 	char end_date[MAX_LINE_LENGTH], price_per_night[MAX_LINE_LENGTH], includes_breakfast[MAX_LINE_LENGTH], room_details[MAX_LINE_LENGTH], rating[MAX_LINE_LENGTH], comment[MAX_LINE_LENGTH];
 	char * endptr;
 	while((fgets(linha, 1024, fp)) != NULL) {
-		
-		linha[strlen(linha)-1] = '\0';
+		size_t comp = strlen(linha);
+		if(comp > 0 && linha[comp-1] == '\n') {
+			linha[comp-1] = '\0';
+		}
+		if(comp > 1 && linha[comp-2] == '\r') {
+			linha[comp-2] = '\0';
+		}
+		//linha[strlen(linha)-1] = '\0';
 		int i=0, j=0;
 		for(j=0; linha[i] != ';'; i++, j++) {
 			id[j] = linha[i];
@@ -547,15 +545,15 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 		room_details[j] = '\0';
 		
 		
-		for(j=0, i++; linha[i] != ';' && linha[i] != '\0'; i++, j++) {
+		for(j=0, i++; linha[i] != ';' && linha[i] != '\0' && linha[i] != '\r'; i++, j++) {
 			rating[j] = linha[i];
 		}
 		rating[j] = '\0';
 		
-		for(j=0, i++; linha[i] != ';' && linha[i] != '\0'; i++, j++) {
+		for(j=0, i++; linha[i] != ';' && linha[i] != '\0' && linha[i] != '\r'; i++, j++) {
 			comment[j] = linha[i];
 		}
-		comment[j-1] = '\0';
+		comment[j] = '\0';
 		
 		  
 		if(is_non_empty_string(id) == 0 || is_non_empty_string(user_id) == 0 || is_non_empty_string(hotel_id) == 0 ||is_non_empty_string(hotel_name) == 0 || is_non_empty_string(address) == 0 || valid_rating(rating)==0 || valid_breakfast(includes_breakfast)==0 || valid_price(price_per_night)==0 || valid_tax(city_tax)==0 || valid_stars(hotel_stars)==0 || compare_begin_with_end(begin_date, end_date)==0 || valid_date(begin_date)==0|| valid_date(end_date)==0){
@@ -565,6 +563,7 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 		}
 		else {
 			User *k_user = RetrieveUser(h, user_id);
+			
 			if(k_user  ) {//(strcasecmp(k_user->account_status, "active") == 0 )
 				Reserva *nova_reserva = (Reserva *)malloc(sizeof(Reserva));
 			nova_reserva->id = strdup(id);
@@ -621,7 +620,6 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 	fclose(fp);
 }
 
-
 void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/passengers_errors.csv", "w");
@@ -629,7 +627,7 @@ void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
 	char flight[MAX_LINE_LENGTH], user[MAX_LINE_LENGTH];
 	
 	while((fgets(linha, 1024, fp)) != NULL) {
-		
+	
 		linha[strlen(linha)-1] = '\0';
 		int i=0, j=0;
 		for(j=0; linha[i] != ';'; i++, j++) {
@@ -637,18 +635,18 @@ void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
 		}
 		flight[j] = '\0';
 		
-		for(j=0, i++; linha[i] != ';' && linha[i] != '\0'; i++, j++) {
+		for(j=0, i++; linha[i] != ';' && linha[i] != '\0' && linha[i] != '\r'; i++, j++) {
 			user[j] = linha[i];
 		}
-		user[j-1] = '\0';
+		user[j] = '\0';
 		Voo *voo = RetrieveVoo(h_voos, flight);
 		User *aux = RetrieveUser(h, user);
-		  
 		if(voo && aux) {
 			Q2 *q2 = (Q2*)malloc(sizeof(Q2));
 			q2->data = strdup(voo->schedule_departure_date);
 			q2->tipo = 2; //voo
 			q2->id = strdup(voo->id);
+			
 			InsertVooUser(h, user, q2);
 			InsertPassengerVoo(h_voos, voo->id);
 		}
@@ -747,7 +745,7 @@ void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voo
 				}
 		  }
 		  else {
-			  Voo *novo_voo = (Voo *)malloc(sizeof(Voo));
+			Voo *novo_voo = (Voo *)malloc(sizeof(Voo));
 			novo_voo->id = strdup(id);
 			novo_voo->airline = strdup(airline);
 			novo_voo->plane_model = strdup(plane_model);
@@ -764,6 +762,8 @@ void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voo
 			novo_voo->delay = calcularDiferencaSegundos(schedule_departure_date, real_departure_date);
 			novo_voo->next_voo = NULL;
 			
+			InsertTableVoos(h_voos, id, novo_voo);
+			
 			/*ReservaResumo *novo_resumo = (ReservaResumo *)malloc(sizeof(ReservaResumo));
 			novo_resumo->id = strdup(id);
 			novo_resumo->begin_date = strdup(begin_date);
@@ -771,24 +771,17 @@ void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voo
 			novo_resumo->user_id = strdup(user_id);
 			novo_resumo->rating = strdup(rating);
 			novo_resumo->total_price = 1;
-			novo_resumo->next_resumo = NULL;*/
+			novo_resumo->next_resumo = NULL;
 			//InsertTableHoteis(h_hoteis, hotel_id, novo_resumo);
 			InsertTableVoos(h_voos, id, novo_voo);
 			
-			/*Q2 *q2 = (Q2*)malloc(sizeof(Q2));
+			Q2 *q2 = (Q2*)malloc(sizeof(Q2));
 			q2->data = strdup(schedule_departure_date);
 			q2->tipo = 2; //voo
 			q2->id = strdup(id);
 			
 			InsertVooUser(h, user_id, q2);*/
 		  }
-			
-			
-
-			
-			
-			
-			
 			
 		//}
 	}

@@ -44,6 +44,7 @@ int main(int argc, char *argv[]) {
     process_reservas_csv(h_users, h_hoteis, h_reservas, csv_reservas);
     process_voos_csv(h_users, h_aeroportos, h_voos, csv_voos);
     process_passengers_csv(h_users, h_voos, csv_passengers);
+    
 	
 	
 	FILE *fp = fopen(argv[2], "r");
