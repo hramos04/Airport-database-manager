@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
 			strcat(destination_folder, str_i);
 			strcat(destination_folder, "_output.txt");
 			fp_output = fopen(destination_folder, "w");
-			comando(linha, h_users, h_voos, h_reservas, h_hoteis, fp_output);
+			comando(linha, h_users, h_voos, h_reservas, h_hoteis, h_aeroportos, fp_output);
 			fclose(fp_output);
 			i++;
 		}

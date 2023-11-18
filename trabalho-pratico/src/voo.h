@@ -48,6 +48,9 @@ void InsertTableVoos(hash_voos h, KeyType k, Voo *voo);
 void Printhash_voo(hash_voos h);
 Voo *RetrieveVoo(hash_voos h, KeyType k);
 int InsertPassengerVoo(hash_voos h, KeyType k);
+Aeroporto *RetrieveAeroporto(hash_aeroportos h, KeyType k);
+void InsertTableAeroportos(hash_aeroportos h, KeyType k, Aeroporto *aeroporto, VooResumo *voo);
+void Printhash_aeroportos(hash_aeroportos h);
 
 
 #endif
