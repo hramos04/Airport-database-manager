@@ -103,7 +103,7 @@ void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, 
 	else if(reserva) {
 		reserva->includes_breakfast[0] = toupper(reserva->includes_breakfast[0]);
 		if(f == 1) {
-			fprintf(fp_output, "--- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f",reserva->hotel_id, reserva->hotel_name, reserva->hotel_stars, reserva->begin_date, reserva->end_date, reserva->includes_breakfast, reserva->total_noites, reserva->total_gasto);
+			fprintf(fp_output, "--- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",reserva->hotel_id, reserva->hotel_name, reserva->hotel_stars, reserva->begin_date, reserva->end_date, reserva->includes_breakfast, reserva->total_noites, reserva->total_gasto);
 		}
 		else {
 			fprintf(fp_output, "%s;%s;%s;%s;%s;%s;%d;%.3f\n",reserva->hotel_id, reserva->hotel_name, reserva->hotel_stars, reserva->begin_date, reserva->end_date, reserva->includes_breakfast, reserva->total_noites, reserva->total_gasto);
