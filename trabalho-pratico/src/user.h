@@ -38,10 +38,10 @@ typedef User *hash_user[HASHSIZE];
 
 void InitializeTable(hash_user h);
 void InsertTable(hash_user h, KeyType k, User *user);
-void Printhash_user(hash_user h);
 void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) ;
 void InsertVooUser(hash_user h, KeyType k, Q2 *q2);
 User *RetrieveUser(hash_user h, KeyType k);
+User *GetUserPrefix(hash_user h, KeyType k);
 
 #endif
 

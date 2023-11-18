@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "user.h"
 
 int Hash(KeyType k) {
@@ -34,6 +35,60 @@ User *RetrieveUser(hash_user h, KeyType k) {
 		 }
 	 }
 	 return NULL;
+}
+
+User* copyUser(User *original) {
+    User *copy = malloc(sizeof(User));
+    copy->id = strdup(original->id);
+    copy->nome = strdup(original->nome);
+    copy->next = NULL;
+    return copy;
+}
+
+int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2) {
+    while (*str1 != '\0' && *str2 != '\0') {
+        while (*str1 == '-' && *str2 == '-') {
+            str1++;
+            str2++;
+        }
+        if (tolower(*str1) != tolower(*str2)) {
+            return (tolower(*str1) - tolower(*str2));
+        } else {
+            str1++;
+            str2++;
+        }
+    }
+
+    return 0;
+}
+
+void addUserToList(User **list, User *newUser) {
+    while (*list != NULL) {
+        int compare = compareNamesWithoutHyphenIgnoreCase(newUser->nome, (*list)->nome);
+        if (compare < 0 || (compare == 0 && strcmp(newUser->id, (*list)->id) < 0)) {
+            newUser->next = *list;
+            *list = newUser;
+            return;
+        }
+        list = &(*list)->next;
+    }
+    *list = newUser;
+}
+
+
+User *GetUserPrefix(hash_user h, KeyType k) {
+	User *res = NULL;
+    for (int i = 0; i < HASHSIZE; i++) {
+        User *currentUser = h[i];
+        while (currentUser != NULL) {
+            if (strcasecmp(currentUser->account_status, "active") == 0 && strncmp(currentUser->nome, k, strlen(k)) == 0) {
+				User *copy = copyUser(currentUser);
+				addUserToList(&res, copy);
+            }
+            currentUser = currentUser->next;
+        }
+    }
+    return res;
 }
 
 // Função para inserir na tabela hash usando encadeamento separado em caso de colisão
@@ -106,21 +161,12 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
 		}
 
 		if (prevQ2 == NULL) {
-			// Inserir no início
 			q2->next = aux->q2;
 			aux->q2 = q2;
 		} else {
-			// Inserir no meio ou no final
 			prevQ2->next = q2;
 			q2->next = currentQ2;
 		}
-		/*if(aux->q2 == NULL) {
-			aux->q2 = q2;
-		}
-		else {
-			q2->next = aux->q2;
-			aux->q2 = q2;
-		}*/
 	
 	}
 }

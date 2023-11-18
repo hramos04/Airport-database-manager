@@ -330,21 +330,9 @@ int calcularDiferencaSegundos(char *datetime1, char *datetime2) {
     return diferencaSegundos;
 }
 
-/*
-int compare_date(char *d1, char *d2){
-    int ano1, mes1,dia1;
-	int ano2, mes2,dia2;
-	sscanf(d1, "%d/%d/%d", &ano1, &mes1, &dia1);
-	sscanf(d2, "%d/%d/%d", &ano2, &mes2, &dia2);
-	if(ano1==ano2 && mes1==mes2 && dia1<=dia2)
-		return 0;
-	else if(ano1==ano2 && mes1<=mes2)
-		return 0;
-	else if(ano1<=ano2)
-		return 0;
-	else return -1;
+int compare_date(){
+    return 0;
 }
-*/
 
 int valid_rating(char *string) {
     if (string[0] == '\0') {
@@ -776,23 +764,14 @@ void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voo
 			
 			InsertTableVoos(h_voos, id, novo_voo);
 			
-			/*ReservaResumo *novo_resumo = (ReservaResumo *)malloc(sizeof(ReservaResumo));
+			VooResumo *novo_resumo = (VooResumo *)malloc(sizeof(VooResumo));
 			novo_resumo->id = strdup(id);
-			novo_resumo->begin_date = strdup(begin_date);
-			novo_resumo->end_date = strdup(end_date);
-			novo_resumo->user_id = strdup(user_id);
-			novo_resumo->rating = strdup(rating);
-			novo_resumo->total_price = 1;
+			novo_resumo->schedule_departure_date = strdup(schedule_departure_date);
+			novo_resumo->destination = strdup(destination);
+			novo_resumo->airline = strdup(airline);
+			novo_resumo->plane_model = strdup(plane_model);
 			novo_resumo->next_resumo = NULL;
-			//InsertTableHoteis(h_hoteis, hotel_id, novo_resumo);
-			InsertTableVoos(h_voos, id, novo_voo);
-			
-			Q2 *q2 = (Q2*)malloc(sizeof(Q2));
-			q2->data = strdup(schedule_departure_date);
-			q2->tipo = 2; //voo
-			q2->id = strdup(id);
-			
-			InsertVooUser(h, user_id, q2);*/
+			InsertTableAeroporto(h_aeroportos, origin, novo_resumo);
 		  }
 			
 		//}

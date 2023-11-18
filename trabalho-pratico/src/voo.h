@@ -28,9 +28,9 @@ typedef struct VooResumo {
     char *id;
     char *schedule_departure_date;
     char *destination;
-    char *airplane;
+    char *airline;
     char *plane_model;
-    struct VooResumo *next_voo;
+    struct VooResumo *next_resumo;
 } VooResumo;
 
 typedef struct Aeroporto {
@@ -48,9 +48,8 @@ void InsertTableVoos(hash_voos h, KeyType k, Voo *voo);
 void Printhash_voo(hash_voos h);
 Voo *RetrieveVoo(hash_voos h, KeyType k);
 int InsertPassengerVoo(hash_voos h, KeyType k);
-//Aeroporto *RetrieveAeroporto(hash_aeroportos h, KeyType k);
-//void InsertTableAeroportos(hash_aeroportos h, KeyType k, Aeroporto *aeroporto, VooResumo *voo);
-//void Printhash_aeroportos(hash_aeroportos h);
+void InsertTableAeroporto(hash_aeroportos h, KeyType k, VooResumo *vooresumo);
+VooResumo *GetVoosAeroportoEntreDatas(hash_aeroportos h, KeyType k, char *begin_date, char *end_date);
 
 #endif
 

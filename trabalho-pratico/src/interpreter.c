@@ -9,22 +9,55 @@
 #define CURRENT_YEAR 2023
 #define CURRENT_MONTH 10
 #define CURRENT_DAY 1
+#define MAX_ARGS 5
+#define MAX_LINE_LENGTH 1024
 
-char **split(const char *linha, int *total) {
-	char **arr = (char**)malloc(10 * sizeof(char *));
-	char *copy = strdup(linha);
-	char *token = strtok(copy, " ");
-	int count = 0;
-	while (token != NULL && count < 10) {
-		arr[count]  =strdup(token);
-		token = strtok(NULL, " ");
-		count++;
-	}
-	free(copy);
-	*total = count;
-	return arr;
-	
+void remove_quotes(char *str) {
+    int len = strlen(str);
+    if (len >= 2 && str[0] == '"' && str[len - 1] == '"') {
+        for (int i = 0; i < len - 1; i++) {
+            str[i] = str[i + 1];
+        }
+        str[len - 1] = '\0';
+    }
 }
+
+void split(char *line, int *arg_count, char *args[MAX_ARGS]) {
+    *arg_count = 0;
+    char buffer[MAX_LINE_LENGTH];
+    int in_quotes = 0;
+    size_t buffer_index = 0;
+
+    for (size_t i = 0; i < strlen(line) && *arg_count < MAX_ARGS; i++) {
+        char current_char = line[i];
+
+        if (current_char == ' ' && !in_quotes) {
+            // Final de um argumento
+            buffer[buffer_index] = '\0';
+            args[(*arg_count)++] = strdup(buffer);
+            buffer_index = 0;
+        } else if (current_char == '\"') {
+            // Início ou final das aspas
+            in_quotes = 1 - in_quotes;
+        } else {
+            // Caracter normal, adiciona ao buffer
+            buffer[buffer_index++] = current_char;
+        }
+    }
+
+    // Adicionar o último argumento
+    if (buffer_index > 0 && *arg_count < MAX_ARGS) {
+        buffer[buffer_index] = '\0';
+        args[(*arg_count)++] = strdup(buffer);
+    }
+
+    // Remover aspas dos argumentos
+    for (int i = 0; i < *arg_count; i++) {
+        remove_quotes(args[i]);
+    }
+}
+
+
 
 int calculaIdade(char *birthDate) {
 	int a_aux, m_aux, d_aux;
@@ -70,7 +103,7 @@ void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, 
 	else if(reserva) {
 		reserva->includes_breakfast[0] = toupper(reserva->includes_breakfast[0]);
 		if(f == 1) {
-			fprintf(fp_output, "--- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",reserva->hotel_id, reserva->hotel_name, reserva->hotel_stars, reserva->begin_date, reserva->end_date, reserva->includes_breakfast, reserva->total_noites, reserva->total_gasto);
+			fprintf(fp_output, "--- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f",reserva->hotel_id, reserva->hotel_name, reserva->hotel_stars, reserva->begin_date, reserva->end_date, reserva->includes_breakfast, reserva->total_noites, reserva->total_gasto);
 		}
 		else {
 			fprintf(fp_output, "%s;%s;%s;%s;%s;%s;%d;%.3f\n",reserva->hotel_id, reserva->hotel_name, reserva->hotel_stars, reserva->begin_date, reserva->end_date, reserva->includes_breakfast, reserva->total_noites, reserva->total_gasto);
@@ -201,40 +234,61 @@ void q4(hash_hoteis h_hoteis, char *argv, int f, FILE *fp_output) {
 	
 }
 
-/*
-void q5(hash_aeroportos h_aeroportos,hash_voos h_voos, char *argv, int f, FILE *fp_output){
+void q9(hash_user h_users, char *argv, int f, FILE *fp_output) {
+	User *aux = GetUserPrefix(h_users, argv);
 	int i = 1;
-	Aeroporto *aux = RetrieveAeroporto(h_aeroportos,argv);
 	if(aux) {
-		VooResumo *voo = aux-> next_resumo;
-		while(voo){
-			Voo *info = RetrieveVoo(h_voos, voo->id);
-			if(f==1){
-				if(i==1){
-					if(compare_date(argv[2],info->schedule_departure_date)==0 && compare_date(info->schedule_arrival_date,argv[3])==0){
-						fprintf(fp_output, "--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\airline: %s\nplane_model: %s\n",i, info->id, info->schedule_departure_date, info->destination, info->airline, info->plane_model);
-					}
+		while(aux) {
+			if(f == 1) {
+				if(i == 1) {
+					fprintf(fp_output, "--- %d ---\nid: %s\nname: %s\n",i, aux->id, aux->nome);
 				}
 				else {
-					if(compare_date(argv[2],info->schedule_departure_date)==0 && compare_date(info->schedule_arrival_date,argv[3])==0){
-						fprintf(fp_output, "\n--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\airline: %s\nplane_model: %s\n",i, info->id, info->schedule_departure_date, info->destination, info->airline, info->plane_model);
-					}	
+					fprintf(fp_output, "\n--- %d ---\nid: %s\nname: %s\n",i, aux->id, aux->nome);
 				}
+				i++;
 			}
 			else {
-				if(compare_date(argv[2],info->schedule_departure_date)==0 && compare_date(info->schedule_arrival_date,argv[3])==0){
-						fprintf(fp_output, "%s;%s;%s;%s;%s\n",info->id, info->schedule_departure_date, info->destination, info->airline, info->plane_model);
-				}
+				fprintf(fp_output, "%s;%s\n",aux->id, aux->nome);
 			}
-			i++;
-			info = info->next_voo;
+			
+			//fprintf(fp_output, "%s;%s;%s;%s;%.0f;%.3f\n",reserva->id, reserva->begin_date, reserva->end_date,reserva->user_id, reserva->rating, reserva->total_price);
+			aux = aux->next;
 		}
 	}
-}*/
+	
+}
 
-int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, FILE *fp_output) {
+
+void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_date, int f, FILE *fp_output) {
+	VooResumo *aux = GetVoosAeroportoEntreDatas(h_aeroportos, origin, begin_date, end_date);
+	int i = 1;
+	if(aux) {
+		while(aux) {
+			if(f == 1) {
+				if(i == 1) {
+					fprintf(fp_output, "--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, aux->id, aux->schedule_departure_date,aux->destination, aux->airline, aux->plane_model);
+				}
+				else {
+					fprintf(fp_output, "\n--- %d ---\niid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, aux->id, aux->schedule_departure_date,aux->destination, aux->airline, aux->plane_model);
+				}
+				i++;
+			}
+			else {
+				fprintf(fp_output, "%s;%s;%s;%s;%s\n",aux->id, aux->schedule_departure_date,aux->destination, aux->airline, aux->plane_model);
+			}
+			
+			//fprintf(fp_output, "%s;%s;%s;%s;%.0f;%.3f\n",reserva->id, reserva->begin_date, reserva->end_date,reserva->user_id, reserva->rating, reserva->total_price);
+			aux = aux->next_resumo;
+		}
+	}
+	
+}
+
+int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, hash_aeroportos h_aeroportos, FILE *fp_output) {
 	int argc = 0;
-	char **args = split(linha, &argc);
+	char *args[MAX_ARGS];
+	split(linha, &argc, args);
 	int f = 0;
 	if(linha[1] == 'F') {
 		f = 1;
@@ -251,11 +305,12 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 	else if(strcmp(args[0], "4") == 0 || strcmp(args[0], "4F") == 0) {
 		q4(h_hoteis, args[1], f, fp_output);
 	}
-	/*
 	else if(strcmp(args[0], "5") == 0 || strcmp(args[0], "5F") == 0) {
-		q5(h_aeroportos, h_voos, args[3], f, fp_output);
+		q5(h_aeroportos, args[1], args[2], args[3], f, fp_output);
 	}
-	}*/
+	else if(strcmp(args[0], "9") == 0 || strcmp(args[0], "9F") == 0) {
+		q9(h_users, args[1], f, fp_output);
+	}
 	
 	
 	return 1;

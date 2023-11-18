@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "voo.h"
 
 int HashAeroportos(KeyType k) {
@@ -66,7 +67,6 @@ int InsertPassengerVoo(hash_voos h, KeyType k) {
 	 return 0;
 }
 
-/*
 Aeroporto *RetrieveAeroporto(hash_aeroportos h, KeyType k) {
 	 int i = HashAeroportos(k);
 	 Aeroporto *res;
@@ -78,16 +78,18 @@ Aeroporto *RetrieveAeroporto(hash_aeroportos h, KeyType k) {
 	 return NULL;
 }
 
-void InsertTableAeroportos(hash_aeroportos h, KeyType k, Aeroporto *aeroporto, VooResumo *voo) {
+void InsertTableAeroporto(hash_aeroportos h, KeyType k, VooResumo *vooresumo) {
+	for (int j = 0; k[j] != '\0'; j++) {
+        k[j] = toupper(k[j]);
+    }
     int i = HashAeroportos(k);
-    
     Aeroporto *aux = RetrieveAeroporto(h, k);
     if(!aux) {
-		Aeroporto*novo_aeroporto = (Aeroporto *)malloc(sizeof(Aeroporto));
-		novo_aeroporto->name = strdup(k);
-		novo_aeroporto->next = NULL;
-		novo_aeroporto->next_resumo = NULL;
-		aux = novo_aeroporto;
+		Aeroporto *novo = (Aeroporto *)malloc(sizeof(Aeroporto));
+		novo->name = strdup(k);
+		novo->next = NULL;
+		novo->next_resumo = vooresumo;
+		aux = novo;
 		if (h[i] == NULL) {
 			h[i] = aux;
 		}
@@ -96,10 +98,20 @@ void InsertTableAeroportos(hash_aeroportos h, KeyType k, Aeroporto *aeroporto, V
 			h[i] = aux;
 		}
 	}
-	voo->next_voo = aux->next_resumo;
-	aux->next_resumo = voo;
+	else {
+		// Insere ordenadamente na lista next_resumo pela schedule_departure_date
+        VooResumo **atual = &aux->next_resumo;
+        while (*atual != NULL &&
+               (strcmp((*atual)->schedule_departure_date, vooresumo->schedule_departure_date) < 0 ||
+                (strcmp((*atual)->schedule_departure_date, vooresumo->schedule_departure_date) == 0 &&
+                 strcmp((*atual)->id, vooresumo->id) < 0))) {
+            atual = &(*atual)->next_resumo;
+        }
+
+        vooresumo->next_resumo = *atual;
+        *atual = vooresumo;
+	}
 }
-*/
 
 
 void InsertTableVoos(hash_voos h, KeyType k, Voo *voo) {
@@ -114,43 +126,29 @@ void InsertTableVoos(hash_voos h, KeyType k, Voo *voo) {
 }
 
 
-void Printhash_voo(hash_voos h) {
-	int total_voos = 0;
-    for (int i = 0; i < HASHSIZE; ++i) {
-        Voo *aux = h[i];
-        while(aux) {
-			printf("ZZZ: %s\n",aux->id);
-			aux = aux->next_voo;
-			total_voos++;
-		}
-        
-    }
-    printf("Total Voos: %d\n",total_voos);
+VooResumo *GetVoosAeroportoEntreDatas(hash_aeroportos h, KeyType k, char *begin_date, char *end_date) {
+	int i = HashAeroportos(k);
+    Aeroporto *aeroporto = RetrieveAeroporto(h, k);
+
+	VooResumo *result = NULL;
+    if (aeroporto) {
+		VooResumo *vooResumo = aeroporto->next_resumo;
+
+		while (vooResumo != NULL) {
+			if (strcmp(vooResumo->schedule_departure_date, begin_date) >= 0 && strcmp(vooResumo->schedule_departure_date, end_date) <= 0) {
+				// Cria uma cópia do VooResumo e adiciona à lista de resultados
+				VooResumo *copia = malloc(sizeof(VooResumo));
+				copia->id = strdup(vooResumo->id);
+				copia->schedule_departure_date = strdup(vooResumo->schedule_departure_date);
+				copia->destination = strdup(vooResumo->destination);
+				copia->airline = strdup(vooResumo->airline);
+				copia->plane_model = strdup(vooResumo->plane_model);
+				copia->next_resumo = result;
+				result = copia;
+			}
+			vooResumo = vooResumo->next_resumo;
+		}	
+	}
+    return result;
 }
-
-
-/*
-void Printhash_aeroportos(hash_aeroportos h) {
-	int total_aeroportos= 0;
-    for (int i = 0; i < HASHSIZE; ++i) {
-        Aeroporto *aux = h[i];
-        while(aux) {
-			printf("Aeroporto: %s\n", aux->name);
-			aux = aux->next;
-			total_aeroportos++;
-		}
-        
-    }
-    printf("Total Aeroportos: %d\n",total_aeroportos);
-}
-*/
-
-
-
-
-
-
-
-
-
 

@@ -129,12 +129,6 @@ void InsertTableHoteis(hash_hoteis h, KeyType k, ReservaResumo *reserva) {
 		prevQ2->next_resumo = reserva;
 		reserva->next_resumo = currentQ2;
 	}
-	
-	
-	
-	
-	//reserva->next_resumo = aux->next_resumo;
-	//aux->next_resumo = reserva;
 }
 
 
@@ -148,53 +142,3 @@ void InsertTableReservas(hash_reservas h, KeyType k, Reserva *reserva) {
         h[i] = reserva;
     }
 }
-
-
-void Printhash_reserva(hash_reservas h) {
-	int total_reservas = 0;
-    for (int i = 0; i < HASHSIZE; ++i) {
-        Reserva *aux = h[i];
-        while(aux) {
-			printf("ZZZ: %s\n",aux->id);
-			aux = aux->next_reserva;
-			total_reservas++;
-		}
-        
-    }
-    printf("Total REservas: %d\n",total_reservas);
-}
-
-
-void Printhash_hoteis(hash_hoteis h) {
-	int total_hoteis = 0;
-    for (int i = 0; i < HASHSIZE; ++i) {
-        Hotel *aux = h[i];
-        
-        while(aux) {
-			
-			int total_reservas_hotel = 0;
-			ReservaResumo *reserva = aux->next_resumo;
-			while(reserva) {
-				total_reservas_hotel++;
-				printf("Resumo: %s\n",reserva->id);
-				reserva = reserva->next_resumo;
-			}
-			printf("ZZZ: %s, Reservas: %d\n",aux->hotel_id, total_reservas_hotel);
-			
-			aux = aux->next;
-			total_hoteis++;
-		}
-        
-    }
-    printf("Total Hoteis: %d\n",total_hoteis);
-}
-
-
-
-
-
-
-
-
-
-
