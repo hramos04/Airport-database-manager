@@ -251,8 +251,6 @@ void q9(hash_user h_users, char *argv, int f, FILE *fp_output) {
 			else {
 				fprintf(fp_output, "%s;%s\n",aux->id, aux->nome);
 			}
-			
-			//fprintf(fp_output, "%s;%s;%s;%s;%.0f;%.3f\n",reserva->id, reserva->begin_date, reserva->end_date,reserva->user_id, reserva->rating, reserva->total_price);
 			aux = aux->next;
 		}
 	}
