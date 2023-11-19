@@ -270,7 +270,7 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
 					fprintf(fp_output, "--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, aux->id, aux->schedule_departure_date,aux->destination, aux->airline, aux->plane_model);
 				}
 				else {
-					fprintf(fp_output, "\n--- %d ---\niid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, aux->id, aux->schedule_departure_date,aux->destination, aux->airline, aux->plane_model);
+					fprintf(fp_output, "\n--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, aux->id, aux->schedule_departure_date,aux->destination, aux->airline, aux->plane_model);
 				}
 				i++;
 			}
