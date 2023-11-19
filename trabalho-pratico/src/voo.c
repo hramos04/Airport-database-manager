@@ -78,12 +78,19 @@ Aeroporto *RetrieveAeroporto(hash_aeroportos h, KeyType k) {
 	 return NULL;
 }
 
+void convertToUpper(char *s) {
+	for (int j = 0; s[j] != '\0'; j++) {
+        s[j] = toupper(s[j]);
+    }
+}
+
 void InsertTableAeroporto(hash_aeroportos h, KeyType k, VooResumo *vooresumo) {
 	for (int j = 0; k[j] != '\0'; j++) {
         k[j] = toupper(k[j]);
     }
     int i = HashAeroportos(k);
     Aeroporto *aux = RetrieveAeroporto(h, k);
+    convertToUpper(vooresumo->destination);
     if(!aux) {
 		Aeroporto *novo = (Aeroporto *)malloc(sizeof(Aeroporto));
 		novo->name = strdup(k);
@@ -99,7 +106,7 @@ void InsertTableAeroporto(hash_aeroportos h, KeyType k, VooResumo *vooresumo) {
 		}
 	}
 	else {
-		// Insere ordenadamente na lista next_resumo pela schedule_departure_date
+		// Insere ordenadamente na lista de voos baseada na data de partida
         VooResumo **atual = &aux->next_resumo;
         while (*atual != NULL &&
                (strcmp((*atual)->schedule_departure_date, vooresumo->schedule_departure_date) < 0 ||
@@ -112,6 +119,20 @@ void InsertTableAeroporto(hash_aeroportos h, KeyType k, VooResumo *vooresumo) {
         *atual = vooresumo;
 	}
 }
+
+/*int InsertAeroportoPassenger(hash_aeroportos h, char *origin) {
+	for (int j = 0; origin[j] != '\0'; j++) {
+        origin[j] = toupper(origin[j]);
+    }
+    Aeroporto *aux = RetrieveAeroporto(h, origin);
+    if(aux) {
+		aux->total_passengers++;
+		printf("Total: %s, %d\n",origin, aux->total_passengers);
+		return 1;
+	}
+	return 0;
+    
+}*/
 
 
 void InsertTableVoos(hash_voos h, KeyType k, Voo *voo) {
