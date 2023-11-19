@@ -330,10 +330,6 @@ int calcularDiferencaSegundos(char *datetime1, char *datetime2) {
     return diferencaSegundos;
 }
 
-int compare_date(){
-    return 0;
-}
-
 int valid_rating(char *string) {
     if (string[0] == '\0') {
         return 1;  // String vazia
