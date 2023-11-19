@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include "user.h"
 
+
 int Hash(KeyType k) {
     int i = 0;
     unsigned h = 0;
@@ -45,27 +46,58 @@ User* copyUser(User *original) {
     return copy;
 }
 
+/*
 int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2) {
     while (*str1 != '\0' && *str2 != '\0') {
         while (*str1 == '-' && *str2 == '-') {
             str1++;
             str2++;
         }
-        if (tolower(*str1) != tolower(*str2)) {
-            return (tolower(*str1) - tolower(*str2));
-        } else {
+		if (isdigit(*str1) && isdigit(*str2)) {
+            while (isdigit(*str1) && isdigit(*str2)) {
+                if (*str1 != *str2) {
+                    return (*str1 - *str2);
+                } else{
+                str1++;
+                str2++;
+            	}
+			}
+		} else{
+        	if (tolower(*str1) != tolower(*str2)) {
+            	return (tolower(*str1) - tolower(*str2));
+        	} else {
+            str1++;
+            str2++;
+       		}
+		}
+    }
+
+    return (*str1 - *str2);
+}*/
+
+int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2) {
+    while (*str1 != '\0' && *str2 != '\0') {
+        while (*str1 == '-' && *str2 == '-') {
             str1++;
             str2++;
         }
-    }
 
-    return 0;
+        int result = strcoll(str1, str2);
+
+        if (result != 0) {
+            return result;
+        } else {
+            str1 += strlen(str1); 
+            str2 += strlen(str2);  
+        }
+    }
+    return strcoll(str1, str2);
 }
 
 void addUserToList(User **list, User *newUser) {
     while (*list != NULL) {
-        int compare = compareNamesWithoutHyphenIgnoreCase(newUser->nome, (*list)->nome);
-        if (compare < 0 || (compare == 0 && strcmp(newUser->id, (*list)->id) < 0)) {
+        int compare = strcoll(newUser->nome, (*list)->nome);
+        if (compare < 0  || (compare == 0 && strcmp(newUser->id, (*list)->id) < 0)) {
             newUser->next = *list;
             *list = newUser;
             return;

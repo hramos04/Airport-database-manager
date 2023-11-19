@@ -6,8 +6,11 @@
 #include "reserva.h"
 #include "voo.h"
 #include "interpreter.h"
+#include <locale.h>
+
 
 int main(int argc, char *argv[]) {
+	setlocale(LC_COLLATE, "en_US.UTF-8");
 	char linha[1024];
 	if(argc < 2) {
 		return 0;
