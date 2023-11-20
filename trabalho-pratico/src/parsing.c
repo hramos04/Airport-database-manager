@@ -597,7 +597,7 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 			InsertTableHoteis(h_hoteis, hotel_id, novo_resumo);
 			InsertTableReservas(h_reservas, id, nova_reserva);
 			
-			Q2 q2 = (Q2)malloc(sizeof(Q2));
+			Q2 *q2 = (Q2*)malloc(sizeof(Q2));
 			q2->data = strdup(begin_date);
 			
 			//printf("Total gasto: %f",calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr));
@@ -642,7 +642,7 @@ void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
 		Voo *voo = RetrieveVoo(h_voos, flight_id);
 		User *aux = RetrieveUser(h, user_id);
 		if(voo && aux) {
-			Q2 q2 = (Q2)malloc(sizeof(Q2));
+			Q2 *q2 = (Q2*)malloc(sizeof(Q2));
 			q2->data = strdup(voo->schedule_departure_date);
 			q2->tipo = 2; //voo
 			q2->id = strdup(voo->id);
