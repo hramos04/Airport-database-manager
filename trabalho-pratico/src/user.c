@@ -70,7 +70,7 @@ int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2) {
 void addUserToList(User **list, User *newUser) {
     while (*list != NULL) {
         int compare = strcoll(newUser->nome, (*list)->nome);
-        if (compare < 0  || (compare == 0 && strcmp(newUser->id,(*list)->id) > 0)) {
+        if (compare < 0  || (compare == 0 && strcoll(newUser->id,(*list)->id) < 0)) {
             newUser->next = *list;
             *list = newUser;
             return;
