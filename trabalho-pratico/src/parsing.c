@@ -624,35 +624,38 @@ void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/passengers_errors.csv", "w");
 	FILE *fp = fopen(ficheiro,"r");
-	char flight[MAX_LINE_LENGTH], user[MAX_LINE_LENGTH];
+	char flight_id[MAX_LINE_LENGTH], user_id[MAX_LINE_LENGTH];
 	
 	while((fgets(linha, 1024, fp)) != NULL) {
 	
 		linha[strlen(linha)-1] = '\0';
 		int i=0, j=0;
 		for(j=0; linha[i] != ';'; i++, j++) {
-			flight[j] = linha[i];
+			flight_id[j] = linha[i];
 		}
-		flight[j] = '\0';
+		flight_id[j] = '\0';
 		
 		for(j=0, i++; linha[i] != ';' && linha[i] != '\0' && linha[i] != '\r'; i++, j++) {
-			user[j] = linha[i];
+			user_id[j] = linha[i];
 		}
-		user[j] = '\0';
-		Voo *voo = RetrieveVoo(h_voos, flight);
-		User *aux = RetrieveUser(h, user);
+		user_id[j] = '\0';
+		Voo *voo = RetrieveVoo(h_voos, flight_id);
+		User *aux = RetrieveUser(h, user_id);
 		if(voo && aux) {
 			Q2 q2 = (Q2)malloc(sizeof(Q2));
 			q2->data = strdup(voo->schedule_departure_date);
 			q2->tipo = 2; //voo
 			q2->id = strdup(voo->id);
 			
-			InsertVooUser(h, user, q2);
+			InsertVooUser(h, user_id, q2);
 			InsertPassengerVoo(h_voos, voo->id);
 		}
+		if(is_non_empty_string(flight_id)==0 || is_non_empty_string(user_id)){
+			if (invalidFile != NULL) {
+				fprintf(invalidFile, "%s\n", linha);
+				}
+		}
 	}
-	
-	
 	fclose(invalidFile);
 	fclose(fp);
 }
@@ -773,11 +776,10 @@ void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voo
 			novo_resumo->next_resumo = NULL;
 			InsertTableAeroporto(h_aeroportos, origin, novo_resumo);
 		  }
-			
-		//}
 	}
 	
 	
 	fclose(invalidFile);
 	fclose(fp);
 }
+
