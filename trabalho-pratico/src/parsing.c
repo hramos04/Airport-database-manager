@@ -8,6 +8,20 @@
 #include "user.h"
 #include "voo.h"
 
+
+// Função para verificar se um usuário com o ID fornecido está na tabela
+int valid_user(hash_user h, KeyType user_id) {
+    User *user = RetrieveUser(h, user_id);
+
+    // Verificar se o usuário foi encontrado e possui status "ativo"
+    if (user != NULL) {
+        return 1; // O usuário está na tabela e é válido
+    } else {
+        return 0; // O usuário não está na tabela ou não possui status "ativo"
+    }
+}
+
+
 int valid_date(char *string) {
     if (strlen(string) != 10) {
         return 0;
@@ -556,7 +570,7 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 		comment[j] = '\0';
 		
 		  
-		if(is_non_empty_string(id) == 0 || is_non_empty_string(user_id) == 0 || is_non_empty_string(hotel_id) == 0 ||is_non_empty_string(hotel_name) == 0 || is_non_empty_string(address) == 0 || valid_rating(rating)==0 || valid_breakfast(includes_breakfast)==0 || valid_price(price_per_night)==0 || valid_tax(city_tax)==0 || valid_stars(hotel_stars)==0 || compare_begin_with_end(begin_date, end_date)==0 || valid_date(begin_date)==0|| valid_date(end_date)==0){
+		if(valid_user(h, user_id) == 0 || is_non_empty_string(id) == 0 || is_non_empty_string(user_id) == 0 || is_non_empty_string(hotel_id) == 0 ||is_non_empty_string(hotel_name) == 0 || is_non_empty_string(address) == 0 || valid_rating(rating)==0 || valid_breakfast(includes_breakfast)==0 || valid_price(price_per_night)==0 || valid_tax(city_tax)==0 || valid_stars(hotel_stars)==0 || compare_begin_with_end(begin_date, end_date)==0 || valid_date(begin_date)==0|| valid_date(end_date)==0){
 			if (invalidFile != NULL) {
 				fprintf(invalidFile, "%s\n", linha);
 			}
