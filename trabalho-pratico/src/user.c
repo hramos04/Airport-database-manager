@@ -46,34 +46,7 @@ User* copyUser(User *original) {
     return copy;
 }
 
-/*
-int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2) {
-    while (*str1 != '\0' && *str2 != '\0') {
-        while (*str1 == '-' && *str2 == '-') {
-            str1++;
-            str2++;
-        }
-		if (isdigit(*str1) && isdigit(*str2)) {
-            while (isdigit(*str1) && isdigit(*str2)) {
-                if (*str1 != *str2) {
-                    return (*str1 - *str2);
-                } else{
-                str1++;
-                str2++;
-            	}
-			}
-		} else{
-        	if (tolower(*str1) != tolower(*str2)) {
-            	return (tolower(*str1) - tolower(*str2));
-        	} else {
-            str1++;
-            str2++;
-       		}
-		}
-    }
 
-    return (*str1 - *str2);
-}*/
 
 int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2) {
     while (*str1 != '\0' && *str2 != '\0') {
@@ -97,7 +70,7 @@ int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2) {
 void addUserToList(User **list, User *newUser) {
     while (*list != NULL) {
         int compare = strcoll(newUser->nome, (*list)->nome);
-        if (compare < 0  || (compare == 0 && strcmp(newUser->id, (*list)->id) < 0)) {
+        if (compare < 0  || (compare == 0 && strcoll(newUser->id,(*list)->id) < 0)) {
             newUser->next = *list;
             *list = newUser;
             return;

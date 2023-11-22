@@ -251,8 +251,6 @@ void q9(hash_user h_users, char *argv, int f, FILE *fp_output) {
 			else {
 				fprintf(fp_output, "%s;%s\n",aux->id, aux->nome);
 			}
-			
-			//fprintf(fp_output, "%s;%s;%s;%s;%.0f;%.3f\n",reserva->id, reserva->begin_date, reserva->end_date,reserva->user_id, reserva->rating, reserva->total_price);
 			aux = aux->next;
 		}
 	}
@@ -283,7 +281,7 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
 		}
 	}
 }
-	
+
 int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, hash_aeroportos h_aeroportos, FILE *fp_output) {
 	int argc = 0;
 	char *args[MAX_ARGS];

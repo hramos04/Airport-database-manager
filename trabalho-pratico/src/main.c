@@ -7,9 +7,14 @@
 #include "voo.h"
 #include "interpreter.h"
 #include <locale.h>
+#include "time.h"
 
 
 int main(int argc, char *argv[]) {
+	
+	clock_t start, end, duration;
+    start = clock();
+
 	setlocale(LC_COLLATE, "en_US.UTF-8");
 	char linha[1024];
 	if(argc < 2) {
@@ -76,8 +81,14 @@ int main(int argc, char *argv[]) {
 		}
 		fclose(fp);
 	}
+	end = clock();
 
-    return 0;
+    duration = (end - start);
+
+    printf("Processor cycles taken : %f cycles\n", (float)duration);
+    printf("Processor time taken : %f seconds\n", (float)duration/CLOCKS_PER_SEC);
+    
+    return 0;   
 }
 
 

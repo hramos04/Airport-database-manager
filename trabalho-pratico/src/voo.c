@@ -148,7 +148,6 @@ void InsertTableVoos(hash_voos h, KeyType k, Voo *voo) {
 
 
 VooResumo *GetVoosAeroportoEntreDatas(hash_aeroportos h, KeyType k, char *begin_date, char *end_date) {
-	int i = HashAeroportos(k);
     Aeroporto *aeroporto = RetrieveAeroporto(h, k);
 
 	VooResumo *result = NULL;
