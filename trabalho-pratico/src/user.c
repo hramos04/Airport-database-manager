@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "user.h"
 
-
+/* Função de hash que converte uma chave num índice na tabela hash. */
 int Hash(KeyType k) {
     int i = 0;
     unsigned h = 0;
@@ -20,13 +20,17 @@ int Hash(KeyType k) {
     return h % HASHSIZE;
 }
 
-// Função para inicializar a tabela hash
+
+/* Função que inicializa a tabela de hash User. */
 void InitializeTable(hash_user h) {
     int i;
     for (i = 0; i < HASHSIZE; ++i)
         h[i] = NULL;
 }
 
+
+/* Função que retorna o User pretendido, caso este se encontre na hash, através da sua respetiva 
+chave. */
 User *RetrieveUser(hash_user h, KeyType k) {
 	 int i = Hash(k);
 	 User *res;
@@ -38,6 +42,8 @@ User *RetrieveUser(hash_user h, KeyType k) {
 	 return NULL;
 }
 
+
+/* Função auxiliar que cria uma copia de um determinado User. */
 User* copyUser(User *original) {
     User *copy = malloc(sizeof(User));
     copy->id = strdup(original->id);
@@ -47,7 +53,8 @@ User* copyUser(User *original) {
 }
 
 
-
+/* Função auxiliar que compara duas strings, que neste caso em concreto, vai ser utilizada para
+comparar nomes, com a particularidade de ignorar hífens nos mesmos. */
 int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2) {
     while (*str1 != '\0' && *str2 != '\0') {
         while (*str1 == '-' && *str2 == '-') {
@@ -67,6 +74,9 @@ int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2) {
     return strcoll(str1, str2);
 }
 
+
+/* Função auxiliar que adiciona um User a uma lista, que é ordenada pelos nomes dos diferentes
+Users. */
 void addUserToList(User **list, User *newUser) {
     while (*list != NULL) {
         int compare = strcoll(newUser->nome, (*list)->nome);
@@ -81,6 +91,9 @@ void addUserToList(User **list, User *newUser) {
 }
 
 
+/* Função auxiliar que percorre a tabela hash, procurando Users que apresentem o parametro 
+"active" e cujos nomes começam com um determinado prefixo, retornando uma lista ordenada 
+desses Users, com a ajuda das função addUserToList e a função copyUser. */
 User *GetUserPrefix(hash_user h, KeyType k) {
 	User *res = NULL;
     for (int i = 0; i < HASHSIZE; i++) {
@@ -96,7 +109,9 @@ User *GetUserPrefix(hash_user h, KeyType k) {
     return res;
 }
 
-// Função para inserir na tabela hash usando encadeamento separado em caso de colisão
+/* A fução InsertTable calcula o indice da chave, com o auxilio da função Hash, e coloca o User na 
+tabela Hash. Caso a posição calculada estiver vazia, o User é adicionado diretamente, caso contrário, 
+é adicionado ao início da lista nessa posição. */
 void InsertTable(hash_user h, KeyType k, User *user) {
     int i = Hash(k);
     if (h[i] == NULL) {
@@ -108,6 +123,10 @@ void InsertTable(hash_user h, KeyType k, User *user) {
     }
 }
 
+
+/* A função verifica com o auxilio da funçao RetriveUser se o User se encontra na hash, caso este 
+se encontre, incrementa o número total de reservas e o gasto total do user, em seguida insere a reserva
+ordenamente na lista ligada Q2. */
 void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
 	User *aux = RetrieveUser(h, k);
 	if(!aux) {
@@ -132,17 +151,18 @@ void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
 		}
 
 		if (prevQ2 == NULL) {
-			// Inserir no início
 			q2->next = aux->q2;
 			aux->q2 = q2;
 		} else {
-			// Inserir no meio ou no final
 			prevQ2->next = q2;
 			q2->next = currentQ2;
 		}
 	}
 }
 
+
+/* A função InsertVooUser segue a mesmo linha de pensamento que a função InsertReservaUser, inserindo os 
+flights na lista ligada Q2, de forma ordenada. */
 void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
 	User *aux = RetrieveUser(h, k);
 	if(!aux) {
@@ -177,36 +197,7 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
 }
 
 
-void Printhash_user(hash_user h) {
-	int total_users = 0;
-	int total_reservas_validas = 0;
-    for (int i = 0; i < HASHSIZE; ++i) {
-        User *aux = h[i];
-        while (aux) {
-            Q2 *rr = aux->q2;
-            int total_reservas = 0;
-            
-            //printf("\n\nPos: %d, ID: %s, Nome: %s, Email: %s, Phone: %s, Birth: %s, Sex: %s, Passport: %s, Country: %s, Adrress: %s, Account: %s, Pay: %s, Status: %s\n", i, aux->id, aux->nome, aux->email, aux->phone, aux->birth, aux->sex, aux->passport, aux->country, aux->address, aux->account_creation, aux->pay_method, aux->account_status);
-            
-            while(rr) {
-				printf("%s, %s, %d\n",rr->id, rr->data, rr->tipo);
-				total_reservas++;
-				total_reservas_validas++;
-				rr = rr->next;
-			}
-			if(total_reservas > 0) {
-				
-				//printf("Total Reservas: %d\n",total_reservas);
-			}
-			
-            
-            aux = aux->next;
-            total_users++;
-        }
-    }
-    printf("Total Users: %d\n",total_users);
-    printf("Total Reservas Global: %d\n",total_reservas_validas);
-}
+
 
 
 

@@ -3,6 +3,8 @@
 #include <string.h>
 #include "reserva.h"
 
+
+/* Função de hash que converte uma chave num índice na tabela hash dos hoteis. */
 int HashHoteis(KeyType k) {
     int i = 0;
     unsigned h = 0;
@@ -18,6 +20,8 @@ int HashHoteis(KeyType k) {
     return h % HASHSIZE;
 }
 
+
+/* Função de hash que converte uma chave num índice na tabela hash das reservas. */
 int HashReservas(KeyType k) {
     int i = 0;
     unsigned h = 0;
@@ -33,18 +37,25 @@ int HashReservas(KeyType k) {
     return h % HASHSIZE;
 }
 
+
+/* Função que inicializa a tabela de hash Hoteis. */
 void InitializeTableHoteis(hash_hoteis h) {
     int i;
     for (i = 0; i < HASHSIZE; ++i)
         h[i] = NULL;
 }
 
+
+/* Função que inicializa a tabela de hash Reservas. */
 void InitializeTableReservas(hash_reservas h) {
     int i;
     for (i = 0; i < HASHSIZE; ++i)
         h[i] = NULL;
 }
 
+
+/* Função que retorna a Reserva pretendida, caso esta se encontre na hash, através da sua respetiva 
+chave. */
 Reserva *RetrieveReserva(hash_reservas h, KeyType k) {
 	 int i = HashReservas(k);
 	 Reserva *res;
@@ -56,6 +67,9 @@ Reserva *RetrieveReserva(hash_reservas h, KeyType k) {
 	 return NULL;
 }
 
+
+/* Função que retorna o Hotel pretendido, caso este se encontre na hash, através da sua respetiva 
+chave. */
 Hotel *RetrieveHotel(hash_hoteis h, KeyType k) {
 	 int i = HashHoteis(k);
 	 Hotel *res;
@@ -67,6 +81,9 @@ Hotel *RetrieveHotel(hash_hoteis h, KeyType k) {
 	 return NULL;
 }
 
+
+/* Função que calcula a média das classificações de um hotel, percorrendo a lista ligada 
+das reservas e somando os diferentes ratings em cada reserva. */
 double GetRatingByHotel(hash_hoteis h, KeyType k) {
 	Hotel *aux = RetrieveHotel(h, k);
 	if(aux) {
@@ -91,7 +108,9 @@ double GetRatingByHotel(hash_hoteis h, KeyType k) {
 }
 
 
-
+/* A função verifica se um Hotel está presente na tabela hash. Caso não esteja, adiciona o novo Hotel 
+à tabela. Posteriormente, insere ordenadamente um novo ReservaResumo associado a esse hotel, na 
+lista ligada, vinculada a esse Hotel .*/
 void InsertTableHoteis(hash_hoteis h, KeyType k, ReservaResumo *reserva) {
     int i = HashHoteis(k);
     
@@ -132,6 +151,9 @@ void InsertTableHoteis(hash_hoteis h, KeyType k, ReservaResumo *reserva) {
 }
 
 
+/* A função insere uma Reserva na tabela hash das Reservas, caso a posição estiver livre coloca a 
+Reserva nessa posição, caso a posição já estiver ocupada,diciona a reserva no início da lista 
+encadeada dessa posição. */
 void InsertTableReservas(hash_reservas h, KeyType k, Reserva *reserva) {
     int i = HashReservas(k);
     if (h[i] == NULL) {

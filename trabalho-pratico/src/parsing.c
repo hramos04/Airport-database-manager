@@ -9,7 +9,8 @@
 #include "voo.h"
 
 
-// Função que verifica se um utilizador é válido.
+/* Função que verifica se um user se encontra na tabela de hash User, retornando 1 caso este se encontre,
+ou retornando 0, caso o User não se encontre na tabela de hash. */ 
 int valid_user(hash_user h, KeyType user_id) {
     User *user = RetrieveUser(h, user_id);
 
@@ -21,7 +22,9 @@ int valid_user(hash_user h, KeyType user_id) {
     }
 }
 
-// Função que verifica se um voo é válido.
+
+/* Função que verifica se um flight se encontra na tabela de hash Voo, retornando 1 caso este se encontre,
+ou retornando 0, caso o flight não se encontre na tabela de hash. */ 
 int valid_flight(hash_voos h, KeyType flight_id){
 	Voo *voo = RetrieveVoo(h, flight_id);
 
@@ -30,10 +33,11 @@ int valid_flight(hash_voos h, KeyType flight_id){
     } else {
         return 0; 
     }
-
 }
 
-// Função que verifica se a data é válida.
+
+/* Função que verifica se uma data cumpre todos os requisitos para ser considerada válida, retornando 1
+caso esta seja válida, ou 0 caso contrário*/
 int valid_date(char *string) {
     if (strlen(string) != 10) {
         return 0;
@@ -61,7 +65,10 @@ int valid_date(char *string) {
     return 1;
 }
 
-// Função que verifica se a data e a hora são válidas.
+
+
+/* Função que verifica se uma data com horas cumpre todos os requisitos para ser considerada válida, 
+retornando 1 caso esta seja válida, ou 0 caso contrário*/
 int valid_date_hour(char *string) {
     if (strlen(string) != 19) {
         return 0;
@@ -92,8 +99,9 @@ int valid_date_hour(char *string) {
     return 1; 
 }
 
-/* Função que verifica se a data de aniversário
-é anterior à data de criação da conta. */
+
+/* Função que verifica se a data de nascimento é anterior à data de criação da conta, retornando 1 
+caso seja verdade, ou 0 caso contrário. */
 int compare_birth_with_account_cr(char *string1, char *string2) {
     if (strlen(string1) != 10 || strlen(string2) != 19) {
         return -1;
@@ -116,7 +124,8 @@ int compare_birth_with_account_cr(char *string1, char *string2) {
     return 0;
 }
 
-// Função que verifica se o email é válido.
+
+/* Função que verifica se o email é válido, retornando 1 caso este seja válido, ou 0 caso contrário.*/
 int valid_email(char *string) {
     int i, atFound = 0, dotFound = 0;
     int usernameLength = 0, domainLength = 0, tldLength = 0;
@@ -144,26 +153,33 @@ int valid_email(char *string) {
     }
 }
 
-// Função que verifica se o código postal é válido.
+
+/* Função que verifica se o código postal é válido, retornando 1 caso este seja válido, 
+ou 0 caso contrário. */
 int valid_country_code(char *string){
     if(strlen(string) == 2) return 1;
     else return 0;
 }
 
-// Função que verifica se o status da conta é válido.
+
+/* Função que verifica se o status da conta é válido, retornando 1 caso esta seja válida, ou 
+0 caso contrário. */
 int valid_account_status(char *string) {
     int result = (strcasecmp(string, "active") == 0 || strcasecmp(string, "inactive") == 0);
 	
     return result;
 }
 
-// Função que verifica se o método de pagamento é válido.
+
+/* Função que verifica se o método de pagamento é válido, retornando 1 caso este seja válido, 
+ou 0 caso contrário. */
 int valid_pay_method(char *string) {
     return (strcasecmp(string, "CASH") == 0 || strcasecmp(string, "DEBIT_CARD") == 0 || strcasecmp(string, "CREDIT_CARD") == 0);
 }
 
 
-// Função que verifica se o nome do aeroporto é válido.
+/* Função que verifica se o nome do aeroporto é válido, retornando 1 caso este seja válido, ou 0 caso 
+contrário. */
 int valid_aeroport(char *string) {
     if (strlen(string) != 3) {
         return 0;
@@ -178,7 +194,9 @@ int valid_aeroport(char *string) {
     return 1;
 }
 
-// Função que verifica se o número de estrelas do hotel é válido.
+
+/* Função que verifica se o número de estrelas do hotel é válido, retornando 1 caso este seja válido, 
+ou 0 caso contrário. */
 int valid_stars(char *string) {
     if (isdigit(string[0]) && (string[0] >= '1' && string[0] <= '5') && string[1]=='\0') {
         return 1;
@@ -186,7 +204,9 @@ int valid_stars(char *string) {
     return 0;
 }
 
-// Função que verifica se a data inicial é anterior à data final.
+
+/* Função que verifica se a data inicial é anterior à data final, retornando 1 caso seja verdade, 
+ou 0 caso contrário. */
 int compare_begin_with_end(char *string1, char *string2) {
     if (strlen(string1) != 10 || strlen(string2) != 10) {
         return -1; 
@@ -209,7 +229,9 @@ int compare_begin_with_end(char *string1, char *string2) {
     return 0; 
 }
 
-// Função que verifica se o número de telefone é válido.
+
+/* Função que verifica se um número de telefone é válido, retornando 1 caso este seja válido, 
+ou 0 caso contrário. */
 int valid_phone_number(char *string){
     if(string[0] == '\0') return 0;
     for (int i = 0; string[i] != '\0'; i++){
@@ -218,14 +240,16 @@ int valid_phone_number(char *string){
     return 1;
 }
 
-// Função que verifica se o sexo é válido.
+
+/* Função que verifica se o sexo é válido, retornando 1 caso este seja válido, ou 0 caso contrário. */
 int valid_sex(char *string){
     if (string[0] == 'M' || string[0] == 'F') return 1;
     else return 0;
 }
 
-/* Função que verifica se a data e hora de início 
-são anterioes a data e hora final. */
+
+/* Função que verifica se a data e hora de início são anterioes a data e hora final, retornando 1 
+caso seja verdade, ou 0 caso contrário. */
 int compare_datetime(char *datetime1, char *datetime2) {
     if (strlen(datetime1) != 19 || strlen(datetime2) != 19) {
         return 0;
@@ -248,8 +272,8 @@ int compare_datetime(char *datetime1, char *datetime2) {
     return 0;
 }
 
-/* Função que verifica se o número de lugares de um
-avião é superior ao número de passageiros num determinado voo. */
+/* Função que verifica se o número de lugares de um avião é superior ao número de passageiros num 
+determinado voo, retornando 1 caso seja verdade, ou 0 caso contrário. */
 int valid_seat(char *string) {
     for (size_t i = 0; i < strlen(string); ++i) {
         if (!isdigit((unsigned char)string[i])) {
@@ -260,7 +284,7 @@ int valid_seat(char *string) {
     return 1;
 }
 
-// Função que calcula os dias ocorridos entre duas datas.
+/* Função que calcula os dias ocorridos entre duas datas. */
 int calcularDiasDatas(char *d1, char *d2) {
 	int ano1, mes1,dia1;
 	int ano2, mes2,dia2;
@@ -270,14 +294,15 @@ int calcularDiasDatas(char *d1, char *d2) {
 	return dia2 - dia1;
 }
 
-/* Função que verifica se a opção de pequeno-almoço
-incluido/não incluido é válida */
+/* Função que verifica se a opção de pequeno-almoço incluido/não incluido é válida, retornando 1 caso 
+este seja válido, ou 0 caso contrário. */
 int valid_breakfast(char *string){
     if(!strcasecmp(string,"true")  || !strcasecmp(string,"t") || !strcmp(string,"1") || !strcasecmp(string,"false") || !strcasecmp(string,"f") || !strcmp(string,"0") || !strcmp(string,"")) return 1;
     return 0;
 }
 
-// Função se o imposto aplicado numa determinada cidade é válido.
+/* Função que verifica se o imposto aplicado numa determinada cidade é válido, retornando 1 caso este 
+seja válido, ou 0 caso contrário. */
 int valid_tax(char *string) {
     for (int i = 0; string[i] != '\0'; i++) {
         if (!isdigit(string[i])) {
@@ -292,7 +317,8 @@ int valid_tax(char *string) {
     return 0;
 }
 
-// Função que verifica se o preço por noite é válido.
+/* Função que verifica se o preço por noite é válido, retornando 1 caso este seja válido, 
+ou 0 caso contrário. */
 int valid_price(char *string) {
     for (int i = 0; string[i] != '\0'; i++) {
         if (!isdigit(string[i])) {
@@ -307,7 +333,7 @@ int valid_price(char *string) {
     return 0;
 }
 
-// Função que calcula a diferença em segundos entre duas datas e horas.
+/* Função que calcula a diferença em segundos entre duas datas e horas. */
 int calcularDiferencaSegundos(char *datetime1, char *datetime2) {
     int ano1, mes1, dia1, hora1, minuto1, segundo1;
     int ano2, mes2, dia2, hora2, minuto2, segundo2;
@@ -324,7 +350,7 @@ int calcularDiferencaSegundos(char *datetime1, char *datetime2) {
 }
 
 
-// Função que verifica se o rating é válido.
+/* Função que verifica se o rating é válido, retornando 1 caso este seja válido, ou 0 caso contrário. */
 int valid_rating(char *string) {
     if (string[0] == '\0') {
         return 1;
@@ -337,15 +363,15 @@ int valid_rating(char *string) {
     return 0;
 }
 
-/* Função que verifica se determinados campos têm 
-tamanho superior a zero. */
+/* Função que verifica se determinados campos têm tamanho superior a zero, retornando 1 caso apresentem 
+tamanho superior a zero, ou 0 caso contrário. */
 int is_non_empty_string(char *string) {
     return (strlen(string) > 0);
 }
 
 
-/* Função responsável por efetuar o parsing de todas as linhas 
-do csv dos utilizadores e verificar se todos os campos são válidos. */
+/* Função responsável por efetuar o parsing de todas as linhas do csv dos utilizadores e verificar se 
+todos os campos são válidos, inserindo os valores na hash table. */
 void process_users_csv(hash_user h, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/users_errors.csv", "w");
@@ -457,8 +483,8 @@ void process_users_csv(hash_user h, char *ficheiro) {
 	fclose(fp);
 }
 
-/* Função responsável por efetuar o parsing de todas as linhas 
-do csv das reservas e verificar se todos os campos são válidos. */
+/* Função responsável por efetuar o parsing de todas as linhas do csv das reservas e verificar se todos 
+os campos são válidos, inserindo os valores nas hash tables. */
 void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_reservas, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/reservations_errors.csv", "w");
@@ -607,8 +633,8 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 	fclose(fp);
 }
 
-/* Função responsável por efetuar o parsing de todas as linhas 
-do csv dos passageiros e verificar se todos os campos são válidos. */
+/* Função responsável por efetuar o parsing de todas as linhas do csv dos passageiros e verificar 
+se todos os campos são válidos, inserindo os valores nas hash tables. */
 void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/passengers_errors.csv", "w");
@@ -649,8 +675,8 @@ void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
 	fclose(fp);
 }
 
-/* Função responsável por efetuar o parsing de todas as linhas 
-do csv dos voos e verificar se todos os campos são válidos. */
+/* Função responsável por efetuar o parsing de todas as linhas do csv dos voos e verificar se 
+todos os campos são válidos, inserindo os valores nas hash tables. */
 void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voos, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/flights_errors.csv", "w");
