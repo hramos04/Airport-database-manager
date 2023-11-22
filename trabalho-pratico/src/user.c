@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "user.h"
+#include "../include/user.h"
+
 
 /* Função de hash que converte uma chave num índice na tabela hash. */
 int Hash(KeyType k) {
