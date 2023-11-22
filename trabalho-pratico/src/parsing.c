@@ -3,10 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "stdbool.h"
-#include "parsing.h"
 #define MAX_LINE_LENGTH 1024
-#include "user.h"
-#include "voo.h"
+#include "../include/parsing.h"
+#include "../include/user.h"
+#include "../include/voo.h"
+
+
+
 
 
 /* Função que verifica se um user se encontra na tabela de hash User, retornando 1 caso este se encontre,

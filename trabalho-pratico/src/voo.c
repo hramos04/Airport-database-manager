@@ -2,8 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "voo.h"
+#include "../include/voo.h"
 
+
+
+/* Função de hash que converte uma chave num índice na tabela hash dos Aeroportos. */
 int HashAeroportos(KeyType k) {
     int i = 0;
     unsigned h = 0;
@@ -19,6 +22,8 @@ int HashAeroportos(KeyType k) {
     return h % HASHSIZE;
 }
 
+
+/* Função de hash que converte uma chave num índice na tabela hash dos Voos. */
 int HashVoos(KeyType k) {
     int i = 0;
     unsigned h = 0;
@@ -34,18 +39,25 @@ int HashVoos(KeyType k) {
     return h % HASHSIZE;
 }
 
+
+/* Função que inicializa a tabela de hash Aeroportos. */
 void InitializeTableAeroportos(hash_aeroportos h) {
     int i;
     for (i = 0; i < HASHSIZE; ++i)
         h[i] = NULL;
 }
 
+
+/* Função que inicializa a tabela de hash Voos. */
 void InitializeTableVoos(hash_voos h) {
     int i;
     for (i = 0; i < HASHSIZE; ++i)
         h[i] = NULL;
 }
 
+
+/* Função que retorna o Voo pretendido, caso este se encontre na hash, através da sua respetiva 
+chave. */
 Voo *RetrieveVoo(hash_voos h, KeyType k) {
 	 int i = HashVoos(k);
 	 Voo *res;
@@ -58,6 +70,8 @@ Voo *RetrieveVoo(hash_voos h, KeyType k) {
 }
 
 
+/* Função auxiliar que incrementa o número total de passageiros, caso o voo exista na tabela hash dos
+voos*/
 int InsertPassengerVoo(hash_voos h, KeyType k) {
 	 Voo *aux = RetrieveVoo(h, k);
 	 if(aux) {
@@ -67,6 +81,9 @@ int InsertPassengerVoo(hash_voos h, KeyType k) {
 	 return 0;
 }
 
+
+/* Função que retorna o Aeroporto pretendido, caso este se encontre na hash, através da sua respetiva 
+chave. */
 Aeroporto *RetrieveAeroporto(hash_aeroportos h, KeyType k) {
 	 int i = HashAeroportos(k);
 	 Aeroporto *res;
@@ -78,12 +95,17 @@ Aeroporto *RetrieveAeroporto(hash_aeroportos h, KeyType k) {
 	 return NULL;
 }
 
+
+/* Função auxiliar que converte todas as letras de uma string para maiúsculas. */
 void convertToUpper(char *s) {
 	for (int j = 0; s[j] != '\0'; j++) {
         s[j] = toupper(s[j]);
     }
 }
 
+
+/* Função que insere ordenadamente um novo resumo de voo, associado a um determinado Aeroporto, 
+na lista ligada, no caso do Aeroporto não existir ainda na tabela, insere esse novo Aeroporto. */
 void InsertTableAeroporto(hash_aeroportos h, KeyType k, VooResumo *vooresumo) {
 	for (int j = 0; k[j] != '\0'; j++) {
         k[j] = toupper(k[j]);
@@ -106,7 +128,6 @@ void InsertTableAeroporto(hash_aeroportos h, KeyType k, VooResumo *vooresumo) {
 		}
 	}
 	else {
-		// Insere ordenadamente na lista de voos baseada na data de partida
         VooResumo **atual = &aux->next_resumo;
         while (*atual != NULL &&
                (strcmp((*atual)->schedule_departure_date, vooresumo->schedule_departure_date) < 0 ||
@@ -120,21 +141,10 @@ void InsertTableAeroporto(hash_aeroportos h, KeyType k, VooResumo *vooresumo) {
 	}
 }
 
-/*int InsertAeroportoPassenger(hash_aeroportos h, char *origin) {
-	for (int j = 0; origin[j] != '\0'; j++) {
-        origin[j] = toupper(origin[j]);
-    }
-    Aeroporto *aux = RetrieveAeroporto(h, origin);
-    if(aux) {
-		aux->total_passengers++;
-		printf("Total: %s, %d\n",origin, aux->total_passengers);
-		return 1;
-	}
-	return 0;
-    
-}*/
 
-
+/* A função InsertTableVoos insere um novo Voo na tabela hash de Voos, caso a posição estiver livre 
+coloca o Voo nessa posição, caso a posição já estiver ocupada, adiciona o voo no início da lista 
+encadeada dessa posição. */
 void InsertTableVoos(hash_voos h, KeyType k, Voo *voo) {
     int i = HashVoos(k);
     if (h[i] == NULL) {
@@ -147,6 +157,8 @@ void InsertTableVoos(hash_voos h, KeyType k, Voo *voo) {
 }
 
 
+/* Função que retorna uma lista de resumos de Voos entre as datas especificadas para um determinado 
+Aeroporto. */
 VooResumo *GetVoosAeroportoEntreDatas(hash_aeroportos h, KeyType k, char *begin_date, char *end_date) {
     Aeroporto *aeroporto = RetrieveAeroporto(h, k);
 
