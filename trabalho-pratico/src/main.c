@@ -11,15 +11,18 @@
 
 
 int main(int argc, char *argv[]) {
-	
+	// Iniciar o relógio para medir o tempo de execução
 	clock_t start, end, duration;
     start = clock();
 
 	setlocale(LC_COLLATE, "en_US.UTF-8");
+	// Verificação do número de argumentos do input
 	char linha[1024];
 	if(argc < 2) {
-		return 0;
+		return 0;	// Encerra o programa se o número de argumentos for insuficiente
 	}
+
+	//Inicialização das tabelas hash
     hash_user h_users;
     hash_hoteis h_hoteis;
     hash_reservas h_reservas;
@@ -49,13 +52,15 @@ int main(int argc, char *argv[]) {
 	strcpy(csv_passengers, argv[1]);
 	strcat(csv_passengers, "/passengers.csv");
 
+
+	//Processamento dos arquivos
     process_users_csv(h_users, csv_users);
     process_reservas_csv(h_users, h_hoteis, h_reservas, csv_reservas);
     process_voos_csv(h_users, h_aeroportos, h_voos, csv_voos);
     process_passengers_csv(h_users, h_voos, csv_passengers);
     
 	
-	
+	// Leitura do ficheiro de input e execução dos comandos
 	FILE *fp = fopen(argv[2], "r");
 	FILE *fp_output = NULL;
 	int i = 1;
@@ -70,17 +75,22 @@ int main(int argc, char *argv[]) {
 			if(comp > 1 && linha[comp-2] == '\r') {
 				linha[comp-2] = '\0';
 			}
+			// path do ficheiro de saída
 			strcpy(destination_folder, "Resultados/command");
 			sprintf(str_i, "%d",i);
 			strcat(destination_folder, str_i);
 			strcat(destination_folder, "_output.txt");
+			// Abertura do ficheiro de saída
 			fp_output = fopen(destination_folder, "w");
+			// Execução dos comandos
 			comando(linha, h_users, h_voos, h_reservas, h_hoteis, h_aeroportos, fp_output);
+			// Fechar o ficheiro
 			fclose(fp_output);
 			i++;
 		}
 		fclose(fp);
 	}
+	// Terminar o relógio e calcular
 	end = clock();
 
     duration = (end - start);

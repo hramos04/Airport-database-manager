@@ -48,8 +48,10 @@ typedef struct User {
 typedef User *hash_user[HASHSIZE];
 
 
-/* Função que inicializa a tabela de hash User. */
+/* Função de hash que converte uma chave num índice na tabela hash. */
 int Hash(KeyType k);
+
+/* Função que inicializa a tabela de hash User. */
 void InitializeTable(hash_user h);
 
 
@@ -76,10 +78,6 @@ void addUserToList(User **list, User *newUser);
 "active" e cujos nomes começam com um determinado prefixo, retornando uma lista ordenada 
 desses Users, com a ajuda das função addUserToList e a função copyUser. */
 User *GetUserPrefix(hash_user h, KeyType k);
-User* copyUser(User *original);
-int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2) ;
-void addUserToList(User **list, User *newUser);
-void Printhash_user(hash_user h);
 
 
 /* A fução InsertTable calcula o indice da chave, com o auxilio da função Hash, e coloca o User na 

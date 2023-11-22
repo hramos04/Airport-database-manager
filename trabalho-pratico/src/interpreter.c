@@ -6,12 +6,22 @@
 #include "voo.h"
 #include "reserva.h"
 
+
+//Definição das constantes
 #define CURRENT_YEAR 2023
 #define CURRENT_MONTH 10
 #define CURRENT_DAY 1
 #define MAX_ARGS 5
 #define MAX_LINE_LENGTH 1024
 
+
+/*
+ * Função: remove_quotes
+ * ---------------------
+ * Remove as aspas de uma string, se presentes.
+ *
+ * str: A string da qual remover as aspas.
+ */
 void remove_quotes(char *str) {
     int len = strlen(str);
     if (len >= 2 && str[0] == '"' && str[len - 1] == '"') {
@@ -22,6 +32,15 @@ void remove_quotes(char *str) {
     }
 }
 
+/*
+ * Função: split
+ * -------------
+ * Divide uma linha em argumentos.
+ *
+ * line: A linha a ser dividida.
+ * arg_count: Ponteiro para a variável que armazenará a quantidade de argumentos.
+ * args: Array que armazenará os argumentos resultantes da divisão.
+ */
 void split(char *line, int *arg_count, char *args[MAX_ARGS]) {
     *arg_count = 0;
     char buffer[MAX_LINE_LENGTH];
@@ -58,7 +77,14 @@ void split(char *line, int *arg_count, char *args[MAX_ARGS]) {
 }
 
 
-
+/*
+ * Função: calculaIdade
+ * ---------------------
+ * Calcula a idade com base na data de nascimento.
+ *
+ * birthDate: A data de nascimento no formato "YYYY/MM/DD".
+ * Retorna: A idade calculada.
+ */
 int calculaIdade(char *birthDate) {
 	int a_aux, m_aux, d_aux;
 	sscanf(birthDate, "%d/%d/%d", &a_aux, &m_aux, &d_aux);
@@ -69,6 +95,15 @@ int calculaIdade(char *birthDate) {
 	return idade;
 }
 
+
+/*
+ * Função: remover_horas
+ * ---------------------
+ * Remove as horas de uma data e hora no formato "YYYY/MM/DD HH:mm:ss".
+ *
+ * datetime: A data e hora original.
+ * data: Array que armazenará a data resultante.
+ */
 void remover_horas(char* datetime, char data[]) {
 	int i=0;
 	for(i=0; datetime[i] != ' ' && datetime[i] != '\0'; i++) {
@@ -77,6 +112,19 @@ void remover_horas(char* datetime, char data[]) {
 	data[i] = '\0';
 }
 
+
+/*
+ * Função: q1
+ * ----------
+ * Executa a Query 1, que recupera informações de usuários, voos ou reservas com base no argumento fornecido.
+ *
+ * h_users: Tabela hash de usuários.
+ * h_voos: Tabela hash de voos.
+ * h_reservas: Tabela hash de reservas.
+ * arg: O argumento fornecido na Query 1.
+ * f: Indica se o formato de saída é detalhado (1) ou simples (0).
+ * fp_output: Ponteiro para o ficheiro de saída.
+ */
 void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, int f, FILE *fp_output) {
 	User *user = RetrieveUser(h_users, arg);
 	Voo *voo = RetrieveVoo(h_voos, arg);
@@ -112,6 +160,17 @@ void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, 
 	}
 }
 
+/*
+ * Função: q2
+ * ----------
+ * Executa a Query 2, que recupera informações da lista ligada Q2 de um usuário.
+ *
+ * h_users: Tabela hash de usuários.
+ * argv: Array contendo os argumentos fornecidos na Query 2.
+ * argc: Número de argumentos fornecidos na Query 2.
+ * f: Indica se o formato de saída é detalhado (1) ou simples (0).
+ * fp_output: Ponteiro para o ficheiro de saída.
+ */
 void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
 	char data[100];
 	User *user = RetrieveUser(h_users, argv[1]);
@@ -194,7 +253,16 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
 	}
 }
 
-
+/*
+ * Função: q3
+ * ----------
+ * Executa a Query 3, que recupera a classificação de um hotel.
+ *
+ * h_hoteis: Tabela hash de hotéis.
+ * argv: O argumento fornecido na Query 3.
+ * f: Indica se o formato de saída é detalhado (1) ou simples (0).
+ * fp_output: Ponteiro para o ficheiro de saída.
+ */
 void q3(hash_hoteis h_hoteis, char *argv,  int f,FILE *fp_output) {
 	
 	double rating = GetRatingByHotel(h_hoteis, argv);
@@ -209,7 +277,16 @@ void q3(hash_hoteis h_hoteis, char *argv,  int f,FILE *fp_output) {
 	}
 }
 
-
+/*
+ * Função: q4
+ * ----------
+ * Executa a Query 4, que recupera informações resumidas de reservas de um hotel.
+ *
+ * h_hoteis: Tabela hash de hotéis.
+ * argv: O argumento fornecido na Query 4.
+ * f: Indica se o formato de saída é detalhado (1) ou simples (0).
+ * fp_output: Ponteiro para o ficheiro de saída.
+ */
 void q4(hash_hoteis h_hoteis, char *argv, int f, FILE *fp_output) {
 	int i = 1;
 	Hotel *aux = RetrieveHotel(h_hoteis, argv);
@@ -234,6 +311,17 @@ void q4(hash_hoteis h_hoteis, char *argv, int f, FILE *fp_output) {
 	
 }
 
+
+/*
+ * Função: q9
+ * ----------
+ * Executa a Query 9, que recupera informações de usuários com base em um prefixo.
+ *
+ * h_users: Tabela hash de usuários.
+ * argv: O argumento fornecido na Query 9.
+ * f: Indica se o formato de saída é detalhado (1) ou simples (0).
+ * fp_output: Ponteiro para o ficheiro de saída.
+ */
 void q9(hash_user h_users, char *argv, int f, FILE *fp_output) {
 	User *aux = GetUserPrefix(h_users, argv);
 	int i = 1;
@@ -258,6 +346,18 @@ void q9(hash_user h_users, char *argv, int f, FILE *fp_output) {
 }
 
 
+/*
+ * Função: q5
+ * ----------
+ * Executa a Query 5, que recupera informações resumidas de voos entre datas específicas.
+ *
+ * h_aeroportos: Tabela hash de aeroportos.
+ * origin: O aeroporto de origem.
+ * begin_date: Data de início no formato "YYYY/MM/DD".
+ * end_date: Data de término no formato "YYYY/MM/DD".
+ * f: Indica se o formato de saída é detalhado (1) ou simples (0).
+ * fp_output: Ponteiro para o ficheiro de saída.
+ */
 void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_date, int f, FILE *fp_output) {
 	VooResumo *aux = GetVoosAeroportoEntreDatas(h_aeroportos, origin, begin_date, end_date);
 	int i = 1;
@@ -282,6 +382,21 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
 	}
 }
 
+
+/*
+ * Função: comando
+ * ---------------
+ * Analisa e executa um comando fornecido.
+ *
+ * linha: O comando a ser analisado e executado.
+ * h_users: Tabela hash de usuários.
+ * h_voos: Tabela hash de voos.
+ * h_reservas: Tabela hash de reservas.
+ * h_hoteis: Tabela hash de hotéis.
+ * h_aeroportos: Tabela hash de aeroportos.
+ * fp_output: Ponteiro para o ficheiro de saída.
+ * Retorna: 1 se o comando for executado com sucesso, 0 caso contrário.
+ */
 int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, hash_aeroportos h_aeroportos, FILE *fp_output) {
 	int argc = 0;
 	char *args[MAX_ARGS];
