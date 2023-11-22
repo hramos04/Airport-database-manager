@@ -678,8 +678,7 @@ void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
 	fclose(fp);
 }
 
-/* Função responsável por efetuar o parsing de todas as linhas do csv dos voos e verificar se 
-todos os campos são válidos, inserindo os valores nas hash tables. */
+/* Função responsável por efetuar o parsing de todas as linhas do csv dos voos e verificar se todos os campos são válidos, inserindo os valores nas hash tables. */
 void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voos, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/flights_errors.csv", "w");
