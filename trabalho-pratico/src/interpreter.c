@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "user.h"
-#include "voo.h"
-#include "reserva.h"
+#include "../include/user.h"
+#include "../include/reserva.h"
+#include "../include/voo.h"
+#include "../include/interpreter.h"
 
 #define CURRENT_YEAR 2023
 #define CURRENT_MONTH 10

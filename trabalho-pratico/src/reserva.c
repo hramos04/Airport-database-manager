@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "reserva.h"
+#include "../include/reserva.h"
+
 
 
 /* Função de hash que converte uma chave num índice na tabela hash dos hoteis. */
@@ -152,7 +153,7 @@ void InsertTableHoteis(hash_hoteis h, KeyType k, ReservaResumo *reserva) {
 
 
 /* A função insere uma Reserva na tabela hash das Reservas, caso a posição estiver livre coloca a 
-Reserva nessa posição, caso a posição já estiver ocupada,diciona a reserva no início da lista 
+Reserva nessa posição, caso a posição já estiver ocupada, adiciona a reserva no início da lista 
 encadeada dessa posição. */
 void InsertTableReservas(hash_reservas h, KeyType k, Reserva *reserva) {
     int i = HashReservas(k);
