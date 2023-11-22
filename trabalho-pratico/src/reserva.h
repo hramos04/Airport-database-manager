@@ -51,8 +51,8 @@ Reserva *RetrieveReserva(hash_reservas h, KeyType k);
 Hotel *RetrieveHotel(hash_hoteis h, KeyType k);
 void InsertTableHoteis(hash_hoteis h, KeyType k, ReservaResumo *reserva);
 void InsertTableReservas(hash_reservas h, KeyType k, Reserva *reserva);
-void Printhash_reserva(hash_reservas h);
-void Printhash_hoteis(hash_hoteis h);
+int HashHoteis(KeyType k);
+int HashReservas(KeyType k);
 
 #endif
 

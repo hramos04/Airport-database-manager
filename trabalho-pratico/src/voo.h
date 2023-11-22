@@ -42,14 +42,18 @@ typedef struct Aeroporto {
 typedef Aeroporto *hash_aeroportos[HASHSIZE];
 typedef Voo *hash_voos[HASHSIZE];
 
+
+int HashAeroportos(KeyType k);
+int HashVoos(KeyType k) ;
 void InitializeTableAeroportos(hash_aeroportos h);
 void InitializeTableVoos(hash_voos h);
 void InsertTableVoos(hash_voos h, KeyType k, Voo *voo);
-void Printhash_voo(hash_voos h);
 Voo *RetrieveVoo(hash_voos h, KeyType k);
 int InsertPassengerVoo(hash_voos h, KeyType k);
 void InsertTableAeroporto(hash_aeroportos h, KeyType k, VooResumo *vooresumo);
 VooResumo *GetVoosAeroportoEntreDatas(hash_aeroportos h, KeyType k, char *begin_date, char *end_date);
+Aeroporto *RetrieveAeroporto(hash_aeroportos h, KeyType k) ;
+void convertToUpper(char *s) ;
 
 #endif
 

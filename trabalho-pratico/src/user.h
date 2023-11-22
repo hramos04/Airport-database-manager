@@ -36,12 +36,17 @@ typedef struct User {
 // Tabela hash
 typedef User *hash_user[HASHSIZE];
 
+int Hash(KeyType k);
 void InitializeTable(hash_user h);
 void InsertTable(hash_user h, KeyType k, User *user);
 void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) ;
 void InsertVooUser(hash_user h, KeyType k, Q2 *q2);
 User *RetrieveUser(hash_user h, KeyType k);
 User *GetUserPrefix(hash_user h, KeyType k);
+User* copyUser(User *original);
+int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2) ;
+void addUserToList(User **list, User *newUser);
+void Printhash_user(hash_user h);
 
 #endif
 
