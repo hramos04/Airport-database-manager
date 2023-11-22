@@ -9,19 +9,31 @@
 #include "voo.h"
 
 
-// Função para verificar se um usuário com o ID fornecido está na tabela
+// Função que verifica se um utilizador é válido.
 int valid_user(hash_user h, KeyType user_id) {
     User *user = RetrieveUser(h, user_id);
 
-    // Verificar se o usuário foi encontrado e possui status "ativo"
+
     if (user != NULL) {
-        return 1; // O usuário está na tabela e é válido
+        return 1;
     } else {
-        return 0; // O usuário não está na tabela ou não possui status "ativo"
+        return 0; 
     }
 }
 
+// Função que verifica se um voo é válido.
+int valid_flight(hash_voos h, KeyType flight_id){
+	Voo *voo = RetrieveVoo(h, flight_id);
 
+    if (voo!= NULL) {
+        return 1;
+    } else {
+        return 0; 
+    }
+
+}
+
+// Função que verifica se a data é válida.
 int valid_date(char *string) {
     if (strlen(string) != 10) {
         return 0;
@@ -29,12 +41,10 @@ int valid_date(char *string) {
 
     for (int i = 0; i < 10; i++) {
         if (i == 4 || i == 7) {
-            // Se estamos nas posições das barras, verifica se o caractere é '/'
             if (string[i] != '/') {
                 return 0;
             }
         } else {
-            // Se não estamos nas posições das barras, verifica se o caractere é um dígito entre '0' e '9'
             if (!isdigit(string[i])) {
                 return 0;
             }
@@ -48,125 +58,117 @@ int valid_date(char *string) {
     if (ano < 0 || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
         return 0;
     }
-    return 1;  // A data é válida
+    return 1;
 }
 
+// Função que verifica se a data e a hora são válidas.
 int valid_date_hour(char *string) {
-    // Verifica se a string tem o comprimento correto
     if (strlen(string) != 19) {
-        return 0; // A string não tem o comprimento correto
+        return 0;
     }
 
     if (string[4] != '/' || string[7] != '/' || string[10] != ' ' ||
         string[13] != ':' || string[16] != ':') {
-        return 0; // Formato incorreto
+        return 0; 
     }
 
     for (int i = 0; i < 19; i++) {
         if (i != 4 && i != 7 && i != 10 && i != 13 && i != 16) {
             if (!isdigit(string[i])) {
-                return 0; // Caracteres inválidos
+                return 0;
             }
         }
     }
 
     int year, month, day, hour, minute, second;
     if (sscanf(string, "%4d/%2d/%2d %2d:%2d:%2d", &year, &month, &day, &hour, &minute, &second) != 6) {
-        return 0; // Falha ao analisar a data e hora
-    }
+        return 0;
+	} 
     if (month < 1 || month > 12 || day < 1 || day > 31 ||
         hour < 0 || hour > 23 || minute < 0 || minute > 59 || second < 0 || second > 59) {
-        return 0; // Valores inválidos
+        return 0; 
     }
 
-    return 1; // A data e hora são válidas
+    return 1; 
 }
 
-int compare_birth_with_account_cr(char *string1, char *string2) { //string1==birth e string2== account_creation
-    // Verifica se as strings têm o comprimento correto
+/* Função que verifica se a data de aniversário
+é anterior à data de criação da conta. */
+int compare_birth_with_account_cr(char *string1, char *string2) {
     if (strlen(string1) != 10 || strlen(string2) != 19) {
-        return -1; // Comprimento incorreto
+        return -1;
     }
 
-    // Extrai os componentes do birth
     int year_date, month_date, day_date;
     if (sscanf(string1, "%4d/%2d/%2d", &year_date, &month_date, &day_date) != 3) {
-        return -1; // Falha ao analisar o birth
+        return -1;
     }
 
-    // Extrai os componentes da acc
     int year_date_hour, month_date_hour, day_date_hour, hour_date_hour, minute_date_hour, second_date_hour;
     if (sscanf(string2, "%4d/%2d/%2d %2d:%2d:%2d", &year_date_hour, &month_date_hour, &day_date_hour, &hour_date_hour, &minute_date_hour, &second_date_hour) != 6) {
-        return -1; // Falha ao analisar o acc
+        return -1; 
     }
 
-    // Compara os anos, meses e dias
     if (year_date < year_date_hour || (year_date == year_date_hour && (month_date < month_date_hour || (month_date == month_date_hour && day_date < day_date_hour)))) {
-        return 1; // birth é anterior a acc
+        return 1;
     }
 
-    return 0; // birth não é anterior a acc
+    return 0;
 }
 
+// Função que verifica se o email é válido.
 int valid_email(char *string) {
     int i, atFound = 0, dotFound = 0;
     int usernameLength = 0, domainLength = 0, tldLength = 0;
     int emailLength = strlen(string);
 
-    // Verificar se o email tem pelo menos tamanho 5 (x@y.z)
     if (emailLength < 5) {
-        return 0;  // Formato inválido
+        return 0;
     }
 
     for (i = 0; i < emailLength; i++) {
         if (string[i] == '@') {
             atFound = 1;
-            usernameLength = i;  // Comprimento do <username>
+            usernameLength = i;
         } else if (string[i] == '.') {
             dotFound = 1;
-            domainLength = i - usernameLength - 1;  // Comprimento do <domain>
-            tldLength = emailLength - i - 1;  // Comprimento do <TLD>
+            domainLength = i - usernameLength - 1;  
+            tldLength = emailLength - i - 1;
         }
     }
 
-    // Verificar se '@' e '.' foram encontrados, e se os comprimentos são válidos
     if (atFound && dotFound && usernameLength > 0 && domainLength > 0 && tldLength >= 2) {
-        return 1;  // Formato válido
+        return 1;  
     } else {
-        return 0;  // Formato inválido
+        return 0; 
     }
 }
 
+// Função que verifica se o código postal é válido.
 int valid_country_code(char *string){
     if(strlen(string) == 2) return 1;
     else return 0;
 }
 
+// Função que verifica se o status da conta é válido.
 int valid_account_status(char *string) {
     int result = (strcasecmp(string, "active") == 0 || strcasecmp(string, "inactive") == 0);
 	
     return result;
 }
 
+// Função que verifica se o método de pagamento é válido.
 int valid_pay_method(char *string) {
     return (strcasecmp(string, "CASH") == 0 || strcasecmp(string, "DEBIT_CARD") == 0 || strcasecmp(string, "CREDIT_CARD") == 0);
 }
 
-int valid_seat_numbers(char *string, char *string1){
-    int n1 = atoi(string);
-    int n2 = atoi(string1);
 
-    // Verificar se o número de lugares é maior ou igual ao número de passageiros
-    return n1 >= n2;
-}
-
+// Função que verifica se o nome do aeroporto é válido.
 int valid_aeroport(char *string) {
-    // Verificar se a string tem exatamente 3 caracteres
     if (strlen(string) != 3) {
         return 0;
     }
 
-    // Verificar se todos os caracteres são letras
     for (int i = 0; string[i] != '\0'; i++) {
         if (!isalpha(string[i])) {
             return 0;
@@ -176,6 +178,7 @@ int valid_aeroport(char *string) {
     return 1;
 }
 
+// Função que verifica se o número de estrelas do hotel é válido.
 int valid_stars(char *string) {
     if (isdigit(string[0]) && (string[0] >= '1' && string[0] <= '5') && string[1]=='\0') {
         return 1;
@@ -183,40 +186,30 @@ int valid_stars(char *string) {
     return 0;
 }
 
-int valid_id(char *string){
-    if (string[0] == '\0') return 0;
-    for (int i = 0; string[i] != '\0'; i++){
-        if (isdigit(string[i]) == 0) return 0;
-    }
-    return 1;
-}
-
+// Função que verifica se a data inicial é anterior à data final.
 int compare_begin_with_end(char *string1, char *string2) {
-    // Verifica se as strings têm o comprimento correto
     if (strlen(string1) != 10 || strlen(string2) != 10) {
-        return -1; // Comprimento incorreto
+        return -1; 
     }
 
-    // Extrai os componentes do begin
     int year_date, month_date, day_date;
     if (sscanf(string1, "%4d/%2d/%2d", &year_date, &month_date, &day_date) != 3) {
         return -1; 
     }
 
-    // Extrai os componentes do end
     int year_date_hour, month_date_hour, day_date_hour;
     if (sscanf(string2, "%4d/%2d/%2d", &year_date_hour, &month_date_hour, &day_date_hour) != 3) {
         return -1; 
     }
-
-    // Compara os anos, meses e dias
+ 
     if (year_date < year_date_hour || (year_date == year_date_hour && (month_date < month_date_hour || (month_date == month_date_hour && day_date < day_date_hour)))) {
-        return 1; // begin é anterior a end
+        return 1; 
     }
 
-    return 0; // begin não é anterior a end
+    return 0; 
 }
 
+// Função que verifica se o número de telefone é válido.
 int valid_phone_number(char *string){
     if(string[0] == '\0') return 0;
     for (int i = 0; string[i] != '\0'; i++){
@@ -225,60 +218,49 @@ int valid_phone_number(char *string){
     return 1;
 }
 
-///caso exista erros pode ser de esta só funcionar com maiusculas
+// Função que verifica se o sexo é válido.
 int valid_sex(char *string){
     if (string[0] == 'M' || string[0] == 'F') return 1;
     else return 0;
 }
 
+/* Função que verifica se a data e hora de início 
+são anterioes a data e hora final. */
 int compare_datetime(char *datetime1, char *datetime2) {
-    // Verifica se as strings têm o comprimento correto
     if (strlen(datetime1) != 19 || strlen(datetime2) != 19) {
-        return 0; // Comprimento incorreto
+        return 0;
     }
 
-    // Extrai os componentes da data e hora
     int year_date, month_date, day_date, hour, minute, second;
     if (sscanf(datetime1, "%4d/%2d/%2d %2d:%2d:%2d", &year_date, &month_date, &day_date, &hour, &minute, &second) != 6) {
-        return 0; // Formato inválido
+        return 0;
     }
 
-    // Extrai os componentes da outra data e hora
     int year_date_hour, month_date_hour, day_date_hour, hour_hour, minute_hour, second_hour;
     if (sscanf(datetime2, "%4d/%2d/%2d %2d:%2d:%2d", &year_date_hour, &month_date_hour, &day_date_hour, &hour_hour, &minute_hour, &second_hour) != 6) {
-        return 0; // Formato inválido
+        return 0;
     }
 
-    // Compara os anos, meses, dias, horas, minutos e segundos
-    if (year_date < year_date_hour || 
-        (year_date == year_date_hour && (month_date < month_date_hour || 
-        (month_date == month_date_hour && (day_date < day_date_hour || 
-        (day_date == day_date_hour && (hour < hour_hour || 
-        (hour == hour_hour && (minute < minute_hour || 
-        (minute == minute_hour && second < second_hour)))))))))) {
-        return 1; // datetime1 é anterior a datetime2
+    if (year_date < year_date_hour || (year_date == year_date_hour && (month_date < month_date_hour || (month_date == month_date_hour && (day_date < day_date_hour || (day_date == day_date_hour && (hour < hour_hour || (hour == hour_hour && (minute < minute_hour || (minute == minute_hour && second < second_hour)))))))))) {
+        return 1; 
     }
 
-    return 0; // datetime1 não é anterior a datetime2
+    return 0;
 }
 
-
-int valid_aerport(char *string){
-    if(strlen(string) == 3) return 1;
-    else return 0;
-}
-
-
+/* Função que verifica se o número de lugares de um
+avião é superior ao número de passageiros num determinado voo. */
 int valid_seat(char *string) {
     for (size_t i = 0; i < strlen(string); ++i) {
         if (!isdigit((unsigned char)string[i])) {
-            return 0; // Caracter não é um dígito
+            return 0;
         }
     }
 
-    return 1; // A string contém apenas números
+    return 1;
 }
 
+// Função que calcula os dias ocorridos entre duas datas.
 int calcularDiasDatas(char *d1, char *d2) {
 	int ano1, mes1,dia1;
 	int ano2, mes2,dia2;
@@ -288,23 +270,21 @@ int calcularDiasDatas(char *d1, char *d2) {
 	return dia2 - dia1;
 }
 
-
-//strcasecmp(string, "DEBIT_CARD") == 0
-
-
+/* Função que verifica se a opção de pequeno-almoço
+incluido/não incluido é válida */
 int valid_breakfast(char *string){
     if(!strcasecmp(string,"true")  || !strcasecmp(string,"t") || !strcmp(string,"1") || !strcasecmp(string,"false") || !strcasecmp(string,"f") || !strcmp(string,"0") || !strcmp(string,"")) return 1;
     return 0;
 }
 
+// Função se o imposto aplicado numa determinada cidade é válido.
 int valid_tax(char *string) {
     for (int i = 0; string[i] != '\0'; i++) {
         if (!isdigit(string[i])) {
-            return 0;  // Caracteres não numéricos encontrados
+            return 0;
         }
     }
-    int tax = atoi(string);  // Converte a string para um número inteiro
-    // Verifica se o número é maior ou igual a 0
+    int tax = atoi(string);
     if (tax >= 0) {
         return 1;
     }
@@ -312,14 +292,14 @@ int valid_tax(char *string) {
     return 0;
 }
 
+// Função que verifica se o preço por noite é válido.
 int valid_price(char *string) {
     for (int i = 0; string[i] != '\0'; i++) {
         if (!isdigit(string[i])) {
-            return 0;  // Caracteres não numéricos encontrados
+            return 0; 
         }
     }
-    int tax = atoi(string);  // Converte a string para um número inteiro
-    // Verifica se o número é maior ou igual a 0
+    int tax = atoi(string);
     if (tax > 0) {
         return 1;
     }
@@ -327,6 +307,7 @@ int valid_price(char *string) {
     return 0;
 }
 
+// Função que calcula a diferença em segundos entre duas datas e horas.
 int calcularDiferencaSegundos(char *datetime1, char *datetime2) {
     int ano1, mes1, dia1, hora1, minuto1, segundo1;
     int ano2, mes2, dia2, hora2, minuto2, segundo2;
@@ -334,23 +315,19 @@ int calcularDiferencaSegundos(char *datetime1, char *datetime2) {
 
     sscanf(datetime2, "%d/%d/%d %d:%d:%d", &ano2, &mes2, &dia2, &hora2, &minuto2, &segundo2);
 
-    // Convertendo os componentes para segundos
     long segundos1 = ano1 * 31536000 + mes1 * 2592000 + dia1 * 86400 + hora1 * 3600 + minuto1 * 60 + segundo1;
     long segundos2 = ano2 * 31536000 + mes2 * 2592000 + dia2 * 86400 + hora2 * 3600 + minuto2 * 60 + segundo2;
 
-    // Calculando a diferença em segundos
     int diferencaSegundos = abs((int)(segundos2 - segundos1));
 
     return diferencaSegundos;
 }
 
-int compare_date(){
-    return 0;
-}
 
+// Função que verifica se o rating é válido.
 int valid_rating(char *string) {
     if (string[0] == '\0') {
-        return 1;  // String vazia
+        return 1;
     }
 
     if (isdigit(string[0]) && (string[0] >= '1' && string[0] <= '5') && string[1] == '\0') {
@@ -360,13 +337,15 @@ int valid_rating(char *string) {
     return 0;
 }
 
-//para verificar que alguns critérios não são vazios 
+/* Função que verifica se determinados campos têm 
+tamanho superior a zero. */
 int is_non_empty_string(char *string) {
     return (strlen(string) > 0);
 }
 
 
-
+/* Função responsável por efetuar o parsing de todas as linhas 
+do csv dos utilizadores e verificar se todos os campos são válidos. */
 void process_users_csv(hash_user h, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/users_errors.csv", "w");
@@ -474,12 +453,12 @@ void process_users_csv(hash_user h, char *ficheiro) {
 		}
 	}
 	
-	
 	fclose(invalidFile);
 	fclose(fp);
 }
 
-
+/* Função responsável por efetuar o parsing de todas as linhas 
+do csv das reservas e verificar se todos os campos são válidos. */
 void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_reservas, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/reservations_errors.csv", "w");
@@ -495,7 +474,6 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 		if(comp > 1 && linha[comp-2] == '\r') {
 			linha[comp-2] = '\0';
 		}
-		//linha[strlen(linha)-1] = '\0';
 		int i=0, j=0;
 		for(j=0; linha[i] != ';'; i++, j++) {
 			id[j] = linha[i];
@@ -578,7 +556,7 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 		else {
 			User *k_user = RetrieveUser(h, user_id);
 			
-			if(k_user  ) {//(strcasecmp(k_user->account_status, "active") == 0 )
+			if(k_user  ) {
 				Reserva *nova_reserva = (Reserva *)malloc(sizeof(Reserva));
 			nova_reserva->id = strdup(id);
 			nova_reserva->user_id = strdup(user_id);
@@ -614,26 +592,23 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 			Q2 *q2 = (Q2*)malloc(sizeof(Q2));
 			q2->data = strdup(begin_date);
 			
-			//printf("Total gasto: %f",calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr));
 			q2->total_gasto = calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) + ( ((calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) / 100)* strtod(nova_reserva->city_tax, &endptr)));
 			
 			
-			q2->tipo = 1; //reserva
+			q2->tipo = 1; 
 			q2->id = strdup(id);
 			
 			InsertReservaUser(h, user_id, q2);
 			}
-			
-			
-			
 		}
 	}
-	
 	
 	fclose(invalidFile);
 	fclose(fp);
 }
 
+/* Função responsável por efetuar o parsing de todas as linhas 
+do csv dos passageiros e verificar se todos os campos são válidos. */
 void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/passengers_errors.csv", "w");
@@ -664,7 +639,7 @@ void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
 			InsertVooUser(h, user_id, q2);
 			InsertPassengerVoo(h_voos, voo->id);
 		}
-		if(is_non_empty_string(flight_id)==0 || is_non_empty_string(user_id)){
+		if(valid_flight(h_voos,flight_id)==0 || valid_user(h,user_id)==0){
 			if (invalidFile != NULL) {
 				fprintf(invalidFile, "%s\n", linha);
 				}
@@ -674,6 +649,8 @@ void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
 	fclose(fp);
 }
 
+/* Função responsável por efetuar o parsing de todas as linhas 
+do csv dos voos e verificar se todos os campos são válidos. */
 void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voos, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/flights_errors.csv", "w");
@@ -756,7 +733,7 @@ void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voo
 		}
 		notes[j-1] = '\0';
 		
-		  if (is_non_empty_string(id)==0 || is_non_empty_string(airline)==0 || is_non_empty_string(plane_model)==0 || is_non_empty_string(pilot)==0 || is_non_empty_string(copilot)==0|| valid_aerport(origin)==0||valid_aerport(destination)==0|| compare_datetime(schedule_departure_date,schedule_arrival_date)==0 || compare_datetime(real_departure_date,real_arrival_date)==0 || valid_seat(total_seats)==0) {
+		  if (is_non_empty_string(id)==0 || is_non_empty_string(airline)==0 || is_non_empty_string(plane_model)==0 || is_non_empty_string(pilot)==0 || is_non_empty_string(copilot)==0|| valid_aeroport(origin)==0||valid_aeroport(destination)==0|| compare_datetime(schedule_departure_date,schedule_arrival_date)==0 || compare_datetime(real_departure_date,real_arrival_date)==0 || valid_seat(total_seats)==0) {
 			  if (invalidFile != NULL) {
 				fprintf(invalidFile, "%s\n", linha);
 				}
