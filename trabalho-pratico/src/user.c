@@ -32,24 +32,30 @@ void InitializeTable(hash_user h) {
 
 /* Função que retorna o User pretendido, caso este se encontre na hash, através da sua respetiva 
 chave. */
-User *RetrieveUser(hash_user h, KeyType k) {
-	 int i = Hash(k);
-	 User *res;
-	 for(res = h[i]; res; res = res->next) {
-		 if(strcmp(res->id, k) == 0) {
-			 return res;
-		 }
-	 }
-	 return NULL;
-}
+TreeNodeUser* RetrieveUser(hash_user h, KeyType k) {
+    int i = Hash(k);
+    TreeNodeUser *root = h[i];
 
+    while (root != NULL) {
+        int compare = strcmp(root->user->id, k);
+
+        if (compare == 0) {
+            return root;
+        } else if (compare < 0) {
+            root = root->right;
+        } else {
+            root = root->left;
+        }
+    }
+
+    return NULL;
+}
 
 /* Função auxiliar que cria uma copia de um determinado User. */
 User* copyUser(User *original) {
     User *copy = malloc(sizeof(User));
     copy->id = strdup(original->id);
     copy->nome = strdup(original->nome);
-    copy->next = NULL;
     return copy;
 }
 
@@ -78,56 +84,58 @@ int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2) {
 
 /* Função auxiliar que adiciona um User a uma lista, que é ordenada pelos nomes dos diferentes
 Users. */
-void addUserToList(User **list, User *newUser) {
-    while (*list != NULL) {
-        int compare = strcoll(newUser->nome, (*list)->nome);
-        if (compare < 0  || (compare == 0 && strcoll(newUser->id,(*list)->id) < 0)) {
-            newUser->next = *list;
-            *list = newUser;
-            return;
-        }
-        list = &(*list)->next;
+TreeNodeUser* insertNode(TreeNodeUser *root, User *user) {
+    if (root == NULL) {
+        TreeNodeUser *newNode = malloc(sizeof(TreeNodeUser));
+        newNode->user = user;
+        newNode->left = newNode->right = NULL;
+        return newNode;
     }
-    *list = newUser;
+
+    int compare = compareNamesWithoutHyphenIgnoreCase(user->nome, root->user->nome);
+    if (compare < 0 || (compare == 0 && strcmp(user->id, root->user->id) < 0)) {
+        root->left = insertNode(root->left, user);
+    } else {
+        root->right = insertNode(root->right, user);
+    }
+
+    return root;
 }
 
 
 /* Função auxiliar que percorre a tabela hash, procurando Users que apresentem o parametro 
 "active" e cujos nomes começam com um determinado prefixo, retornando uma lista ordenada 
 desses Users, com a ajuda das função addUserToList e a função copyUser. */
-User *GetUserPrefix(hash_user h, KeyType k) {
-	User *res = NULL;
-    for (int i = 0; i < HASHSIZE; i++) {
-        User *currentUser = h[i];
-        while (currentUser != NULL) {
-            if (strcasecmp(currentUser->account_status, "active") == 0 && strncmp(currentUser->nome, k, strlen(k)) == 0) {
-				User *copy = copyUser(currentUser);
-				addUserToList(&res, copy);
-            }
-            currentUser = currentUser->next;
+void getUsersWithPrefix(TreeNodeUser *root, const char *prefix, User **resultList) {
+    if (root != NULL) {
+        // Verifica se o usuário está ativo e o nome tem o prefixo
+        if (strcasecmp(root->user->account_status, "active") == 0 && strncmp(root->user->nome, prefix, strlen(prefix)) == 0) {
+            // Adiciona uma cópia do usuário à lista de resultados
+            User *copy = copyUser(root->user);
+            insertNode(root, copy);
         }
+
+        // Recursivamente busca nos filhos
+        getUsersWithPrefix(root->left, prefix, resultList);
+        getUsersWithPrefix(root->right, prefix, resultList);
     }
+}
+
+
+User *GetUserPrefix(hash_user h, KeyType k) {
+    User *res = NULL;
+    int i = Hash(k);
+    getUsersWithPrefix(h[i], k, &res);
     return res;
 }
 
-/* A fução InsertTable calcula o indice da chave, com o auxilio da função Hash, e coloca o User na 
-tabela Hash. Caso a posição calculada estiver vazia, o User é adicionado diretamente, caso contrário, 
-é adicionado ao início da lista nessa posição. */
 void InsertTable(hash_user h, KeyType k, User *user) {
     int i = Hash(k);
-    if (h[i] == NULL) {
-        h[i] = user;
-    }
-    else {
-        user->next = h[i];
-        h[i] = user;
-    }
+    h[i] = insertNode(h[i], user);
 }
 
+/*
 
-/* A função verifica com o auxilio da funçao RetriveUser se o User se encontra na hash, caso este 
-se encontre, incrementa o número total de reservas e o gasto total do user, em seguida insere a reserva
-ordenamente na lista ligada Q2. */
 void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
 	User *aux = RetrieveUser(h, k);
 	if(!aux) {
@@ -162,8 +170,7 @@ void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
 }
 
 
-/* A função InsertVooUser segue a mesmo linha de pensamento que a função InsertReservaUser, inserindo os 
-flights na lista ligada Q2, de forma ordenada. */
+
 void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
 	User *aux = RetrieveUser(h, k);
 	if(!aux) {
@@ -196,7 +203,7 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
 	
 	}
 }
-
+*/
 
 
 
