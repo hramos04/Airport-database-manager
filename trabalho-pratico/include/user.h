@@ -23,14 +23,6 @@ typedef struct Q2 {
 sendo ainda acrescentado o número total de reservas, o número total de voos, o total gasto 
 pelo mesmo e ainda apresentamos a lista ligada Q2 que armazena os dados relativos aos flights
 e às reservas. */
-
-/* Modifique a definição de User para incluir os ponteiros left e right */
-typedef struct TreeNodeUser {
-    struct User *user;
-    struct TreeNodeUser *left;
-    struct TreeNodeUser *right;
-} TreeNodeUser;
-
 typedef struct User {
     char *id;
     char *nome;
@@ -47,12 +39,13 @@ typedef struct User {
     int total_reservas;
     int total_voos;
     double total_gasto;
+    struct User *next;
     struct Q2 *q2;
-    struct TreeNodeUser *treeNode;  // Substituímos 'next' pela árvore binária 'treeNode'
 } User;
 
+
 /* Definição da tabela hash que vai guardar todos os diferentes users. */
-typedef TreeNodeUser *hash_user[HASHSIZE];
+typedef User *hash_user[HASHSIZE];
 
 
 /* Função de hash que converte uma chave num índice na tabela hash. */
@@ -64,44 +57,44 @@ void InitializeTable(hash_user h);
 
 /* Função que retorna o User pretendido, caso este se encontre na hash, através da sua respetiva 
 chave. */
-//User *RetrieveUser(hash_user h, KeyType k);
+User *RetrieveUser(hash_user h, KeyType k);
 
 
 /* Função auxiliar que cria uma copia de um determinado User. */
-//User* copyUser(User *original);
+User* copyUser(User *original);
 
 
 /* Função auxiliar que compara duas strings, que neste caso em concreto, vai ser utilizada para
 comparar nomes, com a particularidade de ignorar hífens nos mesmos. */
-//int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2);
+int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2);
 
 
 /* Função auxiliar que adiciona um User a uma lista, que é ordenada pelos nomes dos diferentes
 Users. */
-//void addUserToList(User **list, User *newUser);
+void addUserToList(User **list, User *newUser);
 
 
 /* Função auxiliar que percorre a tabela hash, procurando Users que apresentem o parametro 
 "active" e cujos nomes começam com um determinado prefixo, retornando uma lista ordenada 
 desses Users, com a ajuda das função addUserToList e a função copyUser. */
-//User *GetUserPrefix(hash_user h, KeyType k);
+User *GetUserPrefix(hash_user h, KeyType k);
 
 
 /* A fução InsertTable calcula o indice da chave, com o auxilio da função Hash, e coloca o User na 
 tabela Hash. Caso a posição calculada estiver vazia, o User é adicionado diretamente, caso contrário, 
 é adicionado ao início da lista nessa posição. */
-//void InsertTable(hash_user h, KeyType k, User *user);
+void InsertTable(hash_user h, KeyType k, User *user);
 
 
 /* A função verifica com o auxilio da funçao RetriveUser se o User se encontra na hash, caso este 
 se encontre, incrementa o número total de reservas e o gasto total do user, em seguida insere a reserva
 ordenamente na lista ligada Q2. */
-//void InsertReservaUser(hash_user h, KeyType k, Q2 *q2);
+void InsertReservaUser(hash_user h, KeyType k, Q2 *q2);
 
 
 /* A função InsertVooUser segue a mesmo linha de pensamento que a função InsertReservaUser, inserindo os 
 flights na lista ligada Q2, de forma ordenada. */
-//void InsertVooUser(hash_user h, KeyType k, Q2 *q2);
+void InsertVooUser(hash_user h, KeyType k, Q2 *q2);
 
 
 #endif
