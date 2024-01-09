@@ -173,6 +173,29 @@ void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
 
 /* A função InsertVooUser segue a mesmo linha de pensamento que a função InsertReservaUser, inserindo os 
 flights na lista ligada Q2, de forma ordenada. */
+
+void InsertQ2(Q2 **root, Q2 *newQ2) {
+    if (*root == NULL) {
+        *root = newQ2;
+    } else {
+        Q2 *currentQ2 = *root;
+        Q2 *prevQ2 = NULL;
+
+        while (currentQ2 != NULL && strcmp(currentQ2->data, newQ2->data) >= 0) {
+            prevQ2 = currentQ2;
+            currentQ2 = currentQ2->next;
+        }
+
+        if (prevQ2 == NULL) {
+            newQ2->next = *root;
+            *root = newQ2;
+        } else {
+            prevQ2->next = newQ2;
+            newQ2->next = currentQ2;
+        }
+    }
+}
+
 void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
     User *aux = RetrieveUser(h, k);
     if (!aux) {
@@ -192,23 +215,11 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
 
     if (aux) {
         aux->total_voos++;
-        Q2 *currentQ2 = aux->q2;
-        Q2 *prevQ2 = NULL;
-
-        while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) >= 0) {
-            prevQ2 = currentQ2;
-            currentQ2 = currentQ2->next;
-        }
-
-        if (prevQ2 == NULL) {
-            q2->next = aux->q2;
-            aux->q2 = q2;
-        } else {
-            prevQ2->next = q2;
-            q2->next = currentQ2;
-        }
+        InsertQ2(&(aux->q2), q2);
     }
 }
+
+
 
 
 

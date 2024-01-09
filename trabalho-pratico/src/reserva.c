@@ -59,15 +59,20 @@ void InitializeTableReservas(hash_reservas h) {
 chave. */
 Reserva *RetrieveReserva(hash_reservas h, KeyType k) {
 	 int i = HashReservas(k);
-	 Reserva *res;
-	 for(res = h[i]; res; res = res->next_reserva) {
-		 if(strcmp(res->id, k) == 0) {
-			 return res;
+	 Reserva *root =h[i];
+	 
+	 while(root != NULL) {
+		 int compare = strcmp(k, root->id);
+		 if(compare == 0) {
+			 return root;
+		 } else if(compare < 0) {
+			 root = root->left;
+		 } else {
+			 root = root->right;
 		 }
 	 }
 	 return NULL;
 }
-
 
 /* Função que retorna o Hotel pretendido, caso este se encontre na hash, através da sua respetiva 
 chave. */
