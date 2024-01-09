@@ -1,7 +1,7 @@
 # COMPILER
 
 CC := gcc
-LIBS := 
+LIBS := -lncurses
 CFLAGS := -Wall -Wextra -pedantic-errors -O2 -Iinclude
 
 # OBJECT CODE
