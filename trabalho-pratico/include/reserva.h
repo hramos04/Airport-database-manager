@@ -26,6 +26,8 @@ typedef struct Reserva {
     int total_noites;
     double total_gasto;
     struct Reserva *next_reserva;
+    struct Reserva *left;
+    struct Reserva *right;
 } Reserva;
 
 
@@ -39,6 +41,8 @@ typedef struct ReservaResumo {
     double total_price;
     double rating;
     struct ReservaResumo *next_resumo;
+    struct ReservaResumo *left;
+    struct ReservaResumo *right;
 } ReservaResumo;
 
 
@@ -48,6 +52,8 @@ typedef struct Hotel {
 	char *hotel_id;
 	struct Hotel *next;
 	struct ReservaResumo *next_resumo;
+    struct Hotel *left;
+    struct Hotel *right;
 } Hotel;
 
 

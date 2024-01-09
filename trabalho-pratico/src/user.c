@@ -33,16 +33,21 @@ void InitializeTable(hash_user h) {
 /* Função que retorna o User pretendido, caso este se encontre na hash, através da sua respetiva 
 chave. */
 User *RetrieveUser(hash_user h, KeyType k) {
-	 int i = Hash(k);
-	 User *res;
-	 for(res = h[i]; res; res = res->next) {
-		 if(strcmp(res->id, k) == 0) {
-			 return res;
-		 }
-	 }
-	 return NULL;
-}
+    int i = Hash(k);
+    User *root = h[i];
 
+    while (root!=NULL){
+        int compare = strcmp(k, root->id);
+        if (compare == 0) {
+            return root;
+        } else if (compare < 0){
+            return root->left;
+        } else {
+            return root->right;
+        }
+    }
+    return NULL;
+}
 
 /* Função auxiliar que cria uma copia de um determinado User. */
 User* copyUser(User *original) {
@@ -52,7 +57,6 @@ User* copyUser(User *original) {
     copy->next = NULL;
     return copy;
 }
-
 
 /* Função auxiliar que compara duas strings, que neste caso em concreto, vai ser utilizada para
 comparar nomes, com a particularidade de ignorar hífens nos mesmos. */
@@ -78,19 +82,18 @@ int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2) {
 
 /* Função auxiliar que adiciona um User a uma lista, que é ordenada pelos nomes dos diferentes
 Users. */
-void addUserToList(User **list, User *newUser) {
-    while (*list != NULL) {
-        int compare = strcoll(newUser->nome, (*list)->nome);
-        if (compare < 0  || (compare == 0 && strcoll(newUser->id,(*list)->id) < 0)) {
-            newUser->next = *list;
-            *list = newUser;
-            return;
+void addUserToTree(User **root, User *newUser){
+    if(*root == NULL){
+        *root = newUser;
+    } else {
+        int compare = strcoll(newUser->nome, (*root)->nome);
+        if(compare < 0 || (compare == 0 && strcoll(newUser->id,(*root)->id) < 0)){
+            addUserToTree(&((*root)->left),newUser);
+        } else {
+            addUserToTree(&((*root)->right),newUser);
         }
-        list = &(*list)->next;
     }
-    *list = newUser;
 }
-
 
 /* Função auxiliar que percorre a tabela hash, procurando Users que apresentem o parametro 
 "active" e cujos nomes começam com um determinado prefixo, retornando uma lista ordenada 
@@ -102,7 +105,7 @@ User *GetUserPrefix(hash_user h, KeyType k) {
         while (currentUser != NULL) {
             if (strcasecmp(currentUser->account_status, "active") == 0 && strncmp(currentUser->nome, k, strlen(k)) == 0) {
 				User *copy = copyUser(currentUser);
-				addUserToList(&res, copy);
+				addUserToTree(&res, copy);
             }
             currentUser = currentUser->next;
         }
@@ -124,88 +127,88 @@ void InsertTable(hash_user h, KeyType k, User *user) {
     }
 }
 
-
 /* A função verifica com o auxilio da funçao RetriveUser se o User se encontra na hash, caso este 
 se encontre, incrementa o número total de reservas e o gasto total do user, em seguida insere a reserva
 ordenamente na lista ligada Q2. */
 void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
-	User *aux = RetrieveUser(h, k);
-	if(!aux) {
-		return;
-	}
-	while(aux) {
-		if(strcmp(k, aux->id) == 0) {
-			break;
-		}
-		aux = aux->next;
-	}
-	
-	if(aux) {
-		aux->total_reservas++;
-		aux->total_gasto += q2->total_gasto;
-		Q2 *currentQ2 = aux->q2;
-		Q2 *prevQ2 = NULL;
-		
-		while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) >= 0) {
-			prevQ2 = currentQ2;
-			currentQ2 = currentQ2->next;
-		}
+    User *aux = RetrieveUser(h, k);
+    if (!aux) {
+        return;
+    }
 
-		if (prevQ2 == NULL) {
-			q2->next = aux->q2;
-			aux->q2 = q2;
-		} else {
-			prevQ2->next = q2;
-			q2->next = currentQ2;
-		}
-	}
+    while (aux) {
+        if (strcmp(k, aux->id) == 0) {
+            break;
+        }
+        if (strcmp(k, aux->id) < 0) {
+            aux = aux->left;
+        } else {
+            aux = aux->right;
+        }
+    }
+
+    if (aux) {
+        aux->total_reservas++;
+        aux->total_gasto += q2->total_gasto;
+
+        Q2 *currentQ2 = aux->q2;
+        Q2 *prevQ2 = NULL;
+
+        while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) >= 0) {
+            prevQ2 = currentQ2;
+            currentQ2 = currentQ2->next;
+        }
+
+        if (prevQ2 == NULL) {
+            q2->next = aux->q2;
+            aux->q2 = q2;
+        } else {
+            prevQ2->next = q2;
+            q2->next = currentQ2;
+        }
+    }
 }
+
 
 
 /* A função InsertVooUser segue a mesmo linha de pensamento que a função InsertReservaUser, inserindo os 
 flights na lista ligada Q2, de forma ordenada. */
 void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
-	User *aux = RetrieveUser(h, k);
-	if(!aux) {
-		return;
-	}
-	while(aux) {
-		if(strcmp(k, aux->id) == 0) {
-			break;
-		}
-		aux = aux->next;
-	}
-	
-	if(aux) {
-		aux->total_voos++;
-		Q2 *currentQ2 = aux->q2;
-		Q2 *prevQ2 = NULL;
-		
-		while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) >= 0) {
-			prevQ2 = currentQ2;
-			currentQ2 = currentQ2->next;
-		}
+    User *aux = RetrieveUser(h, k);
+    if (!aux) {
+        return;
+    }
 
-		if (prevQ2 == NULL) {
-			q2->next = aux->q2;
-			aux->q2 = q2;
-		} else {
-			prevQ2->next = q2;
-			q2->next = currentQ2;
-		}
-	
-	}
+    while (aux) {
+        if (strcmp(k, aux->id) == 0) {
+            break;
+        }
+        if (strcmp(k, aux->id) < 0) {
+            aux = aux->left;
+        } else {
+            aux = aux->right;
+        }
+    }
+
+    if (aux) {
+        aux->total_voos++;
+        Q2 *currentQ2 = aux->q2;
+        Q2 *prevQ2 = NULL;
+
+        while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) >= 0) {
+            prevQ2 = currentQ2;
+            currentQ2 = currentQ2->next;
+        }
+
+        if (prevQ2 == NULL) {
+            q2->next = aux->q2;
+            aux->q2 = q2;
+        } else {
+            prevQ2->next = q2;
+            q2->next = currentQ2;
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

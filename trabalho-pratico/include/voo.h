@@ -5,17 +5,6 @@
 /* Definição do KeyType*/
 typedef char KeyType[300];
 
-typedef struct MedianaAeroporto {
-	char *name;
-	int *atrasos;
-	int tamanho;
-    int capacidade;
-    int mediana;
-    struct MedianaAeroporto *next;
-} MedianaAeroporto;
-
-
-
 /* Definição da estrutura do Voo, que apresenta todos os dados relativos a cada voo, 
 sendo ainda acrescentado o número total de passageiros, de cada voo, e o respetivo delay. */
 typedef struct Voo {
@@ -35,6 +24,8 @@ typedef struct Voo {
     int total_passengers;
     int delay;
     struct Voo *next_voo;
+    struct Voo *left;
+    struct Voo *right;
 } Voo;
 
 
@@ -43,19 +34,24 @@ de cada voo. */
 typedef struct VooResumo {
     char *id;
     char *schedule_departure_date;
-    char *real_departure_date;
     char *destination;
     char *airline;
     char *plane_model;
     struct VooResumo *next_resumo;
+    struct VooResumo *left;
+    struct VooResumo *right;
 } VooResumo;
+
 
 /* Definição da estrutura Aeroporto, que apresenta o respetivo nome de cada Aeroporto e a lista ligada 
 VooResumo que apresenta então todos os voos associados a um determinado Aeroporto. */
+
 typedef struct Aeroporto {
 	char *name;
 	struct Aeroporto *next;
 	struct VooResumo *next_resumo;
+    struct Aeroporto *left;
+    struct Aeroporto *right;
 } Aeroporto;
 
 
@@ -117,7 +113,5 @@ void InsertTableVoos(hash_voos h, KeyType k, Voo *voo);
 Aeroporto. */
 VooResumo *GetVoosAeroportoEntreDatas(hash_aeroportos h, KeyType k, char *begin_date, char *end_date);
 
-MedianaAeroporto * GetMedianaAeroportos(hash_aeroportos h);
 
 #endif
-

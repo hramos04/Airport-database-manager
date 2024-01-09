@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     InitializeTableHoteis(h_hoteis);
     InitializeTableReservas(h_reservas);
     InitializeTableVoos(h_voos);
-     InitializeTableAeroportos(h_aeroportos);
+    InitializeTableAeroportos(h_aeroportos);
     
      /*Leitura e parsing do ficheiro "users.csv"*/
 	char *csv_users = (char*)malloc(256);
@@ -52,7 +52,6 @@ int main(int argc, char *argv[]) {
 	char *csv_passengers = (char*)malloc(256);
 	strcpy(csv_passengers, argv[1]);
 	strcat(csv_passengers, "/passengers.csv");
-
 
 	/*Processamento dos arquivos*/
     process_users_csv(h_users, csv_users);

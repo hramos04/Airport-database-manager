@@ -41,6 +41,8 @@ typedef struct User {
     double total_gasto;
     struct User *next;
     struct Q2 *q2;
+    struct User *left;
+    struct User *right;
 } User;
 
 
@@ -71,7 +73,7 @@ int compareNamesWithoutHyphenIgnoreCase(const char *str1, const char *str2);
 
 /* Função auxiliar que adiciona um User a uma lista, que é ordenada pelos nomes dos diferentes
 Users. */
-void addUserToList(User **list, User *newUser);
+void addUserToTree(User **list, User *newUser);
 
 
 /* Função auxiliar que percorre a tabela hash, procurando Users que apresentem o parametro 
