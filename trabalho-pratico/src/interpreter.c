@@ -383,6 +383,29 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
 	}
 }
 
+void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output) {
+	
+	int i = 0;
+	MedianaAeroporto *aux = GetMedianaAeroportos(h_aeroportos);
+	while(aux && i++ < N) {
+		if(f == 1) {
+			if(i == 1) {
+				fprintf(fp_output,"--- %d ---\nname: %s\nmedian: %d\n",i,aux->name,aux->mediana);
+			}
+			else {
+				fprintf(fp_output,"\n--- %d ---\nname: %s\nmedian: %d\n",i,aux->name,aux->mediana);
+			}
+			
+		}
+		else {
+			fprintf(fp_output,"%s;%d\n",aux->name,aux->mediana);
+		}
+		
+		aux = aux->next;
+	}
+	
+}
+
 
 /*
  * Função: comando
@@ -420,6 +443,9 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 	}
 	else if(strcmp(args[0], "5") == 0 || strcmp(args[0], "5F") == 0) {
 		q5(h_aeroportos, args[1], args[2], args[3], f, fp_output);
+	}
+	else if(strcmp(args[0], "7") == 0 || strcmp(args[0], "7F") == 0) {
+		q7(h_aeroportos, atoi(args[1]), f, fp_output);
 	}
 	else if(strcmp(args[0], "9") == 0 || strcmp(args[0], "9F") == 0) {
 		q9(h_users, args[1], f, fp_output);

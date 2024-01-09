@@ -156,6 +156,88 @@ void InsertTableVoos(hash_voos h, KeyType k, Voo *voo) {
     }
 }
 
+int diferencaEmSegundos(char *datetime1, char *datetime2) {
+    struct {
+        int ano, mes, dia, hora, minuto, segundo;
+    } dt1, dt2;
+
+    sscanf(datetime1, "%d/%d/%d %d:%d:%d", &dt1.ano, &dt1.mes, &dt1.dia, &dt1.hora, &dt1.minuto, &dt1.segundo);
+    sscanf(datetime2, "%d/%d/%d %d:%d:%d", &dt2.ano, &dt2.mes, &dt2.dia, &dt2.hora, &dt2.minuto, &dt2.segundo);
+
+    int diferenca = 0;
+
+    diferenca += (dt1.ano - dt2.ano) * 31536000;
+    diferenca += (dt1.mes - dt2.mes) * 2592000;
+    diferenca += (dt1.dia - dt2.dia) * 86400;
+    diferenca += (dt1.hora - dt2.hora) * 3600;
+    diferenca += (dt1.minuto - dt2.minuto) * 60;
+    diferenca += dt1.segundo - dt2.segundo;
+
+    return diferenca < 0 ? -diferenca : diferenca;
+}
+
+void inserirAtraso(MedianaAeroporto *aeroporto, int valor) {
+    if (aeroporto->tamanho == aeroporto->capacidade) {
+        aeroporto->capacidade *= 2;
+        aeroporto->atrasos = (int *)realloc(aeroporto->atrasos, aeroporto->capacidade * sizeof(int));
+    }
+    aeroporto->atrasos[aeroporto->tamanho++] = valor;
+}
+
+int comparar(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
+
+MedianaAeroporto * GetMedianaAeroportos(hash_aeroportos h) {
+	MedianaAeroporto *aux = NULL;
+	int i = 0;
+	for (i = 0; i < HASHSIZE; i++) {
+		 if(h[i]) {
+			 Aeroporto *ae = h[i];
+			
+			while(ae) {
+				MedianaAeroporto *novo = (MedianaAeroporto*)malloc(sizeof(MedianaAeroporto));
+				novo->name = strdup(ae->name);
+				novo->tamanho = 0;
+				novo->capacidade = 1;
+				novo->mediana = 0;
+				novo->next = NULL;
+				novo->atrasos = (int *)malloc(sizeof(int));
+				 
+				 VooResumo *vooresumo = ae->next_resumo;
+				 while(vooresumo) {
+					 int segundos = diferencaEmSegundos(vooresumo->schedule_departure_date, vooresumo->real_departure_date);
+					inserirAtraso(novo, segundos);
+					 
+					 vooresumo = vooresumo->next_resumo;
+				 }
+				 qsort(novo->atrasos, novo->tamanho, sizeof(int), comparar);
+				 if(novo->tamanho % 2 != 0) {
+					 novo->mediana = novo->atrasos[novo->tamanho/2];
+				 }
+				 else if(novo->tamanho >= 1) {
+					 novo->mediana = (novo->atrasos[novo->tamanho/2] + novo->atrasos[(novo->tamanho/2) - 1]) / 2;
+				 }
+				 
+				if (aux == NULL || (novo->mediana > aux->mediana) || (novo->mediana == aux->mediana && strcmp(novo->name, aux->name) < 0)) {
+                    novo->next = aux;
+                    aux = novo;
+                }
+                else {
+                    MedianaAeroporto *temp = aux;
+                    while (temp->next && (temp->next->mediana > novo->mediana || (temp->next->mediana == novo->mediana && strcmp(novo->name, temp->next->name) >= 0))) {
+                        temp = temp->next;
+                    }
+                    novo->next = temp->next;
+                    temp->next = novo;
+                }
+				 ae = ae->next;
+				 
+			 }
+		 }
+	}
+	return aux;
+}
 
 /* Função que retorna uma lista de resumos de Voos entre as datas especificadas para um determinado 
 Aeroporto. */

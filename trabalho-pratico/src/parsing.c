@@ -180,6 +180,13 @@ int valid_pay_method(char *string) {
     return (strcasecmp(string, "CASH") == 0 || strcasecmp(string, "DEBIT_CARD") == 0 || strcasecmp(string, "CREDIT_CARD") == 0);
 }
 
+int valid_seat_numbers(char *string, char *string1){
+    int n1 = atoi(string);
+    int n2 = atoi(string1);
+
+    // Verificar se o número de lugares é maior ou igual ao número de passageiros
+    return n1 >= n2;
+}
 
 /* Função que verifica se o nome do aeroporto é válido, retornando 1 caso este seja válido, ou 0 caso 
 contrário. */
@@ -207,6 +214,13 @@ int valid_stars(char *string) {
     return 0;
 }
 
+int valid_id(char *string){
+    if (string[0] == '\0') return 0;
+    for (int i = 0; string[i] != '\0'; i++){
+        if (isdigit(string[i]) == 0) return 0;
+    }
+    return 1;
+}
 
 /* Função que verifica se a data inicial é anterior à data final, retornando 1 caso seja verdade, 
 ou 0 caso contrário. */
@@ -273,6 +287,11 @@ int compare_datetime(char *datetime1, char *datetime2) {
     }
 
     return 0;
+}
+
+int valid_aerport(char *string){
+    if(strlen(string) == 3) return 1;
+    else return 0;
 }
 
 /* Função que verifica se o número de lugares de um avião é superior ao número de passageiros num 
@@ -352,6 +371,9 @@ int calcularDiferencaSegundos(char *datetime1, char *datetime2) {
     return diferencaSegundos;
 }
 
+int compare_date(){
+    return 0;
+}
 
 /* Função que verifica se o rating é válido, retornando 1 caso este seja válido, ou 0 caso contrário. */
 int valid_rating(char *string) {
@@ -789,6 +811,7 @@ void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voo
 			VooResumo *novo_resumo = (VooResumo *)malloc(sizeof(VooResumo));
 			novo_resumo->id = strdup(id);
 			novo_resumo->schedule_departure_date = strdup(schedule_departure_date);
+			novo_resumo->real_departure_date = strdup(real_departure_date);
 			novo_resumo->destination = strdup(destination);
 			novo_resumo->airline = strdup(airline);
 			novo_resumo->plane_model = strdup(plane_model);

@@ -45,6 +45,8 @@ void q4(hash_hoteis h_hoteis, char *argv, int f, FILE *fp_output);
 /* Implementação da Query 9*/
 void q9(hash_user h_users, char *argv, int f, FILE *fp_output);
 
+void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output);
+
 /*Implementação da Query 5*/
 void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_date, int f, FILE *fp_output);
 
