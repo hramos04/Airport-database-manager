@@ -7,6 +7,27 @@
 #include "../include/parsing.h"
 #include "../include/user.h"
 #include "../include/voo.h"
+#include "../include/reserva.h"
+
+
+
+
+/*
+int conta_linhas(char *hash_reservas, char* hash_user, char* hash_voos){
+	int r = 0, u = 0, v = 0;
+	char line[250];
+	FILE *file;
+	file = fopen(hash_reservas, "r");
+	if(file == NULL) return 1;
+	while(fgets(line, 250, file)!=NULL){
+		r++;
+	}
+	fclose(file);
+
+}
+*/
+
+
 
 
 

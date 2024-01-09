@@ -85,6 +85,7 @@ Hotel *RetrieveHotel(hash_hoteis h, KeyType k) {
 			 root = root->right;
 		 }
 	 }
+	 return NULL;
 }
 
 
