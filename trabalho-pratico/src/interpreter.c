@@ -383,6 +383,7 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
 	}
 }
 
+/*
 void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output) {
 	
 	int i = 0;
@@ -405,7 +406,7 @@ void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output) {
 	}
 	
 }
-
+*/
 
 /*
  * Função: comando
@@ -444,9 +445,9 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 	else if(strcmp(args[0], "5") == 0 || strcmp(args[0], "5F") == 0) {
 		q5(h_aeroportos, args[1], args[2], args[3], f, fp_output);
 	}
-	else if(strcmp(args[0], "7") == 0 || strcmp(args[0], "7F") == 0) {
+	/*else if(strcmp(args[0], "7") == 0 || strcmp(args[0], "7F") == 0) {
 		q7(h_aeroportos, atoi(args[1]), f, fp_output);
-	}
+	} */
 	else if(strcmp(args[0], "9") == 0 || strcmp(args[0], "9F") == 0) {
 		q9(h_users, args[1], f, fp_output);
 	}
