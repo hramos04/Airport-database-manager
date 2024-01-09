@@ -13,10 +13,11 @@
 
 
 /*
-int conta_linhas(char *hash_reservas, char* hash_user, char* hash_voos){
-	int r = 0, u = 0, v = 0;
+int conta_linhas(char *hash_reservas, char* hash_user, char* hash_voos, char* hash_hoteis,char* hash_aeroportos){
+	int r = 0, u = 0, v = 0, h = 0, a = 0;
 	char line[250];
 	FILE *file;
+
 	file = fopen(hash_reservas, "r");
 	if(file == NULL) return 1;
 	while(fgets(line, 250, file)!=NULL){
@@ -24,14 +25,38 @@ int conta_linhas(char *hash_reservas, char* hash_user, char* hash_voos){
 	}
 	fclose(file);
 
+	file = fopen(hash_user, "r");
+	if(file == NULL) return 1;
+	while(fgets(line, 250, file)!=NULL){
+		u++;
+	}
+	fclose(file);
+
+	file = fopen(hash_voos, "r");
+	if(file == NULL) return 1;
+	while(fgets(line, 250, file)!=NULL){
+		v++;
+	}
+	fclose(file);
+
+	//Não sei se estas duas (em baixo) são precisas, mas não sei como implementar para contar linhas do ficheiro csv dos passageiros.
+	file = fopen(hash_hoteis, "r");
+	if(file == NULL) return 1;
+	while(fgets(line, 250, file)!=NULL){
+		h++;
+	}
+	fclose(file);
+
+	file = fopen(hash_aeroportos, "r");
+	if(file == NULL) return 1;
+	while(fgets(line, 250, file)!=NULL){
+		a++;
+	}
+	fclose(file);
+
+	return 0;
 }
 */
-
-
-
-
-
-
 
 /* Função que verifica se um user se encontra na tabela de hash User, retornando 1 caso este se encontre,
 ou retornando 0, caso o User não se encontre na tabela de hash. */ 
