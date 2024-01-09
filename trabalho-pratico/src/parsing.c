@@ -811,7 +811,7 @@ void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voo
 			VooResumo *novo_resumo = (VooResumo *)malloc(sizeof(VooResumo));
 			novo_resumo->id = strdup(id);
 			novo_resumo->schedule_departure_date = strdup(schedule_departure_date);
-			novo_resumo->real_departure_date = strdup(real_departure_date);
+			//novo_resumo->real_departure_date = strdup(real_departure_date);
 			novo_resumo->destination = strdup(destination);
 			novo_resumo->airline = strdup(airline);
 			novo_resumo->plane_model = strdup(plane_model);
