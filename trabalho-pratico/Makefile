@@ -2,7 +2,7 @@
 
 CC := gcc
 LIBS := -lncurses
-CFLAGS := -Wall -Wextra -pedantic-errors -O2 -Iinclude
+CFLAGS := -Wall -Wextra -pedantic-errors -O2 -Iinclude -g 
 
 # OBJECT CODE
 

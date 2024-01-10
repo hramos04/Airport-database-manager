@@ -42,13 +42,22 @@ void q3(hash_hoteis h_hoteis, char *argv,  int f,FILE *fp_output);
 /*Implementação da Query 4*/
 void q4(hash_hoteis h_hoteis, char *argv, int f, FILE *fp_output);
 
+
+/*Implementação da Query 6*/
+void q6(hash_aeroportos h_aeroportos, char *ano_str, char *N_str, int f, FILE *fp_output);
+
 /* Implementação da Query 9*/
 void q9(hash_user h_users, char *argv, int f, FILE *fp_output);
 
+
+/*Implementação da query 7*/
 void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output);
 
 /*Implementação da Query 5*/
 void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_date, int f, FILE *fp_output);
+
+/*Função principal para ser usada no modo interativo*/
+int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, hash_aeroportos h_aeroportos);
 
 
 #endif

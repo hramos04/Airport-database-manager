@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <unistd.h>
 #include "../include/user.h"
 #include "../include/reserva.h"
 #include "../include/voo.h"
@@ -486,6 +487,70 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 	
 	
 	return 1;
+}
+
+int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, hash_aeroportos h_aeroportos){
+	int argc = 0;
+	char *args[MAX_ARGS];
+	split(linha, &argc, args);
+	int f = 0;
+	char query;
+
+	query = linha[0];
+	FILE *fp_output = fopen("comando_output.txt", "w");
+	if (fp_output == NULL) {
+    // Tratar erro de abertura de arquivo
+    return 1;
+}
+
+
+	if(linha[1] != ' ') return 1;
+
+	if(chdir("Resultados/") != 0);
+
+	switch (query)
+	{
+	case '1':
+		q1(h_users, h_voos, h_reservas, args[1],f,fp_output);
+		break;
+	
+	case '2':
+		q2(h_users, args, argc, f,fp_output);
+		break;
+
+	case '3':
+		q3(h_hoteis, args[1], f,fp_output);
+		break;
+	
+	case '4':
+		q4(h_hoteis, args[1], f,fp_output);
+		break;
+	
+	case '5':
+		q5(h_aeroportos, args[1], args[2], args[3], f, fp_output);
+		break;
+	
+	case '6':
+		q6(h_aeroportos, args[1], args[2], f, fp_output);
+		break;
+	
+	case '7':
+		q7(h_aeroportos, atoi(args[1]), f, fp_output);
+		break;
+	
+	case '9':
+		q9(h_users, args[1], f, fp_output);
+		break;
+	
+	default:
+		return 1;
+		break;
+	}
+
+	if (chdir("trabalho-pratico") != 0);
+	fclose(fp_output);
+
+	return 0;
 }
 
 

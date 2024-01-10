@@ -6,6 +6,7 @@
 #include "../include/reserva.h"
 #include "../include/voo.h"
 #include "../include/interpreter.h"
+#include "../include/interativo.h"
 #include <locale.h>
 #include "time.h"
 
@@ -19,7 +20,9 @@ int main(int argc, char *argv[]) {
 	setlocale(LC_COLLATE, "en_US.UTF-8");
 	/*Verificação do número de argumentos do input*/
 	char linha[1024];
-	if(argc < 2) {
+	
+	if(argc <= 1) {
+		interativo();
 		return 0;	/*Encerra o programa se o número de argumentos for insuficiente*/
 	}
 
