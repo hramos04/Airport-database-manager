@@ -17,7 +17,7 @@ typedef struct MedianaAeroporto {
 
 typedef struct SomaPassageirosAno {
     char *nomeAeroporto;
-    int totalPassageiros;
+    //int totalPassageiros;
     struct SomaPassageirosAno *next;
 } SomaPassageirosAno;
 
