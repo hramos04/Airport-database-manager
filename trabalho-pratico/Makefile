@@ -13,7 +13,7 @@ OBJS_PARSER := $(patsubst %.c, %.o, $(wildcard src/parsing/*.c))
 #OBJS_QUERIES := $(patsubst %.c, %.o, $(wildcard src/queries/*.c))
 OBJS_CATALOGS := $(patsubst %.c, %.o, $(wildcard src/user/*.c))
 #OBJS_INTERACTIVE := $(patsubst %.c, %.o, $(wildcard src/interactive/*.c))
-OBJS_ALL := $(OBJS_UTILS) $(OBJS_TESTS) $(OBJS_FETCH) $(OBJS_PARSER) $(OBJS_QUERIES) $(OBJS_CATALOGS) $(OBJS_INTERACTIVE)
+OBJS_ALL := $(OBJS_UTILS) $(OBJS_TESTS) $(OBJS_FETCH) $(OBJS_PARSER) $(OBJS_QUERIES) $(OBJS_CATALOGS) #$(OBJS_INTERACTIVE)
 
 # TARGETS
 
@@ -26,6 +26,7 @@ PATH_RESULTS := Resultados
 CSV_LARGE := csv/data-large
 CSV_REGULAR := csv/data-regular
 CSV_REGULAR_ERRORS := csv/data-regular-errors
+CSV_LARGE_ERRORS := csv/data-large-erros
 
 
 # BUILDING

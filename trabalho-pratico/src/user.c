@@ -196,6 +196,7 @@ void InsertQ2(Q2 **root, Q2 *newQ2) {
     }
 }
 
+
 void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
     User *aux = RetrieveUser(h, k);
     if (!aux) {
