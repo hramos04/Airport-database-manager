@@ -347,6 +347,19 @@ void ordenarListaDecrescente(SomaPassageirosAno** head) {
 
 
 
+
+int obterAno(const char *data) {
+    // Esta função auxiliar irá extrair o ano da string de data
+    // Certifique-se de adicionar a devida validação para a estrutura real do schedule_departure_date
+    // Esta implementação assume que o ano está no formato "YYYY/MM/DD HH:MM:SS"
+    char ano_str[5];
+    strncpy(ano_str, data, 4);
+    ano_str[4] = '\0';
+    return atoi(ano_str);
+}
+
+
+
 SomaPassageirosAno *criarListaSomaPassageirosAno(hash_aeroportos h_aeroportos, int ano, int n) {
     SomaPassageirosAno *head = NULL;
     
@@ -356,10 +369,13 @@ SomaPassageirosAno *criarListaSomaPassageirosAno(hash_aeroportos h_aeroportos, i
         while (aeroporto != NULL) {
             VooResumo *vooResumo = aeroporto->next_resumo;
             int totalPassageirosAeroporto = 0;
-            
+
             // Somar passageiros para voos com origem no aeroporto
             while (vooResumo != NULL) {
-                if (atoi(strtok(vooResumo->schedule_departure_date, "/")) == ano) {
+                // Obter o ano do voo usando a função auxiliar
+                int anoVoo = obterAno(vooResumo->schedule_departure_date);
+
+                if (anoVoo == ano) {
                     totalPassageirosAeroporto += vooResumo->total_passengers;
                 }
                 vooResumo = vooResumo->next_resumo;
@@ -373,8 +389,9 @@ SomaPassageirosAno *criarListaSomaPassageirosAno(hash_aeroportos h_aeroportos, i
                     VooResumo *vooResumoDestino = origemAeroporto->next_resumo;
                     
                     while (vooResumoDestino != NULL) {
-                        if (atoi(strtok(vooResumoDestino->schedule_departure_date, "/")) == ano &&
-                            strcmp(vooResumoDestino->destination, aeroporto->name) == 0) {
+                        int anoVooDestino = obterAno(vooResumoDestino->schedule_departure_date);
+
+                        if (anoVooDestino == ano && strcmp(vooResumoDestino->destination, aeroporto->name) == 0) {
                             totalPassageirosAeroporto += vooResumoDestino->total_passengers;
                         }
                         vooResumoDestino = vooResumoDestino->next_resumo;
@@ -423,6 +440,7 @@ SomaPassageirosAno *criarListaSomaPassageirosAno(hash_aeroportos h_aeroportos, i
 
     return head;
 }
+
 
 
 
