@@ -7,56 +7,10 @@
 #include "../include/parsing.h"
 #include "../include/user.h"
 #include "../include/voo.h"
-#include "../include/reserva.h"
 
 
 
 
-/*
-int conta_linhas(char *hash_reservas, char* hash_user, char* hash_voos, char* hash_hoteis,char* hash_aeroportos){
-	int r = 0, u = 0, v = 0, h = 0, a = 0;
-	char line[250];
-	FILE *file;
-
-	file = fopen(hash_reservas, "r");
-	if(file == NULL) return 1;
-	while(fgets(line, 250, file)!=NULL){
-		r++;
-	}
-	fclose(file);
-
-	file = fopen(hash_user, "r");
-	if(file == NULL) return 1;
-	while(fgets(line, 250, file)!=NULL){
-		u++;
-	}
-	fclose(file);
-
-	file = fopen(hash_voos, "r");
-	if(file == NULL) return 1;
-	while(fgets(line, 250, file)!=NULL){
-		v++;
-	}
-	fclose(file);
-
-	//Não sei se estas duas (em baixo) são precisas, mas não sei como implementar para contar linhas do ficheiro csv dos passageiros.
-	file = fopen(hash_hoteis, "r");
-	if(file == NULL) return 1;
-	while(fgets(line, 250, file)!=NULL){
-		h++;
-	}
-	fclose(file);
-
-	file = fopen(hash_aeroportos, "r");
-	if(file == NULL) return 1;
-	while(fgets(line, 250, file)!=NULL){
-		a++;
-	}
-	fclose(file);
-
-	return 0;
-}
-*/
 
 /* Função que verifica se um user se encontra na tabela de hash User, retornando 1 caso este se encontre,
 ou retornando 0, caso o User não se encontre na tabela de hash. */ 
@@ -417,6 +371,10 @@ int calcularDiferencaSegundos(char *datetime1, char *datetime2) {
     return diferencaSegundos;
 }
 
+int compare_date(){
+    return 0;
+}
+
 /* Função que verifica se o rating é válido, retornando 1 caso este seja válido, ou 0 caso contrário. */
 int valid_rating(char *string) {
     if (string[0] == '\0') {
@@ -702,7 +660,7 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 
 /* Função responsável por efetuar o parsing de todas as linhas do csv dos passageiros e verificar 
 se todos os campos são válidos, inserindo os valores nas hash tables. */
-void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
+void process_passengers_csv(hash_user h, hash_voos h_voos,hash_aeroportos h_aeroportos, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/passengers_errors.csv", "w");
 	FILE *fp = fopen(ficheiro,"r");
@@ -731,6 +689,7 @@ void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro) {
 			
 			InsertVooUser(h, user_id, q2);
 			InsertPassengerVoo(h_voos, voo->id);
+			InsertPassengerVooResumo(h_aeroportos, voo->id);
 		}
 		if(valid_flight(h_voos,flight_id)==0 || valid_user(h,user_id)==0){
 			if (invalidFile != NULL) {
@@ -853,7 +812,7 @@ void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voo
 			VooResumo *novo_resumo = (VooResumo *)malloc(sizeof(VooResumo));
 			novo_resumo->id = strdup(id);
 			novo_resumo->schedule_departure_date = strdup(schedule_departure_date);
-			//novo_resumo->real_departure_date = strdup(real_departure_date);
+			novo_resumo->real_departure_date = strdup(real_departure_date);
 			novo_resumo->destination = strdup(destination);
 			novo_resumo->airline = strdup(airline);
 			novo_resumo->plane_model = strdup(plane_model);

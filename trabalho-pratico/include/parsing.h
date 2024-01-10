@@ -128,7 +128,7 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 
 /* Função responsável por efetuar o parsing de todas as linhas do csv dos passageiros e verificar 
 se todos os campos são válidos, inserindo os valores nas hash tables. */
-void process_passengers_csv(hash_user h, hash_voos h_voos, char *ficheiro);
+void process_passengers_csv(hash_user h, hash_voos h_voos, hash_aeroportos h_aeroportos, char *ficheiro);
 
 
 /* Função responsável por efetuar o parsing de todas as linhas do csv dos voos e verificar se 
