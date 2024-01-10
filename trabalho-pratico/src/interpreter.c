@@ -397,9 +397,9 @@ void q6(hash_aeroportos h_aeroportos, char *ano_str, char *N_str, int f, FILE *f
     while (current != NULL) {
         if (f == 1) {
             if (i == 1) {
-                fprintf(fp_output, "--- %d ---\nAeroporto: %s\nTotal de Passageiros: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
+                fprintf(fp_output, "--- %d ---\nname: %s\npassengers: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
             } else {
-                fprintf(fp_output, "\n--- %d ---\nAeroporto: %s\nTotal de Passageiros: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
+                fprintf(fp_output, "\n--- %d ---\nname: %s\npassangers: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
             }
             i++;
         } else {
