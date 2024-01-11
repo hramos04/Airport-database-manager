@@ -105,6 +105,8 @@ int main(int argc, char *argv[]) {
     // Imprimir a lista de soma de passageiros por ano
     //imprimirListaSomaPassageirosAno(listaSomaPassageiros);
 
+
+
 	destroiTableUser(h_users);
 	destroiTableVoo(h_voos);
 	destroiTableAeroporto(h_aeroportos);

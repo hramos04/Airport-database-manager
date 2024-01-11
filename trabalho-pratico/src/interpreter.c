@@ -434,6 +434,23 @@ void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output) {
 	
 }
 
+void q8(hash_hoteis h_hoteis,char *argv, char *start_date, char *end_date, int f, FILE *fp_output) {
+	int i = 0;
+	int lucro =GetLucro(h_hoteis,argv, start_date, end_date);
+		if(f == 1) {
+			if(i == 1) {
+				fprintf(fp_output,"--- 1 ---\nrevenue: %d\n",lucro);
+			}
+			else {
+				fprintf(fp_output,"--- 1 ---\nrevenue: %d\n",lucro);
+			}
+			
+		}
+		else {
+			fprintf(fp_output,"%d\n",lucro);
+		}
+	
+}
 
 /*
  * Função: comando
@@ -477,6 +494,9 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 	}
 	else if(strcmp(args[0], "7") == 0 || strcmp(args[0], "7F") == 0) {
 		q7(h_aeroportos, atoi(args[1]), f, fp_output);
+	}
+	else if(strcmp(args[0], "8") == 0 || strcmp(args[0], "8F") == 0) {
+		q8(h_hoteis, args[1], args[2],args[3], f, fp_output);
 	}
 	else if(strcmp(args[0], "9") == 0 || strcmp(args[0], "9F") == 0) {
 		q9(h_users, args[1], f, fp_output);

@@ -633,6 +633,7 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 			novo_resumo->end_date = strdup(end_date);
 			novo_resumo->user_id = strdup(user_id);
 			novo_resumo->rating = strtod(rating, &endptr);
+			novo_resumo->price_per_night=strdup(price_per_night);
 			novo_resumo->total_price = calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) + ( ((calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) / 100)* strtod(nova_reserva->city_tax, &endptr)));
 			novo_resumo->next_resumo = NULL;
 

@@ -36,6 +36,7 @@ typedef struct ReservaResumo {
     char *begin_date;
     char *end_date;
     char *user_id;
+    char *price_per_night;
     double total_price;
     double rating;
     struct ReservaResumo *next_resumo;
@@ -109,6 +110,7 @@ void InsertTableReservas(hash_reservas h, KeyType k, Reserva *reserva);
 
 int HashHoteis(KeyType k);
 int HashReservas(KeyType k);
+int GetLucro(hash_hoteis h, KeyType k, char *start_date, char *end_date);
 
 #endif
 
