@@ -384,13 +384,14 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
 	}
 }
 
-void q6(hash_aeroportos h_aeroportos, char *ano_str, char *N_str, int f, FILE *fp_output) {
+
+void q6(hash_voos h_voos, char *ano_str, char *N_str, int f, FILE *fp_output) {
     // Converter os argumentos de string para inteiros
     int ano = atoi(ano_str);
     int N = atoi(N_str);
 
     // Restante da função permanece inalterado
-    SomaPassageirosAno *listaSomaPassageiros = criarListaSomaPassageirosAno(h_aeroportos, ano, N);
+    SomaPassageirosAno *listaSomaPassageiros = criarListaSomaPassageirosAno(h_voos, ano, N);
 
     // Imprimir os resultados no arquivo ou na tela, dependendo do valor de f
     int i = 1;
@@ -398,9 +399,9 @@ void q6(hash_aeroportos h_aeroportos, char *ano_str, char *N_str, int f, FILE *f
     while (current != NULL) {
         if (f == 1) {
             if (i == 1) {
-                fprintf(fp_output, "--- %d ---\nAeroporto: %s\nTotal de Passageiros: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
+                fprintf(fp_output, "--- %d ---\nname: %s\npassengers: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
             } else {
-                fprintf(fp_output, "\n--- %d ---\nAeroporto: %s\nTotal de Passageiros: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
+                fprintf(fp_output, "\n--- %d ---\nname: %s\npassengers: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
             }
             i++;
         } else {
@@ -408,9 +409,6 @@ void q6(hash_aeroportos h_aeroportos, char *ano_str, char *N_str, int f, FILE *f
         }
         current = current->next;
     }
-
-    // Liberar a memória da lista ligada
-    liberarListaSomaPassageirosAno(listaSomaPassageiros);
 }
 
 
@@ -437,6 +435,23 @@ void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output) {
 	
 }
 
+void q8(hash_hoteis h_hoteis,char *argv, char *start_date, char *end_date, int f, FILE *fp_output) {
+	int i = 0;
+	int lucro =GetLucro(h_hoteis,argv, start_date, end_date);
+		if(f == 1) {
+			if(i == 1) {
+				fprintf(fp_output,"--- 1 ---\nrevenue: %d\n",lucro);
+			}
+			else {
+				fprintf(fp_output,"--- 1 ---\nrevenue: %d\n",lucro);
+			}
+			
+		}
+		else {
+			fprintf(fp_output,"%d\n",lucro);
+		}
+	
+}
 
 /*
  * Função: comando
@@ -476,10 +491,13 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 		q5(h_aeroportos, args[1], args[2], args[3], f, fp_output);
 	}
 	else if(strcmp(args[0], "6") == 0 || strcmp(args[0], "6F") == 0) {
-		q6(h_aeroportos, args[1], args[2], f, fp_output);
+		q6(h_voos, args[1], args[2], f, fp_output);
 	}
 	else if(strcmp(args[0], "7") == 0 || strcmp(args[0], "7F") == 0) {
 		q7(h_aeroportos, atoi(args[1]), f, fp_output);
+	}
+	else if(strcmp(args[0], "8") == 0 || strcmp(args[0], "8F") == 0) {
+		q8(h_hoteis, args[1], args[2],args[3], f, fp_output);
 	}
 	else if(strcmp(args[0], "9") == 0 || strcmp(args[0], "9F") == 0) {
 		q9(h_users, args[1], f, fp_output);

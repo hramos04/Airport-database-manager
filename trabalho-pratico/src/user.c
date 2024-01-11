@@ -18,15 +18,54 @@ int Hash(KeyType k) {
     h += (h << 3);
     h ^= (h >> 11);
     h += (h << 15);
-    return h % HASHSIZE;
+    return h % HASHSIZEUSER;
 }
 
 
 /* Função que inicializa a tabela de hash User. */
 void InitializeTable(hash_user h) {
     int i;
-    for (i = 0; i < HASHSIZE; ++i)
+    for (i = 0; i < HASHSIZEUSER; ++i)
         h[i] = NULL;
+}
+
+
+void destroiTableUser(hash_user h) {
+
+	for(int i = 0; i<HASHSIZEUSER; i++){
+		User *atual = h[i];
+		while(atual!=NULL){
+			User *position = atual;
+			atual = atual->next;
+			free(position->id);
+			free(position->nome);
+			free(position->email);
+			free(position->phone);
+			free(position->birth);
+			free(position->sex);
+			free(position->passport);
+			free(position->country);
+			free(position->address);
+			free(position->account_creation);
+			free(position->pay_method);
+			free(position->account_status);
+			destroiQ2(position->q2);
+		}
+		free(h[i]);
+	}
+}
+
+
+void destroiQ2(Q2 *q2){
+
+	while(q2!=NULL){
+		Q2 *atual = q2;
+		q2 = q2->next;
+		free(atual->id);
+		free(atual->data);
+		free(atual);
+	}
+	free(q2);
 }
 
 
@@ -97,7 +136,7 @@ void addUserToList(User **list, User *newUser) {
 desses Users, com a ajuda das função addUserToList e a função copyUser. */
 User *GetUserPrefix(hash_user h, KeyType k) {
 	User *res = NULL;
-    for (int i = 0; i < HASHSIZE; i++) {
+    for (int i = 0; i < HASHSIZEUSER; i++) {
         User *currentUser = h[i];
         while (currentUser != NULL) {
             if (strcasecmp(currentUser->account_status, "active") == 0 && strncmp(currentUser->nome, k, strlen(k)) == 0) {
@@ -197,15 +236,18 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
 	}
 }
 
+/*
+int userNumber(hash_user h, char *argv){
 
+	int totalUsers = 0;
 
-
-
-
-
-
-
-
-
-
-
+	for(int i = 0; i<HASHSIZEUSER; i++){
+		if(h[i]!=NULL){
+			User* u = h[i];
+			if(argv[1]==NULL){
+				totalUsers ++;
+			}
+			
+		}
+	}
+}*/

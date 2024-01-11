@@ -1,6 +1,6 @@
 #ifndef VOO_H
 #define VOO_H
-#define HASHSIZE 10050 // Tamanho da tabela hash
+#define HASHSIZEVOO 10050 // Tamanho da tabela hash
 
 /* Definição do KeyType*/
 typedef char KeyType[300];
@@ -66,11 +66,11 @@ typedef struct Aeroporto {
 
 
 /* Definição da tabela hash que vai guardar todos os diferentes Aeroportos. */
-typedef Aeroporto *hash_aeroportos[HASHSIZE];
+typedef Aeroporto *hash_aeroportos[HASHSIZEVOO];
 
 
 /* Definição da tabela hash que vai guardar todos os diferentes Voos. */
-typedef Voo *hash_voos[HASHSIZE];
+typedef Voo *hash_voos[HASHSIZEVOO];
 
 
 /* Função de hash que converte uma chave num índice na tabela hash dos Aeroportos. */
@@ -87,6 +87,13 @@ void InitializeTableAeroportos(hash_aeroportos h);
 
 /* Função que inicializa a tabela de hash Voos. */
 void InitializeTableVoos(hash_voos h);
+
+void destroiTableVoo(hash_voos h);
+
+void destroiVooResumo(VooResumo *vooResumo);
+
+
+void destroiTableAeroporto(hash_aeroportos h);
 
 
 /* Função que retorna o Voo pretendido, caso este se encontre na hash, através da sua respetiva 
@@ -134,10 +141,11 @@ MedianaAeroporto * GetMedianaAeroportos(hash_aeroportos h);
 void PrintHashAeroportos(hash_aeroportos h_aeroportos);
 void PrintHashVoos(hash_voos h_voos);
 
-SomaPassageirosAno *criarListaSomaPassageirosAno(hash_aeroportos h_aeroportos, int ano, int n);
+SomaPassageirosAno *criarListaSomaPassageirosAno(hash_voos h, int ano, int n);
 void liberarListaSomaPassageirosAno(SomaPassageirosAno *head);
 void imprimirListaSomaPassageirosAno(SomaPassageirosAno *head);
-
+void imprimirListaSomaPassageirosAno(SomaPassageirosAno *lista);
+void imprimirListaSomaPassageirosAno(SomaPassageirosAno *lista);
 
 #endif
 

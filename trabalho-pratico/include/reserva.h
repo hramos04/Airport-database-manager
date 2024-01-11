@@ -1,6 +1,6 @@
 #ifndef RESERVA_H
 #define RESERVA_H
-#define HASHSIZE 10050 // Tamanho da tabela hash
+#define HASHSIZERESERVA 41000 // Tamanho da tabela hash
 
 /* Definição do KeyType*/
 typedef char KeyType[300];
@@ -36,6 +36,7 @@ typedef struct ReservaResumo {
     char *begin_date;
     char *end_date;
     char *user_id;
+    char *price_per_night;
     double total_price;
     double rating;
     struct ReservaResumo *next_resumo;
@@ -52,11 +53,11 @@ typedef struct Hotel {
 
 
 /* Definição da tabela hash que vai guardar todos os diferentes Hoteis. */
-typedef Hotel *hash_hoteis[HASHSIZE];
+typedef Hotel *hash_hoteis[HASHSIZERESERVA];
 
 
 /* Definição da tabela hash que vai guardar todas as diferentes Reservas. */
-typedef Reserva *hash_reservas[HASHSIZE];
+typedef Reserva *hash_reservas[HASHSIZERESERVA];
 
 
 /* Função de hash que converte uma chave num índice na tabela hash dos hoteis. */
@@ -84,6 +85,12 @@ Reserva *RetrieveReserva(hash_reservas h, KeyType k);
 chave. */
 Hotel *RetrieveHotel(hash_hoteis h, KeyType k) ;
 
+void destroiTableReserva(hash_reservas h);
+
+void destroiReservaResumo(ReservaResumo *reservaResumo);
+
+void destroiTableHotel(hash_hoteis h);
+
 
 /* Função que calcula a média das classificações de um hotel, percorrendo a lista ligada 
 das reservas e somando os diferentes ratings em cada reserva. */
@@ -103,6 +110,7 @@ void InsertTableReservas(hash_reservas h, KeyType k, Reserva *reserva);
 
 int HashHoteis(KeyType k);
 int HashReservas(KeyType k);
+int GetLucro(hash_hoteis h, KeyType k, char *start_date, char *end_date);
 
 #endif
 

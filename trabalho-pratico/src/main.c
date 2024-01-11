@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     InitializeTableHoteis(h_hoteis);
     InitializeTableReservas(h_reservas);
     InitializeTableVoos(h_voos);
-     InitializeTableAeroportos(h_aeroportos);
+    InitializeTableAeroportos(h_aeroportos);
     
      /*Leitura e parsing do ficheiro "users.csv"*/
 	char *csv_users = (char*)malloc(256);
@@ -103,8 +103,18 @@ int main(int argc, char *argv[]) {
     printf("Processor time taken : %f seconds\n", (float)duration/CLOCKS_PER_SEC);
 	//PrintHashAeroportos(h_aeroportos);
     //PrintHashVoos(h_voos);
+	//SomaPassageirosAno *listaSomaPassageiros = criarListaSomaPassageirosAno(h_voos, 2021, 10);
+
+    // Imprimir a lista de soma de passageiros por ano
+    //imprimirListaSomaPassageirosAno(listaSomaPassageiros);
 
 
+
+	destroiTableUser(h_users);
+	destroiTableVoo(h_voos);
+	destroiTableAeroporto(h_aeroportos);
+	destroiTableReserva(h_reservas);
+	destroiTableHotel(h_hoteis);
     return 0;   
 }
 
