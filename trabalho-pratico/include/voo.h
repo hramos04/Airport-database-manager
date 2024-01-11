@@ -17,7 +17,7 @@ typedef struct MedianaAeroporto {
 
 typedef struct SomaPassageirosAno {
     char *nomeAeroporto;
-    //int totalPassageiros;
+    int totalPassageiros;
     struct SomaPassageirosAno *next;
 } SomaPassageirosAno;
 
@@ -134,10 +134,11 @@ MedianaAeroporto * GetMedianaAeroportos(hash_aeroportos h);
 void PrintHashAeroportos(hash_aeroportos h_aeroportos);
 void PrintHashVoos(hash_voos h_voos);
 
-SomaPassageirosAno *criarListaSomaPassageirosAno(hash_aeroportos h_aeroportos, int ano, int n);
+SomaPassageirosAno *criarListaSomaPassageirosAno(hash_voos h, int ano, int n);
 void liberarListaSomaPassageirosAno(SomaPassageirosAno *head);
 void imprimirListaSomaPassageirosAno(SomaPassageirosAno *head);
-
+void imprimirListaSomaPassageirosAno(SomaPassageirosAno *lista);
+void imprimirListaSomaPassageirosAno(SomaPassageirosAno *lista);
 
 #endif
 

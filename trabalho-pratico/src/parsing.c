@@ -371,7 +371,9 @@ int calcularDiferencaSegundos(char *datetime1, char *datetime2) {
     return diferencaSegundos;
 }
 
-
+int compare_date(){
+    return 0;
+}
 
 /* Função que verifica se o rating é válido, retornando 1 caso este seja válido, ou 0 caso contrário. */
 int valid_rating(char *string) {

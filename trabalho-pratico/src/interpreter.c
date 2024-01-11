@@ -383,13 +383,14 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
 	}
 }
 
-void q6(hash_aeroportos h_aeroportos, char *ano_str, char *N_str, int f, FILE *fp_output) {
+
+void q6(hash_voos h_voos, char *ano_str, char *N_str, int f, FILE *fp_output) {
     // Converter os argumentos de string para inteiros
     int ano = atoi(ano_str);
     int N = atoi(N_str);
 
     // Restante da função permanece inalterado
-    SomaPassageirosAno *listaSomaPassageiros = criarListaSomaPassageirosAno(h_aeroportos, ano, N);
+    SomaPassageirosAno *listaSomaPassageiros = criarListaSomaPassageirosAno(h_voos, ano, N);
 
     // Imprimir os resultados no arquivo ou na tela, dependendo do valor de f
     int i = 1;
@@ -397,7 +398,7 @@ void q6(hash_aeroportos h_aeroportos, char *ano_str, char *N_str, int f, FILE *f
     while (current != NULL) {
         if (f == 1) {
             if (i == 1) {
-                fprintf(fp_output, "--- %d ---\nname: %s\npassengers: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
+                fprintf(fp_output, "--- %d ---\nname: %s\npassangers: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
             } else {
                 fprintf(fp_output, "\n--- %d ---\nname: %s\npassangers: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
             }
@@ -407,9 +408,6 @@ void q6(hash_aeroportos h_aeroportos, char *ano_str, char *N_str, int f, FILE *f
         }
         current = current->next;
     }
-
-    // Liberar a memória da lista ligada
-    liberarListaSomaPassageirosAno(listaSomaPassageiros);
 }
 
 
@@ -475,7 +473,7 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 		q5(h_aeroportos, args[1], args[2], args[3], f, fp_output);
 	}
 	else if(strcmp(args[0], "6") == 0 || strcmp(args[0], "6F") == 0) {
-		q6(h_aeroportos, args[1], args[2], f, fp_output);
+		q6(h_voos, args[1], args[2], f, fp_output);
 	}
 	else if(strcmp(args[0], "7") == 0 || strcmp(args[0], "7F") == 0) {
 		q7(h_aeroportos, atoi(args[1]), f, fp_output);

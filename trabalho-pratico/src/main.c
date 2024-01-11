@@ -100,6 +100,10 @@ int main(int argc, char *argv[]) {
     printf("Processor time taken : %f seconds\n", (float)duration/CLOCKS_PER_SEC);
 	//PrintHashAeroportos(h_aeroportos);
     //PrintHashVoos(h_voos);
+	//SomaPassageirosAno *listaSomaPassageiros = criarListaSomaPassageirosAno(h_voos, 2021, 10);
+
+    // Imprimir a lista de soma de passageiros por ano
+    //imprimirListaSomaPassageirosAno(listaSomaPassageiros);
 
 
     return 0;   

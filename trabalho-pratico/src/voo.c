@@ -347,7 +347,6 @@ void ordenarListaDecrescente(SomaPassageirosAno** head) {
 
 
 
-
 int obterAno(const char *data) {
     // Esta função auxiliar irá extrair o ano da string de data
     // Certifique-se de adicionar a devida validação para a estrutura real do schedule_departure_date
@@ -358,58 +357,123 @@ int obterAno(const char *data) {
     return atoi(ano_str);
 }
 
+// Estrutura para um nó de aeroporto
+typedef struct AeroportoNode {
+    char *nomeAeroporto;
+    struct AeroportoNode *next;
+} AeroportoNode;
 
+// Estrutura para a lista de aeroportos
+typedef struct ListaAeroportos {
+    AeroportoNode *head;
+} ListaAeroportos;
 
-SomaPassageirosAno *criarListaSomaPassageirosAno(hash_aeroportos h_aeroportos, int ano, int n) {
-    SomaPassageirosAno *head = NULL;
-    
-    for (int i = 0; i < HASHSIZE; i++) {
-        Aeroporto *aeroporto = h_aeroportos[i];
-        
-        while (aeroporto != NULL) {
-            VooResumo *vooResumo = aeroporto->next_resumo;
-            int totalPassageirosAeroporto = 0;
+// Função para criar uma lista de aeroportos vazia
+ListaAeroportos *criarListaAeroportos() {
+    ListaAeroportos *novaLista = (ListaAeroportos *)malloc(sizeof(ListaAeroportos));
+    if (novaLista != NULL) {
+        novaLista->head = NULL;
+    }
+    return novaLista;
+}
 
-            // Somar passageiros para voos com origem no aeroporto
-            while (vooResumo != NULL) {
-                // Obter o ano do voo usando a função auxiliar
-                int anoVoo = obterAno(vooResumo->schedule_departure_date);
+// Função para adicionar um aeroporto à lista (não adiciona se já existir), ignorando maiúsculas e minúsculas
+void adicionarAeroporto(ListaAeroportos *lista, const char *nomeAeroporto) {
+    if (lista == NULL || nomeAeroporto == NULL) {
+        return;
+    }
 
-                if (anoVoo == ano) {
-                    totalPassageirosAeroporto += vooResumo->total_passengers;
-                }
-                vooResumo = vooResumo->next_resumo;
-            }
-
-            // Somar passageiros para voos com destino no aeroporto
-            for (int j = 0; j < HASHSIZE; j++) {
-                Aeroporto *origemAeroporto = h_aeroportos[j];
-                
-                while (origemAeroporto != NULL) {
-                    VooResumo *vooResumoDestino = origemAeroporto->next_resumo;
-                    
-                    while (vooResumoDestino != NULL) {
-                        int anoVooDestino = obterAno(vooResumoDestino->schedule_departure_date);
-
-                        if (anoVooDestino == ano && strcmp(vooResumoDestino->destination, aeroporto->name) == 0) {
-                            totalPassageirosAeroporto += vooResumoDestino->total_passengers;
-                        }
-                        vooResumoDestino = vooResumoDestino->next_resumo;
-                    }
-
-                    origemAeroporto = origemAeroporto->next;
-                }
-            }
-            
-            // Criar nó para a lista ligada de soma de passageiros por ano
-            SomaPassageirosAno *novo = (SomaPassageirosAno *)malloc(sizeof(SomaPassageirosAno));
-            novo->nomeAeroporto = strdup(aeroporto->name);
-            novo->totalPassageiros = totalPassageirosAeroporto;
-            novo->next = head;
-            head = novo;
-            
-            aeroporto = aeroporto->next;
+    // Verificar se o aeroporto já existe na lista (ignorando maiúsculas e minúsculas)
+    AeroportoNode *atual = lista->head;
+    while (atual != NULL) {
+        if (strcasecmp(atual->nomeAeroporto, nomeAeroporto) == 0) {
+            return;  // Aeroporto já existe, não adiciona novamente
         }
+        atual = atual->next;
+    }
+
+    // Criar novo nó para o aeroporto
+    AeroportoNode *novoAeroporto = (AeroportoNode *)malloc(sizeof(AeroportoNode));
+    if (novoAeroporto != NULL) {
+        novoAeroporto->nomeAeroporto = (char *)malloc(strlen(nomeAeroporto) + 1);
+        strcpy(novoAeroporto->nomeAeroporto, nomeAeroporto);
+        novoAeroporto->next = lista->head;
+        lista->head = novoAeroporto;
+    }
+}
+
+
+// Função para destruir a lista de aeroportos e liberar a memória
+void destruirListaAeroportos(ListaAeroportos *lista) {
+    if (lista == NULL) {
+        return;
+    }
+
+    AeroportoNode *atual = lista->head;
+    while (atual != NULL) {
+        AeroportoNode *proximo = atual->next;
+        free(atual->nomeAeroporto);
+        free(atual);
+        atual = proximo;
+    }
+
+    free(lista);
+}
+
+SomaPassageirosAno *criarListaSomaPassageirosAno(hash_voos h, int ano, int n) {
+    // Lista de aeroportos
+    ListaAeroportos *listaAeroportos = criarListaAeroportos();
+
+    // Percorrer a hash dos voos para coletar origens e destinos
+    for (int i = 0; i < HASHSIZE; i++) {
+        Voo *voo = h[i];
+        
+        while (voo != NULL) {
+            // Adicionar origem à lista de aeroportos
+            adicionarAeroporto(listaAeroportos, voo->origin);
+            
+            // Adicionar destino à lista de aeroportos
+            adicionarAeroporto(listaAeroportos, voo->destination);
+            
+            voo = voo->next_voo;
+        }
+    }
+
+    // Lista de passageiros por ano
+    SomaPassageirosAno *head = NULL;
+
+    // Percorrer a lista de aeroportos
+    AeroportoNode *aeroportoNode = listaAeroportos->head;
+    while (aeroportoNode != NULL) {
+        // Inicializar total de passageiros para o aeroporto
+        int totalPassageirosAeroporto = 0;
+
+        // Somar passageiros para voos com origem ou destino no aeroporto no ano especificado
+        for (int i = 0; i < HASHSIZE; i++) {
+            Voo *voo = h[i];
+
+            while (voo != NULL) {
+                int anoVoo = obterAno(voo->schedule_departure_date);
+
+                if (anoVoo == ano && (strcasecmp(voo->origin, aeroportoNode->nomeAeroporto) == 0 ||
+                                      strcasecmp(voo->destination, aeroportoNode->nomeAeroporto) == 0)) {
+                    totalPassageirosAeroporto += voo->total_passengers;
+                }
+
+                voo = voo->next_voo;
+            }
+        }
+
+        // Criar nó para a lista ligada de soma de passageiros por ano
+        SomaPassageirosAno *novo = (SomaPassageirosAno *)malloc(sizeof(SomaPassageirosAno));
+        novo->nomeAeroporto = (char *)malloc(strlen(aeroportoNode->nomeAeroporto) + 1);
+        strcpy(novo->nomeAeroporto, aeroportoNode->nomeAeroporto);
+        novo->totalPassageiros = totalPassageirosAeroporto;
+        novo->next = head;
+        head = novo;
+
+        // Avançar para o próximo aeroporto
+        aeroportoNode = aeroportoNode->next;
     }
 
     // Ordenar a lista por total de passageiros decrescente
@@ -438,10 +502,11 @@ SomaPassageirosAno *criarListaSomaPassageirosAno(hash_aeroportos h_aeroportos, i
         prev->next = NULL;
     }
 
+    // Liberar a lista de aeroportos
+    destruirListaAeroportos(listaAeroportos);
+
     return head;
 }
-
-
 
 
 // Função para libertar a memória da lista ligada SomaPassageirosAno
@@ -455,22 +520,24 @@ void liberarListaSomaPassageirosAno(SomaPassageirosAno *head) {
     }
 }
 
-// Função para imprimir a lista ligada SomaPassageirosAno
-void imprimirListaSomaPassageirosAno(SomaPassageirosAno *head) {
-    SomaPassageirosAno *current = head;
-    while (current != NULL) {
-        printf("%s, %d\n", current->nomeAeroporto, current->totalPassageiros);
-        current = current->next;
+
+// Função para imprimir a lista de soma de passageiros por ano
+void imprimirListaSomaPassageirosAno(SomaPassageirosAno *lista) {
+    if (lista == NULL) {
+        printf("Lista de soma de passageiros por ano vazia.\n");
+        return;
+    }
+
+    printf("Lista de Soma de Passageiros por Ano:\n");
+
+    SomaPassageirosAno *atual = lista;
+    while (atual != NULL) {
+        printf("Aeroporto: %s, Total de Passageiros: %d\n", atual->nomeAeroporto, atual->totalPassageiros);
+        atual = atual->next;
     }
 }
 
 
-/* Função auxiliar para obter o ano a partir de uma data no formato "YYYY/MM/DD HH:mm:ss" */
-int getYearFromDatetime(char *datetime) {
-    int year;
-    sscanf(datetime, "%d", &year);
-    return year;
-}
 
 
 
@@ -482,35 +549,36 @@ void PrintHashAeroportos(hash_aeroportos h_aeroportos) {
         while (aeroporto != NULL) {
             printf("Aeroporto: %s\n", aeroporto->name);
 
-            VooResumo *vooResumo = aeroporto->next_resumo;
-            while (vooResumo != NULL) {
-                printf("  - VooResumo ID: %s, Schedule Departure Date: %s, Real Departure Date: %s, Destination: %s, Airline: %s, Plane Model: %s, Total Passengers: %d\n",
-                       vooResumo->id, vooResumo->schedule_departure_date, vooResumo->real_departure_date,
-                       vooResumo->destination, vooResumo->airline, vooResumo->plane_model, vooResumo->total_passengers);
-
-                vooResumo = vooResumo->next_resumo;
-            }
-
+        
             aeroporto = aeroporto->next;
         }
     }
 }
 
-/* Função para imprimir a tabela hash de voos */
+/* Função para imprimir a tabela hash de voos filtrando por origem, destino e ano de Schedule Departure Date,
+   considerando insensibilidade a maiúsculas e minúsculas */
 void PrintHashVoos(hash_voos h_voos) {
     for (int i = 0; i < HASHSIZE; i++) {
         Voo *voo = h_voos[i];
-        
+
         while (voo != NULL) {
-            printf("Voo ID: %s\n", voo->id);
-            printf("  - Airline: %s, Plane Model: %s, Total Seats: %s, Origin: %s, Destination: %s\n",
-                   voo->airline, voo->plane_model, voo->total_seats, voo->origin, voo->destination);
-            printf("  - Schedule Departure Date: %s, Schedule Arrival Date: %s\n", voo->schedule_departure_date, voo->schedule_arrival_date);
-            printf("  - Real Departure Date: %s, Real Arrival Date: %s\n", voo->real_departure_date, voo->real_arrival_date);
-            printf("  - Pilot: %s, Copilot: %s, Notes: %s\n", voo->pilot, voo->copilot, voo->notes);
-            printf("  - Total Passengers: %d, Delay: %d\n", voo->total_passengers, voo->delay);
+            if ((strcasecmp(voo->origin, "FRA") == 0 || strcasecmp(voo->destination, "FRA") == 0) &&
+                (obterAno(voo->schedule_departure_date) == 2023)) {
+
+                printf("Voo ID: %s\n", voo->id);
+                printf("  - Airline: %s, Plane Model: %s, Total Seats: %s, Origin: %s, Destination: %s\n",
+                       voo->airline, voo->plane_model, voo->total_seats, voo->origin, voo->destination);
+                printf("  - Schedule Departure Date: %s, Schedule Arrival Date: %s\n",
+                       voo->schedule_departure_date, voo->schedule_arrival_date);
+                printf("  - Real Departure Date: %s, Real Arrival Date: %s\n",
+                       voo->real_departure_date, voo->real_arrival_date);
+                printf("  - Pilot: %s, Copilot: %s, Notes: %s\n", voo->pilot, voo->copilot, voo->notes);
+                printf("  - Total Passengers: %d, Delay: %d\n", voo->total_passengers, voo->delay);
+            }
 
             voo = voo->next_voo;
         }
     }
 }
+
+
