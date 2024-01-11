@@ -54,6 +54,12 @@ int Hash(KeyType k);
 /* Função que inicializa a tabela de hash User. */
 void InitializeTable(hash_user h);
 
+void destroiTableUser(hash_user h);
+
+void destroiQ2(Q2 *q2);
+
+
+
 
 /* Função que retorna o User pretendido, caso este se encontre na hash, através da sua respetiva 
 chave. */

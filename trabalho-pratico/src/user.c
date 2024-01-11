@@ -30,6 +30,45 @@ void InitializeTable(hash_user h) {
 }
 
 
+void destroiTableUser(hash_user h) {
+
+	for(int i = 0; i<HASHSIZE; i++){
+		User *atual = h[i];
+		while(atual!=NULL){
+			User *position = atual;
+			atual = atual->next;
+			free(position->id);
+			free(position->nome);
+			free(position->email);
+			free(position->phone);
+			free(position->birth);
+			free(position->sex);
+			free(position->passport);
+			free(position->country);
+			free(position->address);
+			free(position->account_creation);
+			free(position->pay_method);
+			free(position->account_status);
+			destroiQ2(position->q2);
+		}
+		free(h[i]);
+	}
+}
+
+
+void destroiQ2(Q2 *q2){
+
+	while(q2!=NULL){
+		Q2 *atual = q2;
+		q2 = q2->next;
+		free(atual->id);
+		free(atual->data);
+		free(atual);
+	}
+	free(q2);
+}
+
+
 /* Função que retorna o User pretendido, caso este se encontre na hash, através da sua respetiva 
 chave. */
 User *RetrieveUser(hash_user h, KeyType k) {
@@ -197,15 +236,19 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
 	}
 }
 
+/*
+int userNumber(hash_user h, char *argv){
 
+	int totalUsers = 0;
 
-
-
-
-
-
-
-
-
-
+	for(int i = 0; i<HASHSIZE; i++){
+		if(h[i]!=NULL){
+			User* u = h[i];
+			if(argv[1]==NULL){
+				totalUsers ++;
+			}
+			
+		}
+	}
+}*/
 
