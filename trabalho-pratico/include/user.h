@@ -1,6 +1,6 @@
 #ifndef USER_H
 #define USER_H
-#define HASHSIZE 10050 
+#define HASHSIZEUSER 81000 
 
 
 /* Definição do KeyType*/
@@ -45,7 +45,7 @@ typedef struct User {
 
 
 /* Definição da tabela hash que vai guardar todos os diferentes users. */
-typedef User *hash_user[HASHSIZE];
+typedef User *hash_user[HASHSIZEUSER];
 
 
 /* Função de hash que converte uma chave num índice na tabela hash. */

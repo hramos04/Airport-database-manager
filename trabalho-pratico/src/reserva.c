@@ -18,7 +18,7 @@ int HashHoteis(KeyType k) {
     h += (h << 3);
     h ^= (h >> 11);
     h += (h << 15);
-    return h % HASHSIZE;
+    return h % HASHSIZERESERVA;
 }
 
 
@@ -35,14 +35,14 @@ int HashReservas(KeyType k) {
     h += (h << 3);
     h ^= (h >> 11);
     h += (h << 15);
-    return h % HASHSIZE;
+    return h % HASHSIZERESERVA;
 }
 
 
 /* Função que inicializa a tabela de hash Hoteis. */
 void InitializeTableHoteis(hash_hoteis h) {
     int i;
-    for (i = 0; i < HASHSIZE; ++i)
+    for (i = 0; i < HASHSIZERESERVA; ++i)
         h[i] = NULL;
 }
 
@@ -50,7 +50,7 @@ void InitializeTableHoteis(hash_hoteis h) {
 /* Função que inicializa a tabela de hash Reservas. */
 void InitializeTableReservas(hash_reservas h) {
     int i;
-    for (i = 0; i < HASHSIZE; ++i)
+    for (i = 0; i < HASHSIZERESERVA; ++i)
         h[i] = NULL;
 }
 
@@ -80,6 +80,60 @@ Hotel *RetrieveHotel(hash_hoteis h, KeyType k) {
 		 }
 	 }
 	 return NULL;
+}
+
+void destroiTableReserva(hash_reservas h) {
+
+	for(int i = 0; i<HASHSIZERESERVA; i++){
+		Reserva *atual = h[i];
+		while(atual!=NULL){
+			Reserva *position = atual;
+			atual = atual->next_reserva;
+			free(position->id);
+			free(position->user_id);
+			free(position->hotel_id);
+			free(position->hotel_name);
+			free(position->hotel_stars);
+			free(position->city_tax);
+			free(position->address);
+			free(position->begin_date);
+			free(position->end_date);
+			free(position->price_per_night);
+			free(position->includes_breakfast);
+			free(position->room_details);
+			free(position->rating);
+			free(position->comment);
+		}
+		free(h[i]);
+	}
+}
+
+
+void destroiReservaResumo(ReservaResumo *reservaResumo){
+
+	while(reservaResumo!=NULL){
+		ReservaResumo *atual = reservaResumo;
+		reservaResumo = reservaResumo->next_resumo;
+		free(atual->id);
+		free(atual->begin_date);
+		free(atual->end_date);	
+		free(atual->user_id);
+	}
+	free(reservaResumo);
+}
+
+void destroiTableHotel(hash_hoteis h) {
+
+	for(int i = 0; i<HASHSIZERESERVA; i++){
+		Hotel *atual = h[i];
+		while(atual!=NULL){
+			Hotel *position = atual;
+			atual = atual->next;
+			free(position->hotel_id);
+			destroiReservaResumo(position->next_resumo);
+		}
+		free(h[i]);
+	}
 }
 
 

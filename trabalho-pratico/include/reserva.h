@@ -1,6 +1,6 @@
 #ifndef RESERVA_H
 #define RESERVA_H
-#define HASHSIZE 10050 // Tamanho da tabela hash
+#define HASHSIZERESERVA 41000 // Tamanho da tabela hash
 
 /* Definição do KeyType*/
 typedef char KeyType[300];
@@ -52,11 +52,11 @@ typedef struct Hotel {
 
 
 /* Definição da tabela hash que vai guardar todos os diferentes Hoteis. */
-typedef Hotel *hash_hoteis[HASHSIZE];
+typedef Hotel *hash_hoteis[HASHSIZERESERVA];
 
 
 /* Definição da tabela hash que vai guardar todas as diferentes Reservas. */
-typedef Reserva *hash_reservas[HASHSIZE];
+typedef Reserva *hash_reservas[HASHSIZERESERVA];
 
 
 /* Função de hash que converte uma chave num índice na tabela hash dos hoteis. */
@@ -83,6 +83,12 @@ Reserva *RetrieveReserva(hash_reservas h, KeyType k);
 /* Função que retorna o Hotel pretendido, caso este se encontre na hash, através da sua respetiva 
 chave. */
 Hotel *RetrieveHotel(hash_hoteis h, KeyType k) ;
+
+void destroiTableReserva(hash_reservas h);
+
+void destroiReservaResumo(ReservaResumo *reservaResumo);
+
+void destroiTableHotel(hash_hoteis h);
 
 
 /* Função que calcula a média das classificações de um hotel, percorrendo a lista ligada 

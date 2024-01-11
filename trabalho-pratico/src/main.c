@@ -108,6 +108,8 @@ int main(int argc, char *argv[]) {
 	destroiTableUser(h_users);
 	destroiTableVoo(h_voos);
 	destroiTableAeroporto(h_aeroportos);
+	destroiTableReserva(h_reservas);
+	destroiTableHotel(h_hoteis);
     return 0;   
 }
 

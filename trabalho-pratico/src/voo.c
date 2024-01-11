@@ -19,7 +19,7 @@ int HashAeroportos(KeyType k) {
     h += (h << 3);
     h ^= (h >> 11);
     h += (h << 15);
-    return h % HASHSIZE;
+    return h %HASHSIZEVOO;
 }
 
 
@@ -36,14 +36,14 @@ int HashVoos(KeyType k) {
     h += (h << 3);
     h ^= (h >> 11);
     h += (h << 15);
-    return h % HASHSIZE;
+    return h %HASHSIZEVOO;
 }
 
 
 /* Função que inicializa a tabela de hash Aeroportos. */
 void InitializeTableAeroportos(hash_aeroportos h) {
     int i;
-    for (i = 0; i < HASHSIZE; ++i)
+    for (i = 0; i <HASHSIZEVOO; ++i)
         h[i] = NULL;
 }
 
@@ -51,14 +51,14 @@ void InitializeTableAeroportos(hash_aeroportos h) {
 /* Função que inicializa a tabela de hash Voos. */
 void InitializeTableVoos(hash_voos h) {
     int i;
-    for (i = 0; i < HASHSIZE; ++i)
+    for (i = 0; i <HASHSIZEVOO; ++i)
         h[i] = NULL;
 }
 
 
 void destroiTableVoo(hash_voos h) {
 
-	for(int i = 0; i<HASHSIZE; i++){
+	for(int i = 0; i<HASHSIZEVOO; i++){
 		Voo *atual = h[i];
 		while(atual!=NULL){
 			Voo *position = atual;
@@ -100,7 +100,7 @@ void destroiVooResumo(VooResumo *vooResumo){
 
 void destroiTableAeroporto(hash_aeroportos h){
     	
-        for(int i = 0; i<HASHSIZE; i++){
+        for(int i = 0; i<HASHSIZEVOO; i++){
             Aeroporto *atual = h[i];
             while(atual!=NULL){
                 Aeroporto *position = atual;
@@ -155,7 +155,7 @@ Aeroporto *RetrieveAeroporto(hash_aeroportos h, KeyType k) {
 
 /* Função para incrementar o número total de passageiros na lista ligada VooResumo de um Aeroporto */
 int InsertPassengerVooResumo(hash_aeroportos h_aeroportos, KeyType voo_id) {
-    for (int i = 0; i < HASHSIZE; i++) {
+    for (int i = 0; i <HASHSIZEVOO; i++) {
         Aeroporto *aeroporto = h_aeroportos[i];
 
         while (aeroporto != NULL) {
@@ -278,7 +278,7 @@ int comparar(const void *a, const void *b) {
 MedianaAeroporto * GetMedianaAeroportos(hash_aeroportos h) {
 	MedianaAeroporto *aux = NULL;
 	int i = 0;
-	for (i = 0; i < HASHSIZE; i++) {
+	for (i = 0; i <HASHSIZEVOO; i++) {
 		 if(h[i]) {
 			 Aeroporto *ae = h[i];
 			
@@ -483,7 +483,7 @@ SomaPassageirosAno *criarListaSomaPassageirosAno(hash_voos h, int ano, int n) {
     ListaAeroportos *listaAeroportos = criarListaAeroportos();
 
     // Percorrer a hash dos voos para coletar origens e destinos
-    for (int i = 0; i < HASHSIZE; i++) {
+    for (int i = 0; i <HASHSIZEVOO; i++) {
         Voo *voo = h[i];
         
         while (voo != NULL) {
@@ -507,7 +507,7 @@ SomaPassageirosAno *criarListaSomaPassageirosAno(hash_voos h, int ano, int n) {
         int totalPassageirosAeroporto = 0;
 
         // Somar passageiros para voos com origem ou destino no aeroporto no ano especificado
-        for (int i = 0; i < HASHSIZE; i++) {
+        for (int i = 0; i <HASHSIZEVOO; i++) {
             Voo *voo = h[i];
 
             while (voo != NULL) {
@@ -601,7 +601,7 @@ void imprimirListaSomaPassageirosAno(SomaPassageirosAno *lista) {
 
 /* Função para imprimir a tabela hash de aeroportos */
 void PrintHashAeroportos(hash_aeroportos h_aeroportos) {
-    for (int i = 0; i < HASHSIZE; i++) {
+    for (int i = 0; i <HASHSIZEVOO; i++) {
         Aeroporto *aeroporto = h_aeroportos[i];
         
         while (aeroporto != NULL) {
@@ -616,7 +616,7 @@ void PrintHashAeroportos(hash_aeroportos h_aeroportos) {
 /* Função para imprimir a tabela hash de voos filtrando por origem, destino e ano de Schedule Departure Date,
    considerando insensibilidade a maiúsculas e minúsculas */
 void PrintHashVoos(hash_voos h_voos) {
-    for (int i = 0; i < HASHSIZE; i++) {
+    for (int i = 0; i <HASHSIZEVOO; i++) {
         Voo *voo = h_voos[i];
 
         while (voo != NULL) {
@@ -638,5 +638,4 @@ void PrintHashVoos(hash_voos h_voos) {
         }
     }
 }
-
 

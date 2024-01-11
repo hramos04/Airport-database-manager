@@ -18,21 +18,21 @@ int Hash(KeyType k) {
     h += (h << 3);
     h ^= (h >> 11);
     h += (h << 15);
-    return h % HASHSIZE;
+    return h % HASHSIZEUSER;
 }
 
 
 /* Função que inicializa a tabela de hash User. */
 void InitializeTable(hash_user h) {
     int i;
-    for (i = 0; i < HASHSIZE; ++i)
+    for (i = 0; i < HASHSIZEUSER; ++i)
         h[i] = NULL;
 }
 
 
 void destroiTableUser(hash_user h) {
 
-	for(int i = 0; i<HASHSIZE; i++){
+	for(int i = 0; i<HASHSIZEUSER; i++){
 		User *atual = h[i];
 		while(atual!=NULL){
 			User *position = atual;
@@ -136,7 +136,7 @@ void addUserToList(User **list, User *newUser) {
 desses Users, com a ajuda das função addUserToList e a função copyUser. */
 User *GetUserPrefix(hash_user h, KeyType k) {
 	User *res = NULL;
-    for (int i = 0; i < HASHSIZE; i++) {
+    for (int i = 0; i < HASHSIZEUSER; i++) {
         User *currentUser = h[i];
         while (currentUser != NULL) {
             if (strcasecmp(currentUser->account_status, "active") == 0 && strncmp(currentUser->nome, k, strlen(k)) == 0) {
@@ -241,7 +241,7 @@ int userNumber(hash_user h, char *argv){
 
 	int totalUsers = 0;
 
-	for(int i = 0; i<HASHSIZE; i++){
+	for(int i = 0; i<HASHSIZEUSER; i++){
 		if(h[i]!=NULL){
 			User* u = h[i];
 			if(argv[1]==NULL){
@@ -251,4 +251,3 @@ int userNumber(hash_user h, char *argv){
 		}
 	}
 }*/
-
