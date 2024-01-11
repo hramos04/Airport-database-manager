@@ -549,7 +549,7 @@ int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_re
 		break;
 	
 	case '6':
-		q6(h_aeroportos, args[1], args[2], f, fp_output);
+		q6(h_voos, args[1], args[2], f, fp_output);
 		break;
 	
 	case '7':

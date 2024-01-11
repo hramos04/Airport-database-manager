@@ -427,7 +427,7 @@ typedef struct ListaAeroportos {
 } ListaAeroportos;
 
 // Função para criar uma lista de aeroportos vazia
-ListaAeroportos *criarListaAeroportos() {
+ListaAeroportos *criarListaAeroportos(void) {
     ListaAeroportos *novaLista = (ListaAeroportos *)malloc(sizeof(ListaAeroportos));
     if (novaLista != NULL) {
         novaLista->head = NULL;
