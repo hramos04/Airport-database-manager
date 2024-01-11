@@ -56,6 +56,64 @@ void InitializeTableVoos(hash_voos h) {
 }
 
 
+void destroiTableVoo(hash_voos h) {
+
+	for(int i = 0; i<HASHSIZE; i++){
+		Voo *atual = h[i];
+		while(atual!=NULL){
+			Voo *position = atual;
+			atual = atual->next_voo;
+			free(position->id);
+			free(position->airline);
+			free(position->plane_model);
+			free(position->total_seats);
+			free(position->origin);
+			free(position->destination);
+			free(position->schedule_departure_date);
+			free(position->schedule_arrival_date);
+			free(position->real_departure_date);
+			free(position->real_arrival_date);
+			free(position->pilot);
+			free(position->copilot);
+            free(position->notes);
+		}
+		free(h[i]);
+	}
+}
+
+
+void destroiVooResumo(VooResumo *vooResumo){
+
+	while(vooResumo!=NULL){
+		VooResumo *atual = vooResumo;
+		vooResumo = vooResumo->next_resumo;
+		free(atual->id);
+		free(atual->schedule_departure_date);
+        free(atual->real_departure_date);
+		free(atual->destination);
+        free(atual->airline);
+        free(atual->plane_model);
+        free(atual);
+	}
+	free(vooResumo);
+}
+
+void destroiTableAeroporto(hash_aeroportos h){
+    	
+        for(int i = 0; i<HASHSIZE; i++){
+            Aeroporto *atual = h[i];
+            while(atual!=NULL){
+                Aeroporto *position = atual;
+                atual = atual->next;
+                free(position->name);
+                destroiVooResumo(position->next_resumo);
+            }
+        free(h[i]);
+	}
+}
+
+
+
 /* Função que retorna o Voo pretendido, caso este se encontre na hash, através da sua respetiva 
 chave. */
 Voo *RetrieveVoo(hash_voos h, KeyType k) {

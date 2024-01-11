@@ -88,6 +88,13 @@ void InitializeTableAeroportos(hash_aeroportos h);
 /* Função que inicializa a tabela de hash Voos. */
 void InitializeTableVoos(hash_voos h);
 
+void destroiTableVoo(hash_voos h);
+
+void destroiVooResumo(VooResumo *vooResumo);
+
+
+void destroiTableAeroporto(hash_aeroportos h);
+
 
 /* Função que retorna o Voo pretendido, caso este se encontre na hash, através da sua respetiva 
 chave. */

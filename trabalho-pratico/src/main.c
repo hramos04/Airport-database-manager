@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     InitializeTableHoteis(h_hoteis);
     InitializeTableReservas(h_reservas);
     InitializeTableVoos(h_voos);
-     InitializeTableAeroportos(h_aeroportos);
+    InitializeTableAeroportos(h_aeroportos);
     
      /*Leitura e parsing do ficheiro "users.csv"*/
 	char *csv_users = (char*)malloc(256);
@@ -106,6 +106,8 @@ int main(int argc, char *argv[]) {
     //imprimirListaSomaPassageirosAno(listaSomaPassageiros);
 
 	destroiTableUser(h_users);
+	destroiTableVoo(h_voos);
+	destroiTableAeroporto(h_aeroportos);
     return 0;   
 }
 
