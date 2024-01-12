@@ -7,6 +7,7 @@
 #include "../include/parsing.h"
 #include "../include/user.h"
 #include "../include/voo.h"
+#include "../include/q2.h"
 
 
 
@@ -480,22 +481,7 @@ void process_users_csv(hash_user h, char *ficheiro) {
 			}
 		}
 		else {
-			User *novo_user = (User *)malloc(sizeof(User));
-			novo_user->id = strdup(id);
-			novo_user->nome = strdup(nome);
-			novo_user->email = strdup(email);
-			novo_user->phone = strdup(phone);
-			novo_user->birth = strdup(birth);
-			novo_user->sex = strdup(sex);
-			novo_user->passport = strdup(passport);
-			novo_user->country = strdup(country);
-			novo_user->address = strdup(address);
-			novo_user->account_creation = strdup(account_creation);
-			novo_user->pay_method = strdup(pay_method);
-			novo_user->account_status = strdup(account_status);
-			novo_user->total_reservas = 0;
-			novo_user->total_voos = 0;
-			novo_user->next = NULL;
+			User *novo_user = create_user(id,nome,email,phone,birth,sex,passport,country,address,account_creation,pay_method,account_status);
 			
 			InsertTable(h, id, novo_user);
 		}
@@ -637,17 +623,12 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 			
 			InsertTableHoteis(h_hoteis, hotel_id, novo_resumo);
 			InsertTableReservas(h_reservas, id, nova_reserva);
+
+			double total_gasto = calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) + (((calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) / 100)* strtod(nova_reserva->city_tax, &endptr)));
 			
-			Q2 *q2 = (Q2*)malloc(sizeof(Q2));
-			q2->data = strdup(begin_date);
+			Q2 *nova_q2  = create_q2(id,begin_date,total_gasto,1);
 			
-			q2->total_gasto = calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) + ( ((calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) / 100)* strtod(nova_reserva->city_tax, &endptr)));
-			
-			
-			q2->tipo = 1; 
-			q2->id = strdup(id);
-			
-			InsertReservaUser(h, user_id, q2);
+			InsertReservaUser(h, user_id, nova_q2);
 			}
 		}
 	}
@@ -680,14 +661,16 @@ void process_passengers_csv(hash_user h, hash_voos h_voos,hash_aeroportos h_aero
 		Voo *voo = RetrieveVoo(h_voos, flight_id);
 		User *aux = RetrieveUser(h, user_id);
 		if(voo && aux) {
+
+			/*data = getData(schedule_departure_date);
 			Q2 *q2 = (Q2*)malloc(sizeof(Q2));
 			q2->data = strdup(voo->schedule_departure_date);
 			q2->tipo = 2; //voo
-			q2->id = strdup(voo->id);
-			
+			q2->id = strdup(voo->id);*/
+			/*
 			InsertVooUser(h, user_id, q2);
 			InsertPassengerVoo(h_voos, voo->id);
-			InsertPassengerVooResumo(h_aeroportos, voo->id);
+			InsertPassengerVooResumo(h_aeroportos, voo->id);*/
 		}
 		if(valid_flight(h_voos,flight_id)==0 || valid_user(h,user_id)==0){
 			if (invalidFile != NULL) {

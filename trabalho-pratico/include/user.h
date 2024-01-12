@@ -1,52 +1,65 @@
 #ifndef USER_H
 #define USER_H
 #define HASHSIZEUSER 81000 
+#include "../include/q2.h"
 
 
 /* Definição do KeyType*/
 typedef char KeyType[300];
 
 
-/* Definição de um nó da lista ligada Q2, onde é armazenada a informção de um flight, ou de uma 
-reserva, dependedo do inteiro "tipo", que toma valor 1, caso se trate de um flight e toma valor 
-2, caso se trate de uma reserva. */
-typedef struct Q2 {
-	char *id;
-	char *data;
-	int tipo; //1-flight, 2-reserva
-	double total_gasto;
-	struct Q2 *next;
-} Q2;
+
 
 
 /* Definiçao da estrutura do User, que apresenta todos os dados relativos de cada user, 
 sendo ainda acrescentado o número total de reservas, o número total de voos, o total gasto 
 pelo mesmo e ainda apresentamos a lista ligada Q2 que armazena os dados relativos aos flights
 e às reservas. */
-typedef struct User {
-    char *id;
-    char *nome;
-    char *email;
-    char *phone;
-    char *birth;
-    char *sex;
-    char *passport;
-    char *country;
-    char *address;
-    char *account_creation;
-    char *pay_method;
-    char *account_status;
-    int total_reservas;
-    int total_voos;
-    double total_gasto;
-    struct User *next;
-    struct Q2 *q2;
-} User;
+typedef struct User User;
 
 
 /* Definição da tabela hash que vai guardar todos os diferentes users. */
 typedef User *hash_user[HASHSIZEUSER];
 
+User *create_user(char *id, char *nome, char *email, char *phone, char *birth, char *sex, char *passport, char *country, char *address, char *account_creation, char *pay_method,char *account_status);
+
+char* userGetId(User *user);
+
+char* userGetNome(User *user);
+
+char* userGetEmail(User *user);
+
+char* userGetPhone(User *user);
+
+char* userGetBirth(User *user);
+
+char* userGetSex(User *user);
+
+char* userGetPassport(User *user);
+
+char* userGetCountry(User *user);
+
+char* userGetAddress(User *user);
+
+char* userGetAccountCreation(User *user);
+
+char* userGetPayMethod(User *user);
+
+char* userGetAccountStatus(User *user);
+
+int userGetTotalReservas(User *user);
+
+int userGetTotalVoos(User *user);
+
+double userGetTotalGasto(User *user);
+
+User* userGetNext(User *user);
+
+void userSetNext(User *user, User *next);
+
+Q2* userGetQ2(User *user);
+
+void userSetQ2(User *user, Q2 *q2);
 
 /* Função de hash que converte uma chave num índice na tabela hash. */
 int Hash(KeyType k);
