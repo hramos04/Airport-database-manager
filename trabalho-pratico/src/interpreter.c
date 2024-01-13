@@ -7,6 +7,8 @@
 #include "../include/reserva.h"
 #include "../include/voo.h"
 #include "../include/interpreter.h"
+#include "../include/aeroporto.h"
+
 
 
 //Definição das constantes
@@ -143,10 +145,10 @@ void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, 
 	}
 	else if(voo) {
 		if(f == 1) {
-			fprintf(fp_output,"--- 1 ---\nairline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %d\n",voo->airline, voo->plane_model,voo->origin,voo->destination, voo->schedule_departure_date, voo->schedule_arrival_date, voo->total_passengers, voo->delay);
+			fprintf(fp_output,"--- 1 ---\nairline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %d\n",vooGetAirline(voo), vooGetPlaneModel(voo),vooGetOrigin(voo), vooGetDestination(voo), vooGetScheduleDepartureDate(voo), vooGetScheduleArrivalDate(voo), vooGetTotalPassengers(voo), vooGetDelay(voo));
 		}
 		else {
-			fprintf(fp_output,"%s;%s;%s;%s;%s;%s;%d;%d\n",voo->airline, voo->plane_model,voo->origin,voo->destination, voo->schedule_departure_date, voo->schedule_arrival_date, voo->total_passengers, voo->delay);
+			fprintf(fp_output,"%s;%s;%s;%s;%s;%s;%d;%d\n",vooGetAirline(voo), vooGetPlaneModel(voo),vooGetOrigin(voo), vooGetDestination(voo), vooGetScheduleDepartureDate(voo), vooGetScheduleArrivalDate(voo), vooGetTotalPassengers(voo), vooGetDelay(voo));
 		}
 		
 	}
@@ -367,19 +369,19 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
 		while(aux) {
 			if(f == 1) {
 				if(i == 1) {
-					fprintf(fp_output, "--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, aux->id, aux->schedule_departure_date,aux->destination, aux->airline, aux->plane_model);
+					fprintf(fp_output, "--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, vooResumoGetId(aux), vooResumoGetScheduleDepartureDate(aux),vooResumoGetDestination(aux), vooResumoGetAirline(aux), vooResumoGetPlaneModel(aux));
 				}
 				else {
-					fprintf(fp_output, "\n--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, aux->id, aux->schedule_departure_date,aux->destination, aux->airline, aux->plane_model);
+					fprintf(fp_output, "\n--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, vooResumoGetId(aux), vooResumoGetScheduleDepartureDate(aux),vooResumoGetDestination(aux), vooResumoGetAirline(aux), vooResumoGetPlaneModel(aux));
 				}
 				i++;
 			}
 			else {
-				fprintf(fp_output, "%s;%s;%s;%s;%s\n",aux->id, aux->schedule_departure_date,aux->destination, aux->airline, aux->plane_model);
+				fprintf(fp_output, "%s;%s;%s;%s;%s\n",vooResumoGetId(aux), vooResumoGetScheduleDepartureDate(aux),vooResumoGetDestination(aux), vooResumoGetAirline(aux), vooResumoGetPlaneModel(aux));
 			}
 			
 			//fprintf(fp_output, "%s;%s;%s;%s;%.0f;%.3f\n",reserva->id, reserva->begin_date, reserva->end_date,reserva->user_id, reserva->rating, reserva->total_price);
-			aux = aux->next_resumo;
+			aux = vooResumoGetNext(aux);
 		}
 	}
 }
@@ -399,15 +401,15 @@ void q6(hash_voos h_voos, char *ano_str, char *N_str, int f, FILE *fp_output) {
     while (current != NULL) {
         if (f == 1) {
             if (i == 1) {
-                fprintf(fp_output, "--- %d ---\nname: %s\npassengers: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
+                fprintf(fp_output, "--- %d ---\nname: %s\npassengers: %d\n", i, somaGetNomeAeroporto(current), somaGetTotalPassageiros(current));
             } else {
-                fprintf(fp_output, "\n--- %d ---\nname: %s\npassengers: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
+                fprintf(fp_output, "\n--- %d ---\nname: %s\npassengers: %d\n", i, somaGetNomeAeroporto(current), somaGetTotalPassageiros(current));
             }
             i++;
         } else {
-            fprintf(fp_output, "%s;%d\n", current->nomeAeroporto, current->totalPassageiros);
+            fprintf(fp_output, "%s;%d\n", somaGetNomeAeroporto(current), somaGetTotalPassageiros(current));
         }
-        current = current->next;
+        current = somaGetNext(current);
     }
 }
 
@@ -419,18 +421,18 @@ void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output) {
 	while(aux && i++ < N) {
 		if(f == 1) {
 			if(i == 1) {
-				fprintf(fp_output,"--- %d ---\nname: %s\nmedian: %d\n",i,aux->name,aux->mediana);
+				fprintf(fp_output,"--- %d ---\nname: %s\nmedian: %d\n",i,medianaGetNome(aux),medianaGetMediana(aux));
 			}
 			else {
-				fprintf(fp_output,"\n--- %d ---\nname: %s\nmedian: %d\n",i,aux->name,aux->mediana);
+				fprintf(fp_output,"\n--- %d ---\nname: %s\nmedian: %d\n",i,medianaGetNome(aux),medianaGetMediana(aux));
 			}
 			
 		}
 		else {
-			fprintf(fp_output,"%s;%d\n",aux->name,aux->mediana);
+			fprintf(fp_output,"%s;%d\n",medianaGetNome(aux),medianaGetMediana(aux));
 		}
 		
-		aux = aux->next;
+		aux = medianaGetNext(aux);
 	}
 	
 }

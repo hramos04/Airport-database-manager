@@ -9,8 +9,6 @@ typedef char KeyType[300];
 
 
 
-
-
 /* Definiçao da estrutura do User, que apresenta todos os dados relativos de cada user, 
 sendo ainda acrescentado o número total de reservas, o número total de voos, o total gasto 
 pelo mesmo e ainda apresentamos a lista ligada Q2 que armazena os dados relativos aos flights

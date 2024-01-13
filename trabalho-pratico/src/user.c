@@ -44,7 +44,7 @@ User *create_user(char *id, char *nome, char *email, char *phone, char *birth, c
 
 	user->total_reservas = 0;
 	user->total_voos = 0;
-	user->total_gasto = 0;
+	user->total_gasto = 0.0;
 	user->next = NULL;
 	user->q2 = NULL;
 

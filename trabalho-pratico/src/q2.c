@@ -25,6 +25,19 @@ Q2 *create_q2(char *id, char *data, int tipo, double total_gasto) {
     return q2;
 }
 
+Q2 *create_q2_without_totalGasto(char *id, char *data, int tipo) {
+    Q2 *q2 = malloc(sizeof(struct Q2));
+
+    q2->id = strdup(id);
+    q2->data = strdup(data);
+    q2->tipo = tipo;
+    q2->total_gasto = 0.0;
+    q2->next = NULL;
+
+    return q2;
+}
+
+
 char* getId(Q2 *q2){
     return strdup(q2->id);
 }

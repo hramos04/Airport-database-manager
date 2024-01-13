@@ -5,6 +5,7 @@
 #include "../include/user.h"
 #include "../include/reserva.h"
 #include "../include/voo.h"
+#include "../include/aeroporto.h"
 #include "../include/interpreter.h"
 #include "../include/interativo.h"
 #include <locale.h>

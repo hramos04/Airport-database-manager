@@ -8,6 +8,8 @@
 #include "../include/user.h"
 #include "../include/voo.h"
 #include "../include/q2.h"
+#include "../include/aeroporto.h"
+
 
 
 
@@ -662,15 +664,14 @@ void process_passengers_csv(hash_user h, hash_voos h_voos,hash_aeroportos h_aero
 		User *aux = RetrieveUser(h, user_id);
 		if(voo && aux) {
 
-			/*data = getData(schedule_departure_date);
-			Q2 *q2 = (Q2*)malloc(sizeof(Q2));
-			q2->data = strdup(voo->schedule_departure_date);
-			q2->tipo = 2; //voo
-			q2->id = strdup(voo->id);*/
-			/*
+			char *id = vooGetId(voo);
+			char *data = vooGetScheduleDepartureDate(voo);
+
+			Q2 *q2 = create_q2_without_totalGasto(id,data,2);   
+			
 			InsertVooUser(h, user_id, q2);
-			InsertPassengerVoo(h_voos, voo->id);
-			InsertPassengerVooResumo(h_aeroportos, voo->id);*/
+			InsertPassengerVoo(h_voos, vooGetId(voo));
+			InsertPassengerVooResumo(h_aeroportos, vooGetId(voo));
 		}
 		if(valid_flight(h_voos,flight_id)==0 || valid_user(h,user_id)==0){
 			if (invalidFile != NULL) {
@@ -771,33 +772,12 @@ void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voo
 				}
 		  }
 		  else {
-			Voo *novo_voo = (Voo *)malloc(sizeof(Voo));
-			novo_voo->id = strdup(id);
-			novo_voo->airline = strdup(airline);
-			novo_voo->plane_model = strdup(plane_model);
-			novo_voo->total_seats = strdup(total_seats);
-			novo_voo->origin = strdup(origin);
-			novo_voo->destination = strdup(destination);
-			novo_voo->schedule_departure_date = strdup(schedule_departure_date);
-			novo_voo->schedule_arrival_date = strdup(schedule_arrival_date);
-			novo_voo->real_departure_date = strdup(real_departure_date);
-			novo_voo->real_arrival_date = strdup(real_arrival_date);
-			novo_voo->pilot = strdup(pilot);
-			novo_voo->copilot = strdup(copilot);
-			novo_voo->notes = strdup(notes);
-			novo_voo->delay = calcularDiferencaSegundos(schedule_departure_date, real_departure_date);
-			novo_voo->next_voo = NULL;
+			Voo *novo_voo = createVoo(id,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot,notes);
 			
 			InsertTableVoos(h_voos, id, novo_voo);
 			
-			VooResumo *novo_resumo = (VooResumo *)malloc(sizeof(VooResumo));
-			novo_resumo->id = strdup(id);
-			novo_resumo->schedule_departure_date = strdup(schedule_departure_date);
-			novo_resumo->real_departure_date = strdup(real_departure_date);
-			novo_resumo->destination = strdup(destination);
-			novo_resumo->airline = strdup(airline);
-			novo_resumo->plane_model = strdup(plane_model);
-			novo_resumo->next_resumo = NULL;
+			VooResumo *novo_resumo =createVooResumo(id,schedule_departure_date,real_departure_date,destination,airline,plane_model);
+	
 			InsertTableAeroporto(h_aeroportos, origin, novo_resumo);
 		  }
 	}
