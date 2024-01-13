@@ -132,12 +132,12 @@ void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, 
 	Voo *voo = RetrieveVoo(h_voos, arg);
 	Reserva *reserva = RetrieveReserva(h_reservas, arg);
 	if(user) {
-		if((strcasecmp(user->account_status, "active") == 0 )) {
+		if((strcasecmp(userGetAccountStatus(user), "active") == 0 )) {
 			if(f == 1) {
-				fprintf(fp_output, "--- 1 ---\nname: %s\nsex: %s\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",user->nome,user->sex, calculaIdade(user->birth), user->country,user->passport,user->total_voos, user->total_reservas, user->total_gasto);
+				fprintf(fp_output, "--- 1 ---\nname: %s\nsex: %s\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",userGetNome(user),userGetSex(user),calculaIdade(userGetBirth(user)),userGetCountry(user),userGetPassport(user),userGetTotalVoos(user),userGetTotalReservas(user),userGetTotalGasto(user));
 			}
 			else {
-				fprintf(fp_output, "%s;%s;%d;%s;%s;%d;%d;%.3f\n",user->nome,user->sex, calculaIdade(user->birth), user->country,user->passport,user->total_voos, user->total_reservas, user->total_gasto);
+				fprintf(fp_output, "%s;%s;%d;%s;%s;%d;%d;%.3f\n",userGetNome(user),userGetSex(user),calculaIdade(userGetBirth(user)),userGetCountry(user),userGetPassport(user),userGetTotalVoos(user),userGetTotalReservas(user),userGetTotalGasto(user));
 			}
 		}
 	}
@@ -177,80 +177,80 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
 	char data[100];
 	User *user = RetrieveUser(h_users, argv[1]);
 	int i = 1;
-	if(user && (strcasecmp(user->account_status, "active") == 0 )) {
-		Q2 *q2 = user->q2;
+	if(user && (strcasecmp(userGetAccountStatus(user), "active") == 0 )) {
+		Q2 *q2 = userGetQ2(user);
 		while(q2) {
-			remover_horas(q2->data, data);
+			remover_horas(getData(q2), data);
 			if(argc == 3) {
 				if(strcmp(argv[2], "reservations") == 0) {
-					if(q2->tipo == 1) {
+					if(getTipo(q2) == 1) {
 						if(f == 1) {
 							if(i == 1) {
-								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
+								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
 							}
 							else {
-								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
+								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
 							}
 						}
 						else {
-							fprintf(fp_output, "%s;%s\n",q2->id,data);
+							fprintf(fp_output, "%s;%s\n",getId(q2),data);
 						}
 						i++;
 						
 					}
 				}
 				else if(strcmp(argv[2], "flights") == 0) {
-					if(q2->tipo == 2) {
+					if(getTipo(q2) == 2) {
 						if(f == 1) {
 							if(i == 1) {
-								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
+								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
 							}
 							else {
-								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
+								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
 							}
 							
 						}
 						else {
-							fprintf(fp_output,"%s;%s\n",q2->id,data);
+							fprintf(fp_output,"%s;%s\n",getId(q2),data);
 						}
 						i++;
 					}
 				}
 			}
 			else {
-				if(q2->tipo == 1) {
+				if(getTipo(q2) == 1) {
 					if(f == 1) {
 						if(i == 1) {
-							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, q2->id,data);
+							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, getId(q2),data);
 						}
 						else {
-							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, q2->id,data);
+							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, getId(q2),data);
 						}
 						
 					}
 					else {
-						fprintf(fp_output,"%s;%s;reservation\n",q2->id,data);
+						fprintf(fp_output,"%s;%s;reservation\n",getId(q2),data);
 					}
 					
 				}
 				else {
 					if(f == 1) {
 						if(i == 1) {
-							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i, q2->id,data);
+							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i,getId(q2),data);
 						}
 						else {
-							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i, q2->id,data);
+							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i,getId(q2),data);
 						}
 						
 					}
 					else {
-						fprintf(fp_output,"%s;%s;flight\n",q2->id,data);
+						fprintf(fp_output,"%s;%s;flight\n",getId(q2),data);
 					}
 				}
 				i++;
 			}
 			
-			q2 = q2->next;
+			q2 = getNext(q2);
 		}
 	}
 }
@@ -331,17 +331,17 @@ void q9(hash_user h_users, char *argv, int f, FILE *fp_output) {
 		while(aux) {
 			if(f == 1) {
 				if(i == 1) {
-					fprintf(fp_output, "--- %d ---\nid: %s\nname: %s\n",i, aux->id, aux->nome);
+					fprintf(fp_output, "--- %d ---\nid: %s\nname: %s\n",i, userGetId(aux), userGetNome(aux));
 				}
 				else {
-					fprintf(fp_output, "\n--- %d ---\nid: %s\nname: %s\n",i, aux->id, aux->nome);
+					fprintf(fp_output, "\n--- %d ---\nid: %s\nname: %s\n",i, userGetId(aux), userGetNome(aux));
 				}
 				i++;
 			}
 			else {
-				fprintf(fp_output, "%s;%s\n",aux->id, aux->nome);
+				fprintf(fp_output, "%s;%s\n",userGetId(aux), userGetNome(aux));
 			}
-			aux = aux->next;
+			aux = userGetNext(aux);
 		}
 	}
 	
