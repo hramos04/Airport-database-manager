@@ -127,7 +127,7 @@ void remover_horas(char* datetime, char data[]) {
  * f: Indica se o formato de saída é detalhado (1) ou simples (0).
  * fp_output: Ponteiro para o ficheiro de saída.
  */
-void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, int f, FILE *fp_output) {
+void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, int f, FILE *fp_output) {	//Não é preciso f aqui
 	User *user = RetrieveUser(h_users, arg);
 	Voo *voo = RetrieveVoo(h_voos, arg);
 	Reserva *reserva = RetrieveReserva(h_reservas, arg);
@@ -515,17 +515,20 @@ int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_re
 	char query;
 
 	query = linha[0];
-	FILE *fp_output = fopen("comando_output.txt", "w");
-	if (fp_output == NULL) {
-    // Tratar erro de abertura de arquivo
-    return 1;
-}
-
-
 	if(linha[1] != ' ') return 1;
 
-	if(chdir("Resultados/") != 0);
 
+
+	if(chdir("Resultados/") != 0){
+		printf("Erro");
+	}
+	FILE *fp_output = fopen("comando_output.txt", "w");
+		if (fp_output == NULL) {
+    	// Tratar erro de abertura de arquivo
+    return 1;
+	}
+
+	
 	switch (query)
 	{
 	case '1':
