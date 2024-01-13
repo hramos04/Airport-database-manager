@@ -11,15 +11,8 @@
 #include "../include/interativo.h"
 #include <curses.h>
 
+int main_interativo(char* file, hash_user h_users,hash_aeroportos h_aeroportos,hash_hoteis h_hoteis,hash_reservas h_reservas,hash_voos h_voos){
 
-int main_interativo(char* file){
-
-	//Inicialização das tabelas hash
-    hash_user h_users;
-    hash_hoteis h_hoteis;
-    hash_reservas h_reservas;
-    hash_voos h_voos;
-    hash_aeroportos h_aeroportos;
     
     InitializeTable(h_users);
     InitializeTableHoteis(h_hoteis);
@@ -45,15 +38,13 @@ int main_interativo(char* file){
 	strcat(csv_passengers, "/passengers.csv");
 
 	//Processamento dos arquivos
-    process_users_csv(h_users, csv_users);
-    process_reservas_csv(h_users, h_hoteis, h_reservas, csv_reservas);
-    process_voos_csv(h_users, h_aeroportos, h_voos, csv_voos);
-    process_passengers_csv(h_users, h_voos, h_aeroportos, csv_passengers);
+    int users= process_users_csv(h_users, csv_users);
+    int reservas = process_reservas_csv(h_users, h_hoteis, h_reservas, csv_reservas);
+    int voos = process_voos_csv(h_users, h_aeroportos, h_voos, csv_voos);
+    int passageiros = process_passengers_csv(h_users, h_voos, h_aeroportos, csv_passengers);
+    if(users || reservas || voos || passageiros) return 1;
 
-    free(csv_users);
-    free(csv_reservas);
-    free(csv_voos);
-    free(csv_passengers);
+
 
     return 0;
 }
@@ -190,8 +181,11 @@ int programa_interativo (int highlight, WINDOW* win, int query){
 
     if(highlight == 2){
         endwin();
-        //dar free a tudo
-        //freehashaeroportos ...
+        destroiTableUser(h_users);
+        destroiTableVoo(h_voos);
+        destroiTableAeroporto(h_aeroportos);
+        destroiTableReserva(h_reservas);
+        destroiTableHotel(h_hoteis);
         exit(0);
     }
 
@@ -215,9 +209,7 @@ int programa_interativo (int highlight, WINDOW* win, int query){
         char buffer[250];
         echo();
         curs_set(1);
-        for(i = 0; i < 250 - 1 && (ch_q = getch()) != '\n'; i++ )
-        input_q[i] = ch_q;
-        input_q[i] = '\0';
+        getstr(input_q);
         curs_set(0);
         noecho();
         move(10,0);
@@ -226,13 +218,15 @@ int programa_interativo (int highlight, WINDOW* win, int query){
 
         if(comando_interativo (input_q, h_users, h_voos,h_reservas,h_hoteis,h_aeroportos) == 0){
 
-            if(chdir("Resultados/") != 0);
+            if(chdir("Resultados/") != 0){
+                printf("Erro Resultados");
+            }
             FILE* ficheiro;
-            ficheiro = fopen("file", "r");
+            ficheiro = fopen("comando_output.txt", "r");
 
             if(fgetc(ficheiro) == EOF){
-                printw(">> NÃO HÁ OUTPUTS PARA ESTA QUERY");
-                remove("file");
+                printw(">> NAO HA OUTPUTS PARA ESTA QUERY");
+                remove("comando_output.txt");
                 move(12,6);
                 printw("MENU (Q)");
                 refresh();
@@ -256,7 +250,7 @@ int programa_interativo (int highlight, WINDOW* win, int query){
             if(n_linhas % 15 != 0) move_pages(ficheiro, win, n_linhas, 1);
             else move_pages(ficheiro, win, n_linhas, 0);
 
-            remove("file");
+            remove("comando_output.txt");
             if(chdir("trabalho-pratico") != 0);
         }
 
@@ -278,17 +272,15 @@ int programa_interativo (int highlight, WINDOW* win, int query){
         int ch;
         echo();
         curs_set(1);
-        for(i = 0; i < 250 - 1 && (ch = getch()) != '\n'; i++ )
-        input[i] = ch;
-        input[i] = '\0';
+        getstr(input);
         noecho();
         curs_set(0);
         mvwprintw(win, 2, 23, "[...]");
         clrtoeol();
         refresh();
 
-        if(main_interativo(input) == 1){
-            mvwprintw(win, 2, 30, "          ");
+        if(main_interativo(input,h_users,h_aeroportos,h_hoteis,h_reservas,h_voos) == 1){
+            mvwprintw(win, 2, 35, "O CAMINHO ESTA ERRADO");
             wrefresh(win);
             return 1;
         }

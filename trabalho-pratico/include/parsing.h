@@ -119,22 +119,22 @@ int is_non_empty_string(char *string);
 
 /* Função responsável por efetuar o parsing de todas as linhas do csv dos utilizadores e verificar se 
 todos os campos são válidos, inserindo os valores na hash table. */
-void process_users_csv(hash_user h, char *ficheiro);
+int process_users_csv(hash_user h, char *ficheiro);
 
 
 /* Função responsável por efetuar o parsing de todas as linhas do csv das reservas e verificar se todos 
 os campos são válidos, inserindo os valores nas hash tables. */
-void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_reservas, char *ficheiro);
+int process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_reservas, char *ficheiro);
 
 
 /* Função responsável por efetuar o parsing de todas as linhas do csv dos passageiros e verificar 
 se todos os campos são válidos, inserindo os valores nas hash tables. */
-void process_passengers_csv(hash_user h, hash_voos h_voos, hash_aeroportos h_aeroportos, char *ficheiro);
+int process_passengers_csv(hash_user h, hash_voos h_voos, hash_aeroportos h_aeroportos, char *ficheiro);
 
 
 /* Função responsável por efetuar o parsing de todas as linhas do csv dos voos e verificar se 
 todos os campos são válidos, inserindo os valores nas hash tables. */
-void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voos, char *ficheiro);
+int process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voos, char *ficheiro);
 
 
 #endif  
