@@ -8,6 +8,7 @@
 #include "../include/voo.h"
 #include "../include/interpreter.h"
 #include "../include/aeroporto.h"
+#include "../include/hotel.h"
 
 
 
@@ -153,12 +154,12 @@ void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, 
 		
 	}
 	else if(reserva) {
-		reserva->includes_breakfast[0] = toupper(reserva->includes_breakfast[0]);
+		reservaGetIncludesBreakfast(reserva)[0] = toupper(reservaGetIncludesBreakfast(reserva)[0]);
 		if(f == 1) {
-			fprintf(fp_output, "--- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",reserva->hotel_id, reserva->hotel_name, reserva->hotel_stars, reserva->begin_date, reserva->end_date, reserva->includes_breakfast, reserva->total_noites, reserva->total_gasto);
+			fprintf(fp_output, "--- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",reservaGetHotelId(reserva), reservaGetHotelName(reserva), reservaGetHotelStars(reserva), reservaGetBeginDate(reserva), reservaGetEndDate(reserva), reservaGetIncludesBreakfast(reserva), reservaGetTotalNoites(reserva), reservaGetTotalGasto(reserva));
 		}
 		else {
-			fprintf(fp_output, "%s;%s;%s;%s;%s;%s;%d;%.3f\n",reserva->hotel_id, reserva->hotel_name, reserva->hotel_stars, reserva->begin_date, reserva->end_date, reserva->includes_breakfast, reserva->total_noites, reserva->total_gasto);
+			fprintf(fp_output, "%s;%s;%s;%s;%s;%s;%d;%.3f\n",reservaGetHotelId(reserva), reservaGetHotelName(reserva), reservaGetHotelStars(reserva), reservaGetBeginDate(reserva), reservaGetEndDate(reserva), reservaGetIncludesBreakfast(reserva), reservaGetTotalNoites(reserva), reservaGetTotalGasto(reserva));
 		}
 		
 	}
@@ -295,21 +296,21 @@ void q4(hash_hoteis h_hoteis, char *argv, int f, FILE *fp_output) {
 	int i = 1;
 	Hotel *aux = RetrieveHotel(h_hoteis, argv);
 	if(aux) {
-		ReservaResumo *reserva = aux->next_resumo;
+		ReservaResumo *reserva = hotelGetNextResumo(aux);
 		while(reserva)  {
 			if(f == 1) {
 				if(i == 1) {
-					fprintf(fp_output, "--- %d ---\nid: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.0f\ntotal_price: %.3f\n",i, reserva->id, reserva->begin_date, reserva->end_date,reserva->user_id, reserva->rating, reserva->total_price);
-				}
+					fprintf(fp_output, "--- %d ---\nid: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.0f\ntotal_price: %.3f\n",i, reservaResumoGetId(reserva), reservaResumoGetBeginDate(reserva), reservaResumoGetEndDate(reserva),reservaResumoGetUserId(reserva), reservaResumoGetRating(reserva), reservaResumoGetTotalPrice(reserva));
+				} 
 				else {
-					fprintf(fp_output, "\n--- %d ---\nid: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.0f\ntotal_price: %.3f\n",i, reserva->id, reserva->begin_date, reserva->end_date,reserva->user_id, reserva->rating, reserva->total_price);
+					fprintf(fp_output, "\n--- %d ---\nid: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.0f\ntotal_price: %.3f\n",i, reservaResumoGetId(reserva), reservaResumoGetBeginDate(reserva), reservaResumoGetEndDate(reserva),reservaResumoGetUserId(reserva), reservaResumoGetRating(reserva), reservaResumoGetTotalPrice(reserva));
 				}
 			}
 			else {
-				fprintf(fp_output, "%s;%s;%s;%s;%.0f;%.3f\n",reserva->id, reserva->begin_date, reserva->end_date,reserva->user_id, reserva->rating, reserva->total_price);
+				fprintf(fp_output, "%s;%s;%s;%s;%.0f;%.3f\n",reservaResumoGetId(reserva), reservaResumoGetBeginDate(reserva), reservaResumoGetEndDate(reserva),reservaResumoGetUserId(reserva), reservaResumoGetRating(reserva), reservaResumoGetTotalPrice(reserva));
 			}
 			i++;
-			reserva = reserva->next_resumo;
+			reserva = reservaResumoGetNext(reserva);
 		}
 	}
 	

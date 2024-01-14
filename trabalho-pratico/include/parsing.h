@@ -4,6 +4,7 @@
 #include "../include/user.h"
 #include "../include/voo.h"
 #include "../include/aeroporto.h"
+#include "../include/hotel.h"
 
 
 

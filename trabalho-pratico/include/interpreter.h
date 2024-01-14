@@ -11,6 +11,7 @@
 #include "reserva.h"
 #include <stdio.h>
 #include "aeroporto.h"
+#include "hotel.h"
 
 /*Função principal usada para executar as queries/comandos*/
 int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis,hash_aeroportos h_aeroportos, FILE *fp_output);

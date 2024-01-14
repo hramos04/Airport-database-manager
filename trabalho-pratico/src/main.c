@@ -7,6 +7,7 @@
 #include "../include/voo.h"
 #include "../include/aeroporto.h"
 #include "../include/interpreter.h"
+#include "../include/hotel.h"
 #include "../include/interativo.h"
 #include <locale.h>
 #include "time.h"
@@ -24,7 +25,7 @@ int main(int argc, char *argv[]) {
 	
 	if(argc <= 1) {
 		interativo();
-		return 0;	/*Encerra o programa se o número de argumentos for insuficiente*/
+		return 0;	//Encerra o programa se o número de argumentos for insuficiente
 	}
 
 	/*Inicialização das tabelas hash*/

@@ -9,6 +9,8 @@
 #include "../include/voo.h"
 #include "../include/q2.h"
 #include "../include/aeroporto.h"
+#include "../include/hotel.h"
+#include "../include/reserva.h"
 
 
 
@@ -595,45 +597,23 @@ int process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_rese
 		else {
 			User *k_user = RetrieveUser(h, user_id);
 			
-			if(k_user  ) {
-				Reserva *nova_reserva = (Reserva *)malloc(sizeof(Reserva));
-			nova_reserva->id = strdup(id);
-			nova_reserva->user_id = strdup(user_id);
-			nova_reserva->hotel_id = strdup(hotel_id);
-			nova_reserva->hotel_name = strdup(hotel_name);
-			nova_reserva->hotel_stars = strdup(hotel_stars);
-			nova_reserva->city_tax = strdup(city_tax);
-			nova_reserva->address = strdup(address);
-			nova_reserva->begin_date = strdup(begin_date);
-			nova_reserva->end_date = strdup(end_date);
-			nova_reserva->price_per_night = strdup(price_per_night);
-			nova_reserva->includes_breakfast = strdup(includes_breakfast);
-			nova_reserva->room_details = strdup(room_details);
-			nova_reserva->rating = strdup(rating);
-			nova_reserva->comment = strdup(comment);
-			nova_reserva->total_noites = calcularDiasDatas(begin_date, end_date);
-			nova_reserva->total_gasto =calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) + ( ((calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) / 100)* strtod(nova_reserva->city_tax, &endptr)));
-			nova_reserva->next_reserva = NULL;
+			if(k_user) {
+				int total_noites = calcularDiasDatas(begin_date, end_date);
+				double total_gasto = calcularDiasDatas(begin_date, end_date) * strtod(price_per_night, &endptr) + ( ((calcularDiasDatas(begin_date, end_date) * strtod(price_per_night, &endptr) / 100)* strtod(city_tax, &endptr)));
+				Reserva *nova_reserva = createReserva(id,user_id,hotel_id,hotel_name,hotel_stars,city_tax,address,begin_date,end_date,price_per_night,includes_breakfast,room_details,rating,comment,total_noites,total_gasto);
 			
-			ReservaResumo *novo_resumo = (ReservaResumo *)malloc(sizeof(ReservaResumo));
-			novo_resumo->id = strdup(id);
-			novo_resumo->begin_date = strdup(begin_date);
-			novo_resumo->end_date = strdup(end_date);
-			novo_resumo->user_id = strdup(user_id);
-			novo_resumo->rating = strtod(rating, &endptr);
-			novo_resumo->price_per_night=strdup(price_per_night);
-			novo_resumo->total_price = calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) + ( ((calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) / 100)* strtod(nova_reserva->city_tax, &endptr)));
-			novo_resumo->next_resumo = NULL;
+				
+				double rat = strtod(rating, &endptr);
+				double total =  calcularDiasDatas(begin_date, end_date) * strtod(price_per_night, &endptr) + ( ((calcularDiasDatas(begin_date, end_date) * strtod(price_per_night, &endptr) / 100)* strtod(city_tax, &endptr)));
 
-			
-			InsertTableHoteis(h_hoteis, hotel_id, novo_resumo);
-			InsertTableReservas(h_reservas, id, nova_reserva);
-
-			double total_gasto = calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) + (((calcularDiasDatas(begin_date, end_date) * strtod(nova_reserva->price_per_night, &endptr) / 100)* strtod(nova_reserva->city_tax, &endptr)));
-			
-			Q2 *nova_q2  = create_q2(id,begin_date,total_gasto,1);
-			
-			InsertReservaUser(h, user_id, nova_q2);
+				ReservaResumo *novo_resumo = createReservaResumo(id,begin_date,end_date,user_id,price_per_night,total,rat);
+				
+				InsertTableHoteis(h_hoteis, hotel_id, novo_resumo);
+				InsertTableReservas(h_reservas, id, nova_reserva);
+				
+				Q2 *nova_q2  = create_q2(id,begin_date,total_gasto,1);
+				
+				InsertReservaUser(h, user_id, nova_q2);
 			}
 		}
 	}
