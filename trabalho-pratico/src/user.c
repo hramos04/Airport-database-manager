@@ -3,138 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "../include/user.h"
-#include "../include/q2.h"
-
-struct User {
-    char *id;
-    char *nome;
-    char *email;
-    char *phone;
-    char *birth;
-    char *sex;
-    char *passport;
-    char *country;
-    char *address;
-    char *account_creation;
-    char *pay_method;
-    char *account_status;
-    int total_reservas;
-    int total_voos;
-    double total_gasto;
-    struct User *next;
-    struct Q2 *q2;
-};
-
-
-User *create_user(char *id, char *nome, char *email, char *phone, char *birth, char *sex, char *passport, char *country, char *address, char *account_creation, char *pay_method,char *account_status) {
-    User *user = malloc(sizeof(struct User));
-
-    user->id = strdup(id);
-	user->nome = strdup(nome);
-	user->email = strdup(email);
-	user->phone = strdup(phone);
-	user->birth = strdup(birth);
-	user->sex = strdup(sex);
-	user->passport = strdup(passport);
-	user->country = strdup(country);
-	user->address = strdup(address);
-	user->account_creation = strdup(account_creation);
-	user->pay_method = strdup(pay_method);
-	user->account_status = strdup(account_status);
-
-	user->total_reservas = 0;
-	user->total_voos = 0;
-	user->total_gasto = 0.0;
-	user->next = NULL;
-	user->q2 = NULL;
-
-    return user;
-}
-
-char* userGetId(User *user){
-	return strdup(user->id);
-}
-
-char* userGetNome(User *user){
-	return strdup(user->nome);
-}
-
-char* userGetEmail(User *user){
-	return strdup(user->email);
-}
-
-char* userGetPhone(User *user){
-	return strdup(user->phone);
-}
-
-char* userGetBirth(User *user){
-	return strdup(user->birth);
-}
-
-char* userGetSex(User *user){
-	return strdup(user->sex);
-}
-
-char* userGetPassport(User *user){
-	return strdup(user->passport);
-}
-
-char* userGetCountry(User *user){
-	return strdup(user->country);
-}
-
-char* userGetAddress(User *user){
-	return strdup(user->address);
-}
-
-char* userGetAccountCreation(User *user){
-	return strdup(user->account_creation);
-}
-
-char* userGetPayMethod(User *user){
-	return strdup(user->pay_method);
-}
-
-char* userGetAccountStatus(User *user){
-	return strdup(user->account_status);
-}
-
-int userGetTotalReservas(User *user){
-	return user->total_reservas;
-}
-
-int userGetTotalVoos(User *user){
-	return user->total_voos;
-}
-
-double userGetTotalGasto(User *user){
-	return user->total_gasto;
-}
-
-User* userGetNext(User *user){
-	return user->next;
-}
-
-void userSetNext(User *user, User *next){
-	user->next = next;
-}
-
-Q2* userGetQ2(User *user){
-	return user->q2;
-}
-
-void userSetQ2(User *user, Q2 *q2){
-	user->q2 = q2;
-}
-
-
-
-
-
-
-
-
-
 
 
 /* Função de hash que converte uma chave num índice na tabela hash. */
@@ -185,6 +53,19 @@ void destroiTableUser(hash_user h) {
 		}
 		free(h[i]);
 	}
+}
+
+
+void destroiQ2(Q2 *q2){
+
+	while(q2!=NULL){
+		Q2 *atual = q2;
+		q2 = q2->next;
+		free(atual->id);
+		free(atual->data);
+		free(atual);
+	}
+	free(q2);
 }
 
 
@@ -300,21 +181,21 @@ void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
 	
 	if(aux) {
 		aux->total_reservas++;
-		aux->total_gasto += getTotalGasto(q2);
+		aux->total_gasto += q2->total_gasto;
 		Q2 *currentQ2 = aux->q2;
 		Q2 *prevQ2 = NULL;
 		
-		while (currentQ2 != NULL && strcmp(getData(currentQ2), getData(q2)) >= 0) {
+		while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) >= 0) {
 			prevQ2 = currentQ2;
-			currentQ2 = getNext(currentQ2);
+			currentQ2 = currentQ2->next;
 		}
 
 		if (prevQ2 == NULL) {
-			setNext(q2,aux->q2);
+			q2->next = aux->q2;
 			aux->q2 = q2;
 		} else {
-			setNext(prevQ2,q2);
-			setNext(q2,currentQ2);
+			prevQ2->next = q2;
+			q2->next = currentQ2;
 		}
 	}
 }
@@ -339,20 +220,247 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
 		Q2 *currentQ2 = aux->q2;
 		Q2 *prevQ2 = NULL;
 		
-		while (currentQ2 != NULL && strcmp(getData(currentQ2), getData(q2)) >= 0) {
+		while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) >= 0) {
 			prevQ2 = currentQ2;
-			currentQ2 = getNext(currentQ2);
+			currentQ2 = currentQ2->next;
 		}
 
 		if (prevQ2 == NULL) {
-			setNext(q2,aux->q2);
+			q2->next = aux->q2;
 			aux->q2 = q2;
 		} else {
-			setNext(prevQ2,q2);
-			setNext(q2,currentQ2);
+			prevQ2->next = q2;
+			q2->next = currentQ2;
 		}
+	
 	}
 }
+
+
+
+
+//////////////////////////usar esta função quando só aparece a pedir o ano 
+/* Função que conta quantos usuários têm o ano de criação da conta igual ao ano fornecido. */
+int CountUsersByYear(hash_user h, int year) {
+    int count = 0;
+
+    for (int i = 0; i < HASHSIZEUSER; i++) {
+        User *currentUser = h[i];
+
+        while (currentUser != NULL) {
+            // Extraindo o ano da string de criação da conta
+            int accountYear;
+            sscanf(currentUser->account_creation, "%d", &accountYear);
+
+            // Verificando se o ano coincide
+            if (accountYear == year) {
+                count++;
+            }
+
+            currentUser = currentUser->next;
+        }
+    }
+
+    return count;
+}
+
+////Função que conta os usuários, mas que dá todos os meses
+/* Função que imprime o número de usuários para cada mês em um determinado ano. */
+int CountUsersByMonth(hash_user h, int year, int month) {
+    int userCount = 0;
+
+    for (int i = 0; i < HASHSIZEUSER; i++) {
+        User *currentUser = h[i];
+
+        while (currentUser != NULL) {
+            // Extraindo o ano e o mês da string de criação da conta
+            int accountYear, accountMonth;
+            if (sscanf(currentUser->account_creation, "%d/%d", &accountYear, &accountMonth) == 2 && accountYear == year && accountMonth == month) {
+                // Incrementando o contador para o mês correspondente
+                userCount++;
+            }
+
+            currentUser = currentUser->next;
+        }
+    }
+
+    // Retornando o resultado
+    return userCount;
+}
+
+int CountUsersByDate(hash_user h, int year, int month, int day) {
+    int userCount = 0;
+
+    for (int i = 0; i < HASHSIZEUSER; i++) {
+        User *currentUser = h[i];
+
+        while (currentUser != NULL) {
+            // Extraindo o ano, mês e dia da string de criação da conta
+            int accountYear, accountMonth, accountDay;
+            if (sscanf(currentUser->account_creation, "%d/%d/%d", &accountYear, &accountMonth, &accountDay) == 3 &&
+                accountYear == year && accountMonth == month && accountDay == day) {
+                // Incrementando o contador para a data correspondente
+                userCount++;
+            }
+
+            currentUser = currentUser->next;
+        }
+    }
+
+    // Retornando o resultado
+    return userCount;
+}
+
+
+
+// Função que retorna o número total de passageiros para um determinado ano
+int SomaPassageirosPorAnoUnico(hash_user h, int ano) {
+    int totalPassageiros = 0;
+
+    for (int i = 0; i < HASHSIZEUSER; i++) {
+        User *currentUser = h[i];
+
+        while (currentUser != NULL) {
+            int passageiroEncontrado = 0;  // Flag para evitar contar o mesmo usuário várias vezes
+            int viagensNoAno = 0;  // Contador de viagens do usuário no ano fornecido
+
+            Q2 *q2 = currentUser->q2;
+
+            while (q2 != NULL) {
+                // Verificar se é um voo (tipo 2) e se é do ano desejado
+                if (q2->tipo == 2) {
+                    int anoVoo;
+                    sscanf(q2->data, "%d", &anoVoo);
+
+                    if (anoVoo == ano) {
+                        viagensNoAno += 1;
+                        // Verificar se é a única viagem do usuário no ano
+                        if (viagensNoAno == 1) {
+                            // Incrementar o total de passageiros apenas uma vez por usuário
+                            totalPassageiros += 1;  // Cada voo representa um passageiro
+                            passageiroEncontrado = 1;
+                        }
+                    }
+                }
+
+                q2 = q2->next;
+            }
+
+            currentUser = currentUser->next;
+        }
+    }
+
+    return totalPassageiros;
+}
+
+// Função que retorna o número total de passageiros para um determinado ano e mês
+int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes) {
+    int totalPassageiros = 0;
+
+    for (int i = 0; i < HASHSIZEUSER; i++) {
+        User *currentUser = h[i];
+
+        while (currentUser != NULL) {
+            int passageiroEncontrado = 0;  // Flag para evitar contar o mesmo usuário várias vezes
+            int viagensNoAnoMes = 0;  // Contador de viagens do usuário no ano e mês fornecidos
+
+            Q2 *q2 = currentUser->q2;
+
+            while (q2 != NULL) {
+                // Verificar se é um voo (tipo 2) e se é do ano e mês desejados
+                if (q2->tipo == 2) {
+                    int anoVoo, mesVoo;
+                    sscanf(q2->data, "%d/%d", &anoVoo, &mesVoo);
+
+                    if (anoVoo == ano && mesVoo == mes) {
+                        viagensNoAnoMes += 1;
+                        // Verificar se é a única viagem do usuário no ano e mês
+                        if (viagensNoAnoMes == 1) {
+                            // Incrementar o total de passageiros apenas uma vez por usuário
+                            totalPassageiros += 1;  // Cada voo representa um passageiro
+                            passageiroEncontrado = 1;
+                        }
+                    }
+                }
+
+                q2 = q2->next;
+            }
+
+            currentUser = currentUser->next;
+        }
+    }
+
+    return totalPassageiros;
+}
+
+// Função que retorna o número total de passageiros para um determinado ano, mês e dia
+int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
+    int totalPassageiros = 0;
+
+    for (int i = 0; i < HASHSIZEUSER; i++) {
+        User *currentUser = h[i];
+
+        while (currentUser != NULL) {
+            int passageiroEncontrado = 0;  // Flag para evitar contar o mesmo usuário várias vezes
+            int viagensNaData = 0;  // Contador de viagens do usuário na data fornecida
+
+            Q2 *q2 = currentUser->q2;
+
+            while (q2 != NULL) {
+                // Verificar se é um voo (tipo 2) e se é da data desejada
+                if (q2->tipo == 2) {
+                    int anoVoo, mesVoo, diaVoo;
+                    sscanf(q2->data, "%d/%d/%d", &anoVoo, &mesVoo, &diaVoo);
+
+                    if (anoVoo == ano && mesVoo == mes && diaVoo == dia) {
+                        viagensNaData += 1;
+                        // Verificar se é a única viagem do usuário na data
+                        if (viagensNaData == 1) {
+                            // Incrementar o total de passageiros apenas uma vez por usuário
+                            totalPassageiros += 1;  // Cada voo representa um passageiro
+                            passageiroEncontrado = 1;
+                        }
+                    }
+                }
+
+                q2 = q2->next;
+            }
+
+            currentUser = currentUser->next;
+        }
+    }
+
+    return totalPassageiros;
+}
+
+
+
+// Função que imprime todos os voos de todos os usuários
+void ImprimirTodosVoos(hash_user h) {
+    for (int i = 0; i < HASHSIZEUSER; i++) {
+        User *currentUser = h[i];
+
+        while (currentUser != NULL) {
+            printf("Voos do usuário %s:\n", currentUser->id);
+
+            Q2 *q2 = currentUser->q2;
+
+            while (q2 != NULL) {
+                if (q2->tipo == 1) {
+                    printf("   - ID do Voo: %s\n", q2->id);
+                    printf("     Data: %s\n", q2->data);
+                    printf("     Total Gasto: %.2f\n", q2->total_gasto);
+                }
+
+                q2 = q2->next;
+            }
+
+            currentUser = currentUser->next;
+        }
+    }
+}
+
+
 
 /*
 int userNumber(hash_user h, char *argv){

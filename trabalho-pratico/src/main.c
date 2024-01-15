@@ -5,9 +5,7 @@
 #include "../include/user.h"
 #include "../include/reserva.h"
 #include "../include/voo.h"
-#include "../include/aeroporto.h"
 #include "../include/interpreter.h"
-#include "../include/hotel.h"
 #include "../include/interativo.h"
 #include <locale.h>
 #include "time.h"
@@ -25,7 +23,7 @@ int main(int argc, char *argv[]) {
 	
 	if(argc <= 1) {
 		interativo();
-		return 0;	//Encerra o programa se o número de argumentos for insuficiente
+		return 0;	/*Encerra o programa se o número de argumentos for insuficiente*/
 	}
 
 	/*Inicialização das tabelas hash*/
@@ -59,15 +57,12 @@ int main(int argc, char *argv[]) {
 	strcat(csv_passengers, "/passengers.csv");
 
 
-	//Processamento dos arquivos
-    int users= process_users_csv(h_users, csv_users);
-    int reservas = process_reservas_csv(h_users, h_hoteis, h_reservas, csv_reservas);
-    int voos = process_voos_csv(h_users, h_aeroportos, h_voos, csv_voos);
-    int passageiros = process_passengers_csv(h_users, h_voos, h_aeroportos, csv_passengers);
-    if(users || reservas || voos || passageiros){
-		printf("ERRO NO CAMINHO DOS FICHEIROS\n");
-		return 1;
-	}
+	/*Processamento dos arquivos*/
+    process_users_csv(h_users, csv_users);
+    process_reservas_csv(h_users, h_hoteis, h_reservas, csv_reservas);
+    process_voos_csv(h_users, h_aeroportos, h_voos, csv_voos);
+    process_passengers_csv(h_users, h_voos, h_aeroportos,csv_passengers);
+    
 	
 	/*Leitura do ficheiro de input e execução dos comandos*/
 	FILE *fp = fopen(argv[2], "r");
@@ -106,15 +101,7 @@ int main(int argc, char *argv[]) {
 
     printf("Processor cycles taken : %f cycles\n", (float)duration);
     printf("Processor time taken : %f seconds\n", (float)duration/CLOCKS_PER_SEC);
-	//PrintHashAeroportos(h_aeroportos);
-    //PrintHashVoos(h_voos);
-	//SomaPassageirosAno *listaSomaPassageiros = criarListaSomaPassageirosAno(h_voos, 2021, 10);
-
-    // Imprimir a lista de soma de passageiros por ano
-    //imprimirListaSomaPassageirosAno(listaSomaPassageiros);
-
-
-
+	
 	destroiTableUser(h_users);
 	destroiTableVoo(h_voos);
 	destroiTableAeroporto(h_aeroportos);
