@@ -494,9 +494,9 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
 
 			// Modificação na impressão para considerar o formato
 			if (f == 1 && (totalUsersAno + totalVoosAno + totalPassageirosAno + total + totalReservasAno) > 0) {
-				fprintf(fp_output, "--- %d ---\nyear: %d\nusers: %d\nflights: %d\npassengers: %d\nunique_passengers: %d\nreservations: %d\n", r, j, totalUsersAno, totalVoosAno, totalPassageirosAno, total, totalReservasAno);
+				fprintf(fp_output, "--- %d ---\nyear: %d\nusers: %d\nflights: %d\npassengers: %d\nunique_passengers: %d\nreservations: %d\n\n", r, j, totalUsersAno, totalVoosAno, totalPassageirosAno, total, totalReservasAno);
 			} else if (totalUsersAno + totalVoosAno + totalPassageirosAno + total + totalReservasAno > 0) {
-				fprintf(fp_output, "%d;%d;%d;%d;%d;%d\n", r, j, totalUsersAno, totalVoosAno, totalPassageirosAno, total, totalReservasAno);
+				fprintf(fp_output, "%d;%d;%d;%d;%d;%d\n", j, totalUsersAno, totalVoosAno, totalPassageirosAno, total, totalReservasAno);
 			}
 		}
 	}
@@ -516,7 +516,7 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
 			if ( (totalUsersNoMes + totalVoosNoMes + totalPassageirosMes + total1 + totalReservasNoMes)>0) {
 				// Modificação na impressão para considerar o formato
 				if (f == 1) {
-					fprintf(fp_output, "--- %d ---\nmonth: %d\nusers: %d\nflights: %d\npassengers: %d\nunique_passengers: %d\nreservations: %d\n", i, i, totalUsersNoMes, totalVoosNoMes, totalPassageirosMes, total1, totalReservasNoMes);
+					fprintf(fp_output, "--- %d ---\nmonth: %d\nusers: %d\nflights: %d\npassengers: %d\nunique_passengers: %d\nreservations: %d\n\n", i, i, totalUsersNoMes, totalVoosNoMes, totalPassageirosMes, total1, totalReservasNoMes);
 				} else {
 					fprintf(fp_output, "%d;%d;%d;%d;%d;%d\n", i, totalUsersNoMes, totalVoosNoMes, totalPassageirosMes, total1, totalReservasNoMes);
 				}
@@ -541,9 +541,9 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
 
 			// Modificação na impressão para considerar o formato
 			if (f == 1 && (totalUsersNaData + totalVoosNaData + totalPassageirosDia + total2 + totalReservasNaData) > 0) {
-				fprintf(fp_output, "--- %d ---\nday: %d\nusers: %d\nflights: %d\npassengers: %d\nunique_passengers: %d\nreservations: %d\n", l, d, totalUsersNaData, totalVoosNaData, totalPassageirosDia, total2, totalReservasNaData);
+				fprintf(fp_output, "--- %d ---\nday: %d\nusers: %d\nflights: %d\npassengers: %d\nunique_passengers: %d\nreservations: %d\n\n", l, d, totalUsersNaData, totalVoosNaData, totalPassageirosDia, total2, totalReservasNaData);
 			} else if ( (totalUsersNaData + totalVoosNaData + totalPassageirosDia + total2 + totalReservasNaData)> 0) {
-				fprintf(fp_output, "%d;%d;%d;%d;%d;%d\n", l, d, totalUsersNaData, totalVoosNaData, totalPassageirosDia, total2, totalReservasNaData);
+				fprintf(fp_output, "%d;%d;%d;%d;%d;%d\n", d, totalUsersNaData, totalVoosNaData, totalPassageirosDia, total2, totalReservasNaData);
 			}
 		}
 	}
