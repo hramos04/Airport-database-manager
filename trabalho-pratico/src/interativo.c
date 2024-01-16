@@ -218,9 +218,8 @@ int programa_interativo (int highlight, WINDOW* win, int query){
 
         if(comando_interativo (input_q, h_users, h_voos,h_reservas,h_hoteis,h_aeroportos) == 0){
 
-            if(chdir("Resultados/") != 0){
-                printf("Erro Resultados");
-            }
+            if(chdir("Resultados/") != 0);
+            
             FILE* ficheiro;
             ficheiro = fopen("comando_output.txt", "r");
 
