@@ -394,10 +394,11 @@ int is_non_empty_string(char *string) {
 
 /* Função responsável por efetuar o parsing de todas as linhas do csv dos utilizadores e verificar se 
 todos os campos são válidos, inserindo os valores na hash table. */
-void process_users_csv(hash_user h, char *ficheiro) {
+int process_users_csv(hash_user h, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/users_errors.csv", "w");
 	FILE *fp = fopen(ficheiro,"r");
+	if(!fp) return 1;
 	
 	char id[MAX_LINE_LENGTH], nome[MAX_LINE_LENGTH], email[MAX_LINE_LENGTH], phone[MAX_LINE_LENGTH], birth[MAX_LINE_LENGTH], sex[MAX_LINE_LENGTH], passport[MAX_LINE_LENGTH];
 	char country[MAX_LINE_LENGTH], address[MAX_LINE_LENGTH], account_creation[MAX_LINE_LENGTH], pay_method[MAX_LINE_LENGTH], account_status[MAX_LINE_LENGTH];
@@ -503,17 +504,20 @@ void process_users_csv(hash_user h, char *ficheiro) {
 	
 	fclose(invalidFile);
 	fclose(fp);
+	return 0;
 }
 
 /* Função responsável por efetuar o parsing de todas as linhas do csv das reservas e verificar se todos 
 os campos são válidos, inserindo os valores nas hash tables. */
-void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_reservas, char *ficheiro) {
+int process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_reservas, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/reservations_errors.csv", "w");
 	FILE *fp = fopen(ficheiro,"r");
 	char id[MAX_LINE_LENGTH], user_id[MAX_LINE_LENGTH], hotel_id[MAX_LINE_LENGTH], hotel_name[MAX_LINE_LENGTH], hotel_stars[MAX_LINE_LENGTH], address[MAX_LINE_LENGTH], city_tax[MAX_LINE_LENGTH], begin_date[MAX_LINE_LENGTH];
 	char end_date[MAX_LINE_LENGTH], price_per_night[MAX_LINE_LENGTH], includes_breakfast[MAX_LINE_LENGTH], room_details[MAX_LINE_LENGTH], rating[MAX_LINE_LENGTH], comment[MAX_LINE_LENGTH];
 	char * endptr;
+	if(!fp) return 1;
+
 	while((fgets(linha, 1024, fp)) != NULL) {
 		size_t comp = strlen(linha);
 		if(comp > 0 && linha[comp-1] == '\n') {
@@ -654,15 +658,17 @@ void process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_res
 	
 	fclose(invalidFile);
 	fclose(fp);
+	return 0;
 }
 
 /* Função responsável por efetuar o parsing de todas as linhas do csv dos passageiros e verificar 
 se todos os campos são válidos, inserindo os valores nas hash tables. */
-void process_passengers_csv(hash_user h, hash_voos h_voos,hash_aeroportos h_aeroportos, char *ficheiro) {
+int process_passengers_csv(hash_user h, hash_voos h_voos,hash_aeroportos h_aeroportos, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/passengers_errors.csv", "w");
 	FILE *fp = fopen(ficheiro,"r");
 	char flight_id[MAX_LINE_LENGTH], user_id[MAX_LINE_LENGTH];
+	if(!fp) return 1;
 	
 	while((fgets(linha, 1024, fp)) != NULL) {
 	
@@ -697,16 +703,20 @@ void process_passengers_csv(hash_user h, hash_voos h_voos,hash_aeroportos h_aero
 	}
 	fclose(invalidFile);
 	fclose(fp);
+	return 0;
 }
 
 /* Função responsável por efetuar o parsing de todas as linhas do csv dos voos e verificar se todos os campos são válidos, inserindo os valores nas hash tables. */
-void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voos, char *ficheiro) {
+int process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voos, char *ficheiro) {
 	char linha[MAX_LINE_LENGTH];
 	FILE *invalidFile = fopen("Resultados/flights_errors.csv", "w");
 	FILE *fp = fopen(ficheiro,"r");
 	char id[MAX_LINE_LENGTH], airline[MAX_LINE_LENGTH], plane_model[MAX_LINE_LENGTH], total_seats[MAX_LINE_LENGTH], origin[MAX_LINE_LENGTH], destination[MAX_LINE_LENGTH];
 	char schedule_departure_date[MAX_LINE_LENGTH], schedule_arrival_date[MAX_LINE_LENGTH];
 	char real_departure_date[MAX_LINE_LENGTH], real_arrival_date[MAX_LINE_LENGTH], pilot[MAX_LINE_LENGTH], copilot[MAX_LINE_LENGTH], notes[MAX_LINE_LENGTH];
+
+	if(!fp) return 1;
+
 	if(h_aeroportos && h) {
 		
 	}
@@ -822,5 +832,6 @@ void process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voo
 	
 	fclose(invalidFile);
 	fclose(fp);
+	return 0;
 }
 

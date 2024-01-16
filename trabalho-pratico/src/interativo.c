@@ -38,11 +38,14 @@ int main_interativo(char* file, hash_user h_users,hash_aeroportos h_aeroportos,h
 	strcat(csv_passengers, "/passengers.csv");
 
 	//Processamento dos arquivos
-    int users= process_users_csv(h_users, csv_users);
+    int users = process_users_csv(h_users, csv_users);
     int reservas = process_reservas_csv(h_users, h_hoteis, h_reservas, csv_reservas);
     int voos = process_voos_csv(h_users, h_aeroportos, h_voos, csv_voos);
     int passageiros = process_passengers_csv(h_users, h_voos, h_aeroportos, csv_passengers);
-    if(users || reservas || voos || passageiros) return 1;
+    if(users || reservas || voos || passageiros){ 
+        printf("ERRO NO CAMINHO DO FICHEIRO");
+        return 1;
+    }
 
 
 

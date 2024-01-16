@@ -612,18 +612,19 @@ int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_re
 	split(linha, &argc, args);
 	int f = 0;
 	char query;
-
 	query = linha[0];
+
+	if(linha[1] != ' ') return 1;
+
+	if(chdir("Resultados/") != 0){
+		printf("Error");
+	}
+
 	FILE *fp_output = fopen("comando_output.txt", "w");
 	if (fp_output == NULL) {
     // Tratar erro de abertura de arquivo
     return 1;
 }
-
-
-	if(linha[1] != ' ') return 1;
-
-	if(chdir("Resultados/") != 0);
 
 	switch (query)
 	{
@@ -655,8 +656,16 @@ int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_re
 		q7(h_aeroportos, atoi(args[1]), f, fp_output);
 		break;
 	
+	case '8':
+		q8(h_hoteis, args[1], args[2],args[3], f, fp_output);
+		break;
+	
 	case '9':
 		q9(h_users, args[1], f, fp_output);
+		break;
+
+	case '10':
+		q10(h_users, h_voos, h_reservas, args, argc,f, fp_output);
 		break;
 	
 	default:
