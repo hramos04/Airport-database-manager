@@ -146,6 +146,12 @@ void liberarListaSomaPassageirosAno(SomaPassageirosAno *head);
 void imprimirListaSomaPassageirosAno(SomaPassageirosAno *head);
 void imprimirListaSomaPassageirosAno(SomaPassageirosAno *lista);
 void imprimirListaSomaPassageirosAno(SomaPassageirosAno *lista);
+int SomaPassageirosPorAno(hash_voos h, int ano);
+int SomaPassageirosPorMes(hash_voos h, int ano, int mes);
+int SomaPassageirosPorDia(hash_voos h, int ano, int mes, int dia);
+int SomaVoosPorAno(hash_voos h, int ano);
+int SomaVoosPorMes(hash_voos h, int ano, int mes);
+int SomaVoosPorDia(hash_voos h, int ano, int mes, int dia);
 
 #endif
 

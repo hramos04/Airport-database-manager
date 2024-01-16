@@ -111,6 +111,9 @@ void InsertTableReservas(hash_reservas h, KeyType k, Reserva *reserva);
 int HashHoteis(KeyType k);
 int HashReservas(KeyType k);
 int GetLucro(hash_hoteis h, KeyType k, char *start_date, char *end_date);
+int ContarReservasPorAno(hash_reservas h, int ano);
+int ContarReservasPorMes(hash_reservas h, int ano, int mes);
+int ContarReservasPorData(hash_reservas h, int ano, int mes, int dia);
 
 #endif
 

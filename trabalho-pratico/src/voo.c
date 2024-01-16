@@ -639,3 +639,157 @@ void PrintHashVoos(hash_voos h_voos) {
     }
 }
 
+
+
+////////////////////////////////////////função que dá o número total de passageiros num ano 
+// Função para somar o total de passageiros para voos em um determinado ano
+int SomaPassageirosPorAno(hash_voos h, int ano) {
+    int totalPassageiros = 0;
+
+    for (int i = 0; i < HASHSIZEVOO; i++) {
+        Voo *voo = h[i];
+
+        while (voo != NULL) {
+            // Extrair o ano do campo schedule_departure_date
+            int anoVoo;
+            sscanf(voo->schedule_departure_date, "%d", &anoVoo);
+
+            // Verificar se o ano coincide com o ano fornecido
+            if (anoVoo == ano) {
+                totalPassageiros += voo->total_passengers;
+            }
+
+            voo = voo->next_voo;
+        }
+    }
+
+    return totalPassageiros;
+}
+
+//////////////Soma passageiros por mês////////////
+// Função para somar o número de passageiros para um determinado ano e imprimir por mês
+int SomaPassageirosPorMes(hash_voos h, int ano, int mes) {
+    int totalPassageiros = 0;
+
+    for (int i = 0; i < HASHSIZEVOO; i++) {
+        Voo *voo = h[i];
+
+        while (voo != NULL) {
+            // Extrair o ano e o mês do campo schedule_departure_date
+            int anoVoo, mesVoo;
+            sscanf(voo->schedule_departure_date, "%d/%d", &anoVoo, &mesVoo);
+
+            // Verificar se o ano e o mês coincidem com o ano e mês fornecidos
+            if (anoVoo == ano && mesVoo == mes) {
+                totalPassageiros += voo->total_passengers;
+            }
+
+            voo = voo->next_voo;
+        }
+    }
+
+    // Retornando o resultado
+    return totalPassageiros;
+}
+
+//////////////Soma passageiros por dia////////////
+// Função para somar o número de passageiros para um determinado ano, mês e dia, e imprimir por dia
+int SomaPassageirosPorDia(hash_voos h, int ano, int mes, int dia) {
+    int totalPassageiros = 0;
+
+    for (int i = 0; i < HASHSIZEVOO; i++) {
+        Voo *voo = h[i];
+
+        while (voo != NULL) {
+            // Extrair o ano, mês e dia do campo schedule_departure_date
+            int anoVoo, mesVoo, diaVoo;
+            sscanf(voo->schedule_departure_date, "%d/%d/%d", &anoVoo, &mesVoo, &diaVoo);
+
+            // Verificar se o ano, mês e dia coincidem com o ano, mês e dia fornecidos
+            if (anoVoo == ano && mesVoo == mes && diaVoo == dia) {
+                totalPassageiros += voo->total_passengers;
+            }
+
+            voo = voo->next_voo;
+        }
+    }
+
+    // Retornando o resultado
+    return totalPassageiros;
+}
+
+////////////função dá o número de voos por ano 
+// Função para somar o número de voos para um determinado ano
+int SomaVoosPorAno(hash_voos h, int ano) {
+    int totalVoos = 0;
+
+    for (int i = 0; i < HASHSIZEVOO; i++) {
+        Voo *voo = h[i];
+
+        while (voo != NULL) {
+            // Extrair o ano do campo schedule_departure_date
+            int anoVoo;
+            sscanf(voo->schedule_departure_date, "%d", &anoVoo);
+
+            // Verificar se o ano coincide com o ano fornecido
+            if (anoVoo == ano) {
+                totalVoos++;
+            }
+
+            voo = voo->next_voo;
+        }
+    }
+
+    return totalVoos;
+}
+
+
+////////////função dá número de voos por mês 
+// Função para somar o número total de voos para um determinado ano e imprimir por mês
+int SomaVoosPorMes(hash_voos h, int ano, int mes) {
+    int totalVoos = 0;
+
+    for (int i = 0; i < HASHSIZEVOO; i++) {
+        Voo *voo = h[i];
+
+        while (voo != NULL) {
+            // Extrair o ano e o mês do campo schedule_departure_date
+            int anoVoo, mesVoo;
+            sscanf(voo->schedule_departure_date, "%d/%d", &anoVoo, &mesVoo);
+
+            // Verificar se o ano e o mês coincidem com o ano e mês fornecidos
+            if (anoVoo == ano && mesVoo == mes) {
+                totalVoos++;
+            }
+
+            voo = voo->next_voo;
+        }
+    }
+
+    // Retornando o resultado
+    return totalVoos;
+}
+
+int SomaVoosPorDia(hash_voos h, int ano, int mes, int dia) {
+    int totalVoos = 0;
+
+    for (int i = 0; i < HASHSIZEVOO; i++) {
+        Voo *voo = h[i];
+
+        while (voo != NULL) {
+            // Extrair o ano, mês e dia do campo schedule_departure_date
+            int anoVoo, mesVoo, diaVoo;
+            sscanf(voo->schedule_departure_date, "%d/%d/%d", &anoVoo, &mesVoo, &diaVoo);
+
+            // Verificar se a data coincide com a data fornecida
+            if (anoVoo == ano && mesVoo == mes && diaVoo == dia) {
+                totalVoos++;
+            }
+
+            voo = voo->next_voo;
+        }
+    }
+
+    // Retornando o resultado
+    return totalVoos;
+}

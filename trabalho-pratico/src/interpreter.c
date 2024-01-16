@@ -127,17 +127,17 @@ void remover_horas(char* datetime, char data[]) {
  * f: Indica se o formato de saída é detalhado (1) ou simples (0).
  * fp_output: Ponteiro para o ficheiro de saída.
  */
-void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, int f, FILE *fp_output) {	//Não é preciso f aqui
+void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, int f, FILE *fp_output) {
 	User *user = RetrieveUser(h_users, arg);
 	Voo *voo = RetrieveVoo(h_voos, arg);
 	Reserva *reserva = RetrieveReserva(h_reservas, arg);
 	if(user) {
-		if((strcasecmp(userGetAccountStatus(user), "active") == 0 )) {
+		if((strcasecmp(user->account_status, "active") == 0 )) {
 			if(f == 1) {
-				fprintf(fp_output, "--- 1 ---\nname: %s\nsex: %s\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",userGetNome(user),userGetSex(user),calculaIdade(userGetBirth(user)),userGetCountry(user),userGetPassport(user),userGetTotalVoos(user),userGetTotalReservas(user),userGetTotalGasto(user));
+				fprintf(fp_output, "--- 1 ---\nname: %s\nsex: %s\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",user->nome,user->sex, calculaIdade(user->birth), user->country,user->passport,user->total_voos, user->total_reservas, user->total_gasto);
 			}
 			else {
-				fprintf(fp_output, "%s;%s;%d;%s;%s;%d;%d;%.3f\n",userGetNome(user),userGetSex(user),calculaIdade(userGetBirth(user)),userGetCountry(user),userGetPassport(user),userGetTotalVoos(user),userGetTotalReservas(user),userGetTotalGasto(user));
+				fprintf(fp_output, "%s;%s;%d;%s;%s;%d;%d;%.3f\n",user->nome,user->sex, calculaIdade(user->birth), user->country,user->passport,user->total_voos, user->total_reservas, user->total_gasto);
 			}
 		}
 	}
@@ -177,80 +177,80 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
 	char data[100];
 	User *user = RetrieveUser(h_users, argv[1]);
 	int i = 1;
-	if(user && (strcasecmp(userGetAccountStatus(user), "active") == 0 )) {
-		Q2 *q2 = userGetQ2(user);
+	if(user && (strcasecmp(user->account_status, "active") == 0 )) {
+		Q2 *q2 = user->q2;
 		while(q2) {
-			remover_horas(getData(q2), data);
+			remover_horas(q2->data, data);
 			if(argc == 3) {
 				if(strcmp(argv[2], "reservations") == 0) {
-					if(getTipo(q2) == 1) {
+					if(q2->tipo == 1) {
 						if(f == 1) {
 							if(i == 1) {
-								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
+								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
 							}
 							else {
-								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
+								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
 							}
 						}
 						else {
-							fprintf(fp_output, "%s;%s\n",getId(q2),data);
+							fprintf(fp_output, "%s;%s\n",q2->id,data);
 						}
 						i++;
 						
 					}
 				}
 				else if(strcmp(argv[2], "flights") == 0) {
-					if(getTipo(q2) == 2) {
+					if(q2->tipo == 2) {
 						if(f == 1) {
 							if(i == 1) {
-								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
+								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
 							}
 							else {
-								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
+								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
 							}
 							
 						}
 						else {
-							fprintf(fp_output,"%s;%s\n",getId(q2),data);
+							fprintf(fp_output,"%s;%s\n",q2->id,data);
 						}
 						i++;
 					}
 				}
 			}
 			else {
-				if(getTipo(q2) == 1) {
+				if(q2->tipo == 1) {
 					if(f == 1) {
 						if(i == 1) {
-							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, getId(q2),data);
+							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, q2->id,data);
 						}
 						else {
-							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, getId(q2),data);
+							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, q2->id,data);
 						}
 						
 					}
 					else {
-						fprintf(fp_output,"%s;%s;reservation\n",getId(q2),data);
+						fprintf(fp_output,"%s;%s;reservation\n",q2->id,data);
 					}
 					
 				}
 				else {
 					if(f == 1) {
 						if(i == 1) {
-							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i,getId(q2),data);
+							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i, q2->id,data);
 						}
 						else {
-							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i,getId(q2),data);
+							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i, q2->id,data);
 						}
 						
 					}
 					else {
-						fprintf(fp_output,"%s;%s;flight\n",getId(q2),data);
+						fprintf(fp_output,"%s;%s;flight\n",q2->id,data);
 					}
 				}
 				i++;
 			}
 			
-			q2 = getNext(q2);
+			q2 = q2->next;
 		}
 	}
 }
@@ -331,17 +331,17 @@ void q9(hash_user h_users, char *argv, int f, FILE *fp_output) {
 		while(aux) {
 			if(f == 1) {
 				if(i == 1) {
-					fprintf(fp_output, "--- %d ---\nid: %s\nname: %s\n",i, userGetId(aux), userGetNome(aux));
+					fprintf(fp_output, "--- %d ---\nid: %s\nname: %s\n",i, aux->id, aux->nome);
 				}
 				else {
-					fprintf(fp_output, "\n--- %d ---\nid: %s\nname: %s\n",i, userGetId(aux), userGetNome(aux));
+					fprintf(fp_output, "\n--- %d ---\nid: %s\nname: %s\n",i, aux->id, aux->nome);
 				}
 				i++;
 			}
 			else {
-				fprintf(fp_output, "%s;%s\n",userGetId(aux), userGetNome(aux));
+				fprintf(fp_output, "%s;%s\n",aux->id, aux->nome);
 			}
-			aux = userGetNext(aux);
+			aux = aux->next;
 		}
 	}
 	
@@ -453,6 +453,103 @@ void q8(hash_hoteis h_hoteis,char *argv, char *start_date, char *end_date, int f
 	
 }
 
+void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **argv, int argc, int f, FILE *fp_output) {
+    char data[100];
+    int yearToCount = -1;
+    int monthToCount = -1;
+
+	
+    // Verifica se o ano foi fornecido como argumento
+    if (argc > 1) {
+        if (isdigit(argv[1][0])) {
+            yearToCount = atoi(argv[1]);
+
+            // Verifica se o mês foi fornecido como argumento
+            if (argc > 2) {
+                if (isdigit(argv[2][0])) {
+                    monthToCount = atoi(argv[2]);
+                } else {
+                    // Se o segundo argumento não for um dígito, considera-o como parte do ano
+                    if (argc > 2 && isdigit(argv[2][0])) {
+                        yearToCount = atoi(argv[1]) * 100 + atoi(argv[2]);
+                    }
+                }
+            }
+        }
+    }
+
+    // Análise de anos
+	if (yearToCount == -1) {
+		int r = 0;
+		int somaTotal = 0;  // Nova variável para a soma total
+
+		for (int j = 2010; j < 2024; j++) {
+			int totalUsersAno = CountUsersByYear(h_users, j);
+			int totalVoosAno = SomaVoosPorAno(h_voos, j);
+			int totalPassageirosAno = SomaPassageirosPorAno(h_voos, j);
+			int total = SomaPassageirosPorAnoUnico(h_users, j);
+			int totalReservasAno = ContarReservasPorAno(h_reservas, j);
+			r++;
+
+
+			// Modificação na impressão para considerar o formato
+			if (f == 1 && (totalUsersAno + totalVoosAno + totalPassageirosAno + total + totalReservasAno) > 0) {
+				fprintf(fp_output, "--- %d ---\nyear: %d\nusers: %d\nflights: %d\npassengers: %d\nunique_passengers: %d\nreservations: %d\n\n", r, j, totalUsersAno, totalVoosAno, totalPassageirosAno, total, totalReservasAno);
+			} else if (totalUsersAno + totalVoosAno + totalPassageirosAno + total + totalReservasAno > 0) {
+				fprintf(fp_output, "%d;%d;%d;%d;%d;%d\n", j, totalUsersAno, totalVoosAno, totalPassageirosAno, total, totalReservasAno);
+			}
+		}
+	}
+
+    // Análise de meses
+	if (yearToCount != -1 && monthToCount == -1) {
+		int somaTotal = 0;  // Nova variável para a soma total
+
+		for (int i = 1; i <= 12; i++) {
+			int totalUsersNoMes = CountUsersByMonth(h_users, yearToCount, i);
+			int totalVoosNoMes = SomaVoosPorMes(h_voos, yearToCount, i);
+			int totalPassageirosMes = SomaPassageirosPorMes(h_voos, yearToCount, i);
+			int total1 = SomaPassageirosPorAnoMesUnico(h_users, yearToCount, i);
+			int totalReservasNoMes = ContarReservasPorMes(h_reservas, yearToCount, i);
+
+
+			if ( (totalUsersNoMes + totalVoosNoMes + totalPassageirosMes + total1 + totalReservasNoMes)>0) {
+				// Modificação na impressão para considerar o formato
+				if (f == 1) {
+					fprintf(fp_output, "--- %d ---\nmonth: %d\nusers: %d\nflights: %d\npassengers: %d\nunique_passengers: %d\nreservations: %d\n\n", i, i, totalUsersNoMes, totalVoosNoMes, totalPassageirosMes, total1, totalReservasNoMes);
+				} else {
+					fprintf(fp_output, "%d;%d;%d;%d;%d;%d\n", i, totalUsersNoMes, totalVoosNoMes, totalPassageirosMes, total1, totalReservasNoMes);
+				}
+			}
+		}
+	}
+
+
+    // Análise de dias
+	if (yearToCount != -1 && monthToCount != -1) {
+		int l = 0;
+		int somaTotal = 0;  // Nova variável para a soma total
+
+		for (int d = 1; d <= 31; d++) {
+			int totalUsersNaData = CountUsersByDate(h_users, yearToCount, monthToCount, d);
+			int totalVoosNaData = SomaVoosPorDia(h_voos, yearToCount, monthToCount, d);
+			int totalPassageirosDia = SomaPassageirosPorDia(h_voos, yearToCount, monthToCount, d);
+			int total2 = SomaPassageirosPorAnoMesDataUnica(h_users, yearToCount, monthToCount, d);
+			int totalReservasNaData = ContarReservasPorData(h_reservas, yearToCount, monthToCount, d);
+			l++;
+
+
+			// Modificação na impressão para considerar o formato
+			if (f == 1 && (totalUsersNaData + totalVoosNaData + totalPassageirosDia + total2 + totalReservasNaData) > 0) {
+				fprintf(fp_output, "--- %d ---\nday: %d\nusers: %d\nflights: %d\npassengers: %d\nunique_passengers: %d\nreservations: %d\n\n", l, d, totalUsersNaData, totalVoosNaData, totalPassageirosDia, total2, totalReservasNaData);
+			} else if ( (totalUsersNaData + totalVoosNaData + totalPassageirosDia + total2 + totalReservasNaData)> 0) {
+				fprintf(fp_output, "%d;%d;%d;%d;%d;%d\n", d, totalUsersNaData, totalVoosNaData, totalPassageirosDia, total2, totalReservasNaData);
+			}
+		}
+	}
+}
+
+
 /*
  * Função: comando
  * ---------------
@@ -472,8 +569,8 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 	char *args[MAX_ARGS];
 	split(linha, &argc, args);
 	int f = 0;
-	if(linha[1] == 'F') {
-		f = 1;
+	if (strstr(linha, "F") != NULL) {
+    f = 1;
 	}
 	if(strcmp(args[0], "1") == 0 || strcmp(args[0], "1F") == 0) {
 		q1(h_users, h_voos, h_reservas, args[1], f, fp_output);
@@ -502,7 +599,9 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 	else if(strcmp(args[0], "9") == 0 || strcmp(args[0], "9F") == 0) {
 		q9(h_users, args[1], f, fp_output);
 	}
-	
+	else if(strcmp(args[0], "10") == 0 || strcmp(args[0], "10F") == 0) {
+		q10(h_users, h_voos, h_reservas, args, argc,f, fp_output);
+	}
 	
 	return 1;
 }
@@ -515,20 +614,17 @@ int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_re
 	char query;
 
 	query = linha[0];
+	FILE *fp_output = fopen("comando_output.txt", "w");
+	if (fp_output == NULL) {
+    // Tratar erro de abertura de arquivo
+    return 1;
+}
+
+
 	if(linha[1] != ' ') return 1;
 
+	if(chdir("Resultados/") != 0);
 
-
-	if(chdir("Resultados/") != 0){
-		printf("Erro");
-	}
-	FILE *fp_output = fopen("comando_output.txt", "w");
-		if (fp_output == NULL) {
-    	// Tratar erro de abertura de arquivo
-    return 1;
-	}
-
-	
 	switch (query)
 	{
 	case '1':

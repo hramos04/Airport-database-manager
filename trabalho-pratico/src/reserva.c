@@ -291,3 +291,75 @@ void InsertTableReservas(hash_reservas h, KeyType k, Reserva *reserva) {
         h[i] = reserva;
     }
 }
+
+
+int ContarReservasPorAno(hash_reservas h, int ano) {
+    int totalReservas = 0;
+
+    for (int i = 0; i < HASHSIZERESERVA; ++i) {
+        Reserva *res = h[i];
+        while (res != NULL) {
+            // Extrair o ano da data de início da reserva
+            int anoReserva;
+            sscanf(res->begin_date, "%d", &anoReserva);
+
+            // Verificar se o ano coincide e incrementar o total
+            if (anoReserva == ano) {
+                totalReservas++;
+            }
+
+            res = res->next_reserva;
+        }
+    }
+
+    return totalReservas;
+}
+
+int ContarReservasPorMes(hash_reservas h, int ano, int mes) {
+    int totalReservasNoMes = 0;
+
+    for (int i = 0; i < HASHSIZERESERVA; ++i) {
+        Reserva *res = h[i];
+        while (res != NULL) {
+            // Extrair o ano e mês da data de início da reserva
+            int anoReserva, mesReserva;
+            sscanf(res->begin_date, "%d/%d", &anoReserva, &mesReserva);
+
+            // Verificar se o ano e mês coincidem
+            if (anoReserva == ano && mesReserva == mes) {
+                // Incrementar o total de reservas para o mês correspondente
+                totalReservasNoMes++;
+            }
+
+            res = res->next_reserva;
+        }
+    }
+
+    // Retornar o resultado
+    return totalReservasNoMes;
+}
+
+int ContarReservasPorData(hash_reservas h, int ano, int mes, int dia) {
+    int totalReservasNaData = 0;
+
+    for (int i = 0; i < HASHSIZERESERVA; ++i) {
+        Reserva *res = h[i];
+        while (res != NULL) {
+            // Extrair o ano, mês e dia da data de início da reserva
+            int anoReserva, mesReserva, diaReserva;
+            sscanf(res->begin_date, "%d/%d/%d", &anoReserva, &mesReserva, &diaReserva);
+
+            // Verificar se a data coincide
+            if (anoReserva == ano && mesReserva == mes && diaReserva == dia) {
+                // Incrementar o total de reservas para a data correspondente
+                totalReservasNaData++;
+            }
+
+            res = res->next_reserva;
+        }
+    }
+
+    // Retornar o resultado
+    return totalReservasNaData;
+}
+
