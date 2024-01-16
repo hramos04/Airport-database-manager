@@ -457,6 +457,7 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
     char data[100];
     int yearToCount = -1;
     int monthToCount = -1;
+	int le=0;
 
 	
     // Verifica se o ano foi fornecido como argumento
@@ -511,7 +512,7 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
 			int totalPassageirosMes = SomaPassageirosPorMes(h_voos, yearToCount, i);
 			int total1 = SomaPassageirosPorAnoMesUnico(h_users, yearToCount, i);
 			int totalReservasNoMes = ContarReservasPorMes(h_reservas, yearToCount, i);
-
+			
 
 			if ( (totalUsersNoMes + totalVoosNoMes + totalPassageirosMes + total1 + totalReservasNoMes)>0) {
 				// Modificação na impressão para considerar o formato
@@ -541,7 +542,8 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
 
 			// Modificação na impressão para considerar o formato
 			if (f == 1 && (totalUsersNaData + totalVoosNaData + totalPassageirosDia + total2 + totalReservasNaData) > 0) {
-				fprintf(fp_output, "--- %d ---\nday: %d\nusers: %d\nflights: %d\npassengers: %d\nunique_passengers: %d\nreservations: %d\n\n", l, d, totalUsersNaData, totalVoosNaData, totalPassageirosDia, total2, totalReservasNaData);
+				le++;
+				fprintf(fp_output, "--- %d ---\nday: %d\nusers: %d\nflights: %d\npassengers: %d\nunique_passengers: %d\nreservations: %d\n\n", le, d, totalUsersNaData, totalVoosNaData, totalPassageirosDia, total2, totalReservasNaData);
 			} else if ( (totalUsersNaData + totalVoosNaData + totalPassageirosDia + total2 + totalReservasNaData)> 0) {
 				fprintf(fp_output, "%d;%d;%d;%d;%d;%d\n", d, totalUsersNaData, totalVoosNaData, totalPassageirosDia, total2, totalReservasNaData);
 			}
