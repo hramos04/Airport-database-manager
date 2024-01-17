@@ -172,7 +172,6 @@ void move_pages(FILE *file, WINDOW* win, int n_linhas, int sum){
 }
 
 int programa_interativo (int highlight, WINDOW* win, int query){
-    int i;
     hash_user h_users; 
     hash_voos h_voos;
     hash_reservas h_reservas; 
@@ -204,7 +203,6 @@ int programa_interativo (int highlight, WINDOW* win, int query){
         move(10,0);
         printw(">> INSERIR A QUERY: "); 
         char* input_q = malloc(250);
-        int ch_q;
         int n_linhas=0;
         char buffer[250];
         echo();
@@ -251,7 +249,7 @@ int programa_interativo (int highlight, WINDOW* win, int query){
             else move_pages(ficheiro, win, n_linhas, 0);
 
             remove("comando_output.txt");
-            if(chdir("trabalho-pratico") != 0);
+            chdir("trabalho-pratico");
         }
 
     else{
@@ -269,7 +267,6 @@ int programa_interativo (int highlight, WINDOW* win, int query){
         mvwprintw(win, 2, 23, "          ");
         wrefresh(win);
         char* input = malloc(250);
-        int ch;
         echo();
         curs_set(1);
         getstr(input);
