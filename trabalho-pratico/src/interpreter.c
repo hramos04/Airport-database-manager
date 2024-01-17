@@ -517,7 +517,8 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
 			if ( (totalUsersNoMes + totalVoosNoMes + totalPassageirosMes + total1 + totalReservasNoMes)>0) {
 				// Modificação na impressão para considerar o formato
 				if (f == 1) {
-					fprintf(fp_output, "--- %d ---\nmonth: %d\nusers: %d\nflights: %d\npassengers: %d\nunique_passengers: %d\nreservations: %d\n\n", i, i, totalUsersNoMes, totalVoosNoMes, totalPassageirosMes, total1, totalReservasNoMes);
+					fprintf(fp_output, "--- %d ---\nmonth: %d\nusers: %d\nflights: %d\npassengers: %d\nunique_passengers: %d\nreservations: %d", i, i, totalUsersNoMes, totalVoosNoMes, totalPassageirosMes, total1, totalReservasNoMes);
+					if (i<9) {fprintf(fp_output, "\n\n");}
 				} else {
 					fprintf(fp_output, "%d;%d;%d;%d;%d;%d\n", i, totalUsersNoMes, totalVoosNoMes, totalPassageirosMes, total1, totalReservasNoMes);
 				}
