@@ -457,7 +457,6 @@ void q8(hash_hoteis h_hoteis,char *argv, char *start_date, char *end_date, int f
 }
 
 void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **argv, int argc, int f, FILE *fp_output) {
-    char data[100];
     int yearToCount = -1;
     int monthToCount = -1;
 	int le=0;
@@ -485,7 +484,6 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
     // Análise de anos
 	if (yearToCount == -1) {
 		int r = 0;
-		int somaTotal = 0;  // Nova variável para a soma total
 
 		for (int j = 2010; j < 2024; j++) {
 			int totalUsersAno = CountUsersByYear(h_users, j);
@@ -507,7 +505,6 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
 
     // Análise de meses
 	if (yearToCount != -1 && monthToCount == -1) {
-		int somaTotal = 0;  // Nova variável para a soma total
 
 		for (int i = 1; i <= 12; i++) {
 			int totalUsersNoMes = CountUsersByMonth(h_users, yearToCount, i);
@@ -532,7 +529,6 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
     // Análise de dias
 	if (yearToCount != -1 && monthToCount != -1) {
 		int l = 0;
-		int somaTotal = 0;  // Nova variável para a soma total
 
 		for (int d = 1; d <= 31; d++) {
 			int totalUsersNaData = CountUsersByDate(h_users, yearToCount, monthToCount, d);
@@ -674,10 +670,8 @@ int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_re
 		break;
 	}
 
-	if (chdir("trabalho-pratico") != 0);
+	chdir("trabalho-pratico"); /////alterei nesta linha Martim, ve se assim faz sentido 
 	fclose(fp_output);
 
 	return 0;
 }
-
-
