@@ -7,6 +7,9 @@
 #include "../include/reserva.h"
 #include "../include/voo.h"
 #include "../include/interpreter.h"
+#include "../include/aeroporto.h"
+#include "../include/hotel.h"
+
 
 
 //Definição das constantes
@@ -127,36 +130,36 @@ void remover_horas(char* datetime, char data[]) {
  * f: Indica se o formato de saída é detalhado (1) ou simples (0).
  * fp_output: Ponteiro para o ficheiro de saída.
  */
-void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, int f, FILE *fp_output) {
+void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, int f, FILE *fp_output) {	//Não é preciso f aqui
 	User *user = RetrieveUser(h_users, arg);
 	Voo *voo = RetrieveVoo(h_voos, arg);
 	Reserva *reserva = RetrieveReserva(h_reservas, arg);
 	if(user) {
-		if((strcasecmp(user->account_status, "active") == 0 )) {
+		if((strcasecmp(userGetAccountStatus(user), "active") == 0 )) {
 			if(f == 1) {
-				fprintf(fp_output, "--- 1 ---\nname: %s\nsex: %s\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",user->nome,user->sex, calculaIdade(user->birth), user->country,user->passport,user->total_voos, user->total_reservas, user->total_gasto);
+				fprintf(fp_output, "--- 1 ---\nname: %s\nsex: %s\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",userGetNome(user),userGetSex(user),calculaIdade(userGetBirth(user)),userGetCountry(user),userGetPassport(user),userGetTotalVoos(user),userGetTotalReservas(user),userGetTotalGasto(user));
 			}
 			else {
-				fprintf(fp_output, "%s;%s;%d;%s;%s;%d;%d;%.3f\n",user->nome,user->sex, calculaIdade(user->birth), user->country,user->passport,user->total_voos, user->total_reservas, user->total_gasto);
+				fprintf(fp_output, "%s;%s;%d;%s;%s;%d;%d;%.3f\n",userGetNome(user),userGetSex(user),calculaIdade(userGetBirth(user)),userGetCountry(user),userGetPassport(user),userGetTotalVoos(user),userGetTotalReservas(user),userGetTotalGasto(user));
 			}
 		}
 	}
 	else if(voo) {
 		if(f == 1) {
-			fprintf(fp_output,"--- 1 ---\nairline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %d\n",voo->airline, voo->plane_model,voo->origin,voo->destination, voo->schedule_departure_date, voo->schedule_arrival_date, voo->total_passengers, voo->delay);
+			fprintf(fp_output,"--- 1 ---\nairline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %d\n",vooGetAirline(voo), vooGetPlaneModel(voo),vooGetOrigin(voo), vooGetDestination(voo), vooGetScheduleDepartureDate(voo), vooGetScheduleArrivalDate(voo), vooGetTotalPassengers(voo), vooGetDelay(voo));
 		}
 		else {
-			fprintf(fp_output,"%s;%s;%s;%s;%s;%s;%d;%d\n",voo->airline, voo->plane_model,voo->origin,voo->destination, voo->schedule_departure_date, voo->schedule_arrival_date, voo->total_passengers, voo->delay);
+			fprintf(fp_output,"%s;%s;%s;%s;%s;%s;%d;%d\n",vooGetAirline(voo), vooGetPlaneModel(voo),vooGetOrigin(voo), vooGetDestination(voo), vooGetScheduleDepartureDate(voo), vooGetScheduleArrivalDate(voo), vooGetTotalPassengers(voo), vooGetDelay(voo));
 		}
 		
 	}
 	else if(reserva) {
-		reserva->includes_breakfast[0] = toupper(reserva->includes_breakfast[0]);
+		reservaGetIncludesBreakfast(reserva)[0] = toupper(reservaGetIncludesBreakfast(reserva)[0]);
 		if(f == 1) {
-			fprintf(fp_output, "--- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",reserva->hotel_id, reserva->hotel_name, reserva->hotel_stars, reserva->begin_date, reserva->end_date, reserva->includes_breakfast, reserva->total_noites, reserva->total_gasto);
+			fprintf(fp_output, "--- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",reservaGetHotelId(reserva), reservaGetHotelName(reserva), reservaGetHotelStars(reserva), reservaGetBeginDate(reserva), reservaGetEndDate(reserva), reservaGetIncludesBreakfast(reserva), reservaGetTotalNoites(reserva), reservaGetTotalGasto(reserva));
 		}
 		else {
-			fprintf(fp_output, "%s;%s;%s;%s;%s;%s;%d;%.3f\n",reserva->hotel_id, reserva->hotel_name, reserva->hotel_stars, reserva->begin_date, reserva->end_date, reserva->includes_breakfast, reserva->total_noites, reserva->total_gasto);
+			fprintf(fp_output, "%s;%s;%s;%s;%s;%s;%d;%.3f\n",reservaGetHotelId(reserva), reservaGetHotelName(reserva), reservaGetHotelStars(reserva), reservaGetBeginDate(reserva), reservaGetEndDate(reserva), reservaGetIncludesBreakfast(reserva), reservaGetTotalNoites(reserva), reservaGetTotalGasto(reserva));
 		}
 		
 	}
@@ -177,80 +180,80 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
 	char data[100];
 	User *user = RetrieveUser(h_users, argv[1]);
 	int i = 1;
-	if(user && (strcasecmp(user->account_status, "active") == 0 )) {
-		Q2 *q2 = user->q2;
+	if(user && (strcasecmp(userGetAccountStatus(user), "active") == 0 )) {
+		Q2 *q2 = userGetQ2(user);
 		while(q2) {
-			remover_horas(q2->data, data);
+			remover_horas(getData(q2), data);
 			if(argc == 3) {
 				if(strcmp(argv[2], "reservations") == 0) {
-					if(q2->tipo == 1) {
+					if(getTipo(q2) == 1) {
 						if(f == 1) {
 							if(i == 1) {
-								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
+								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
 							}
 							else {
-								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
+								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
 							}
 						}
 						else {
-							fprintf(fp_output, "%s;%s\n",q2->id,data);
+							fprintf(fp_output, "%s;%s\n",getId(q2),data);
 						}
 						i++;
 						
 					}
 				}
 				else if(strcmp(argv[2], "flights") == 0) {
-					if(q2->tipo == 2) {
+					if(getTipo(q2) == 2) {
 						if(f == 1) {
 							if(i == 1) {
-								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
+								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
 							}
 							else {
-								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,q2->id,data);
+								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
 							}
 							
 						}
 						else {
-							fprintf(fp_output,"%s;%s\n",q2->id,data);
+							fprintf(fp_output,"%s;%s\n",getId(q2),data);
 						}
 						i++;
 					}
 				}
 			}
 			else {
-				if(q2->tipo == 1) {
+				if(getTipo(q2) == 1) {
 					if(f == 1) {
 						if(i == 1) {
-							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, q2->id,data);
+							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, getId(q2),data);
 						}
 						else {
-							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, q2->id,data);
+							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, getId(q2),data);
 						}
 						
 					}
 					else {
-						fprintf(fp_output,"%s;%s;reservation\n",q2->id,data);
+						fprintf(fp_output,"%s;%s;reservation\n",getId(q2),data);
 					}
 					
 				}
 				else {
 					if(f == 1) {
 						if(i == 1) {
-							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i, q2->id,data);
+							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i,getId(q2),data);
 						}
 						else {
-							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i, q2->id,data);
+							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i,getId(q2),data);
 						}
 						
 					}
 					else {
-						fprintf(fp_output,"%s;%s;flight\n",q2->id,data);
+						fprintf(fp_output,"%s;%s;flight\n",getId(q2),data);
 					}
 				}
 				i++;
 			}
 			
-			q2 = q2->next;
+			q2 = getNext(q2);
 		}
 	}
 }
@@ -293,21 +296,21 @@ void q4(hash_hoteis h_hoteis, char *argv, int f, FILE *fp_output) {
 	int i = 1;
 	Hotel *aux = RetrieveHotel(h_hoteis, argv);
 	if(aux) {
-		ReservaResumo *reserva = aux->next_resumo;
+		ReservaResumo *reserva = hotelGetNextResumo(aux);
 		while(reserva)  {
 			if(f == 1) {
 				if(i == 1) {
-					fprintf(fp_output, "--- %d ---\nid: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.0f\ntotal_price: %.3f\n",i, reserva->id, reserva->begin_date, reserva->end_date,reserva->user_id, reserva->rating, reserva->total_price);
-				}
+					fprintf(fp_output, "--- %d ---\nid: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.0f\ntotal_price: %.3f\n",i, reservaResumoGetId(reserva), reservaResumoGetBeginDate(reserva), reservaResumoGetEndDate(reserva),reservaResumoGetUserId(reserva), reservaResumoGetRating(reserva), reservaResumoGetTotalPrice(reserva));
+				} 
 				else {
-					fprintf(fp_output, "\n--- %d ---\nid: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.0f\ntotal_price: %.3f\n",i, reserva->id, reserva->begin_date, reserva->end_date,reserva->user_id, reserva->rating, reserva->total_price);
+					fprintf(fp_output, "\n--- %d ---\nid: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.0f\ntotal_price: %.3f\n",i, reservaResumoGetId(reserva), reservaResumoGetBeginDate(reserva), reservaResumoGetEndDate(reserva),reservaResumoGetUserId(reserva), reservaResumoGetRating(reserva), reservaResumoGetTotalPrice(reserva));
 				}
 			}
 			else {
-				fprintf(fp_output, "%s;%s;%s;%s;%.0f;%.3f\n",reserva->id, reserva->begin_date, reserva->end_date,reserva->user_id, reserva->rating, reserva->total_price);
+				fprintf(fp_output, "%s;%s;%s;%s;%.0f;%.3f\n",reservaResumoGetId(reserva), reservaResumoGetBeginDate(reserva), reservaResumoGetEndDate(reserva),reservaResumoGetUserId(reserva), reservaResumoGetRating(reserva), reservaResumoGetTotalPrice(reserva));
 			}
 			i++;
-			reserva = reserva->next_resumo;
+			reserva = reservaResumoGetNext(reserva);
 		}
 	}
 	
@@ -331,17 +334,17 @@ void q9(hash_user h_users, char *argv, int f, FILE *fp_output) {
 		while(aux) {
 			if(f == 1) {
 				if(i == 1) {
-					fprintf(fp_output, "--- %d ---\nid: %s\nname: %s\n",i, aux->id, aux->nome);
+					fprintf(fp_output, "--- %d ---\nid: %s\nname: %s\n",i, userGetId(aux), userGetNome(aux));
 				}
 				else {
-					fprintf(fp_output, "\n--- %d ---\nid: %s\nname: %s\n",i, aux->id, aux->nome);
+					fprintf(fp_output, "\n--- %d ---\nid: %s\nname: %s\n",i, userGetId(aux), userGetNome(aux));
 				}
 				i++;
 			}
 			else {
-				fprintf(fp_output, "%s;%s\n",aux->id, aux->nome);
+				fprintf(fp_output, "%s;%s\n",userGetId(aux), userGetNome(aux));
 			}
-			aux = aux->next;
+			aux = userGetNext(aux);
 		}
 	}
 	
@@ -367,19 +370,19 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
 		while(aux) {
 			if(f == 1) {
 				if(i == 1) {
-					fprintf(fp_output, "--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, aux->id, aux->schedule_departure_date,aux->destination, aux->airline, aux->plane_model);
+					fprintf(fp_output, "--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, vooResumoGetId(aux), vooResumoGetScheduleDepartureDate(aux),vooResumoGetDestination(aux), vooResumoGetAirline(aux), vooResumoGetPlaneModel(aux));
 				}
 				else {
-					fprintf(fp_output, "\n--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, aux->id, aux->schedule_departure_date,aux->destination, aux->airline, aux->plane_model);
+					fprintf(fp_output, "\n--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, vooResumoGetId(aux), vooResumoGetScheduleDepartureDate(aux),vooResumoGetDestination(aux), vooResumoGetAirline(aux), vooResumoGetPlaneModel(aux));
 				}
 				i++;
 			}
 			else {
-				fprintf(fp_output, "%s;%s;%s;%s;%s\n",aux->id, aux->schedule_departure_date,aux->destination, aux->airline, aux->plane_model);
+				fprintf(fp_output, "%s;%s;%s;%s;%s\n",vooResumoGetId(aux), vooResumoGetScheduleDepartureDate(aux),vooResumoGetDestination(aux), vooResumoGetAirline(aux), vooResumoGetPlaneModel(aux));
 			}
 			
 			//fprintf(fp_output, "%s;%s;%s;%s;%.0f;%.3f\n",reserva->id, reserva->begin_date, reserva->end_date,reserva->user_id, reserva->rating, reserva->total_price);
-			aux = aux->next_resumo;
+			aux = vooResumoGetNext(aux);
 		}
 	}
 }
@@ -399,15 +402,15 @@ void q6(hash_voos h_voos, char *ano_str, char *N_str, int f, FILE *fp_output) {
     while (current != NULL) {
         if (f == 1) {
             if (i == 1) {
-                fprintf(fp_output, "--- %d ---\nname: %s\npassengers: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
+                fprintf(fp_output, "--- %d ---\nname: %s\npassengers: %d\n", i, somaGetNomeAeroporto(current), somaGetTotalPassageiros(current));
             } else {
-                fprintf(fp_output, "\n--- %d ---\nname: %s\npassengers: %d\n", i, current->nomeAeroporto, current->totalPassageiros);
+                fprintf(fp_output, "\n--- %d ---\nname: %s\npassengers: %d\n", i, somaGetNomeAeroporto(current), somaGetTotalPassageiros(current));
             }
             i++;
         } else {
-            fprintf(fp_output, "%s;%d\n", current->nomeAeroporto, current->totalPassageiros);
+            fprintf(fp_output, "%s;%d\n", somaGetNomeAeroporto(current), somaGetTotalPassageiros(current));
         }
-        current = current->next;
+        current = somaGetNext(current);
     }
 }
 
@@ -419,18 +422,18 @@ void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output) {
 	while(aux && i++ < N) {
 		if(f == 1) {
 			if(i == 1) {
-				fprintf(fp_output,"--- %d ---\nname: %s\nmedian: %d\n",i,aux->name,aux->mediana);
+				fprintf(fp_output,"--- %d ---\nname: %s\nmedian: %d\n",i,medianaGetNome(aux),medianaGetMediana(aux));
 			}
 			else {
-				fprintf(fp_output,"\n--- %d ---\nname: %s\nmedian: %d\n",i,aux->name,aux->mediana);
+				fprintf(fp_output,"\n--- %d ---\nname: %s\nmedian: %d\n",i,medianaGetNome(aux),medianaGetMediana(aux));
 			}
 			
 		}
 		else {
-			fprintf(fp_output,"%s;%d\n",aux->name,aux->mediana);
+			fprintf(fp_output,"%s;%d\n",medianaGetNome(aux),medianaGetMediana(aux));
 		}
 		
-		aux = aux->next;
+		aux = medianaGetNext(aux);
 	}
 	
 }
@@ -571,8 +574,8 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 	char *args[MAX_ARGS];
 	split(linha, &argc, args);
 	int f = 0;
-	if (strstr(linha, "F") != NULL) {
-    f = 1;
+	if(linha[1] == 'F') {
+		f = 1;
 	}
 	if(strcmp(args[0], "1") == 0 || strcmp(args[0], "1F") == 0) {
 		q1(h_users, h_voos, h_reservas, args[1], f, fp_output);
@@ -605,6 +608,8 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 		q10(h_users, h_voos, h_reservas, args, argc,f, fp_output);
 	}
 	
+	
+	
 	return 1;
 }
 
@@ -614,20 +619,22 @@ int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_re
 	split(linha, &argc, args);
 	int f = 0;
 	char query;
-	query = linha[0];
 
+	query = linha[0];
 	if(linha[1] != ' ') return 1;
 
+
+
 	if(chdir("Resultados/") != 0){
-		printf("Error");
+		printf("Erro");
+	}
+	FILE *fp_output = fopen("comando_output.txt", "w");
+		if (fp_output == NULL) {
+    	// Tratar erro de abertura de arquivo
+    return 1;
 	}
 
-	FILE *fp_output = fopen("comando_output.txt", "w");
-	if (fp_output == NULL) {
-    // Tratar erro de abertura de arquivo
-    return 1;
-}
-
+	
 	switch (query)
 	{
 	case '1':
@@ -658,16 +665,8 @@ int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_re
 		q7(h_aeroportos, atoi(args[1]), f, fp_output);
 		break;
 	
-	case '8':
-		q8(h_hoteis, args[1], args[2],args[3], f, fp_output);
-		break;
-	
 	case '9':
 		q9(h_users, args[1], f, fp_output);
-		break;
-
-	case '10':
-		q10(h_users, h_voos, h_reservas, args, argc,f, fp_output);
 		break;
 	
 	default:

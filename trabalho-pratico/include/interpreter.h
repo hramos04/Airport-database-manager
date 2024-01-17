@@ -10,6 +10,8 @@
 #include "voo.h"
 #include "reserva.h"
 #include <stdio.h>
+#include "aeroporto.h"
+#include "hotel.h"
 
 /*Função principal usada para executar as queries/comandos*/
 int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis,hash_aeroportos h_aeroportos, FILE *fp_output);
@@ -55,6 +57,11 @@ void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output);
 
 /*Implementação da Query 5*/
 void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_date, int f, FILE *fp_output);
+
+void q8(hash_hoteis h_hoteis,char *argv, char *start_date, char *end_date, int f, FILE *fp_output);
+
+void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **argv, int argc, int f, FILE *fp_output);
+
 
 /*Função principal para ser usada no modo interativo*/
 int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, hash_aeroportos h_aeroportos);

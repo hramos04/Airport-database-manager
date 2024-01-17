@@ -3,6 +3,138 @@
 #include <string.h>
 #include <ctype.h>
 #include "../include/user.h"
+#include "../include/q2.h"
+
+struct User {
+    char *id;
+    char *nome;
+    char *email;
+    char *phone;
+    char *birth;
+    char *sex;
+    char *passport;
+    char *country;
+    char *address;
+    char *account_creation;
+    char *pay_method;
+    char *account_status;
+    int total_reservas;
+    int total_voos;
+    double total_gasto;
+    struct User *next;
+    struct Q2 *q2;
+};
+
+
+User *create_user(char *id, char *nome, char *email, char *phone, char *birth, char *sex, char *passport, char *country, char *address, char *account_creation, char *pay_method,char *account_status) {
+    User *user = malloc(sizeof(struct User));
+
+    user->id = strdup(id);
+	user->nome = strdup(nome);
+	user->email = strdup(email);
+	user->phone = strdup(phone);
+	user->birth = strdup(birth);
+	user->sex = strdup(sex);
+	user->passport = strdup(passport);
+	user->country = strdup(country);
+	user->address = strdup(address);
+	user->account_creation = strdup(account_creation);
+	user->pay_method = strdup(pay_method);
+	user->account_status = strdup(account_status);
+
+	user->total_reservas = 0;
+	user->total_voos = 0;
+	user->total_gasto = 0.0;
+	user->next = NULL;
+	user->q2 = NULL;
+
+    return user;
+}
+
+char* userGetId(User *user){
+	return strdup(user->id);
+}
+
+char* userGetNome(User *user){
+	return strdup(user->nome);
+}
+
+char* userGetEmail(User *user){
+	return strdup(user->email);
+}
+
+char* userGetPhone(User *user){
+	return strdup(user->phone);
+}
+
+char* userGetBirth(User *user){
+	return strdup(user->birth);
+}
+
+char* userGetSex(User *user){
+	return strdup(user->sex);
+}
+
+char* userGetPassport(User *user){
+	return strdup(user->passport);
+}
+
+char* userGetCountry(User *user){
+	return strdup(user->country);
+}
+
+char* userGetAddress(User *user){
+	return strdup(user->address);
+}
+
+char* userGetAccountCreation(User *user){
+	return strdup(user->account_creation);
+}
+
+char* userGetPayMethod(User *user){
+	return strdup(user->pay_method);
+}
+
+char* userGetAccountStatus(User *user){
+	return strdup(user->account_status);
+}
+
+int userGetTotalReservas(User *user){
+	return user->total_reservas;
+}
+
+int userGetTotalVoos(User *user){
+	return user->total_voos;
+}
+
+double userGetTotalGasto(User *user){
+	return user->total_gasto;
+}
+
+User* userGetNext(User *user){
+	return user->next;
+}
+
+void userSetNext(User *user, User *next){
+	user->next = next;
+}
+
+Q2* userGetQ2(User *user){
+	return user->q2;
+}
+
+void userSetQ2(User *user, Q2 *q2){
+	user->q2 = q2;
+}
+
+
+
+
+
+
+
+
+
 
 
 /* Função de hash que converte uma chave num índice na tabela hash. */
@@ -53,19 +185,6 @@ void destroiTableUser(hash_user h) {
 		}
 		free(h[i]);
 	}
-}
-
-
-void destroiQ2(Q2 *q2){
-
-	while(q2!=NULL){
-		Q2 *atual = q2;
-		q2 = q2->next;
-		free(atual->id);
-		free(atual->data);
-		free(atual);
-	}
-	free(q2);
 }
 
 
@@ -181,21 +300,21 @@ void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
 	
 	if(aux) {
 		aux->total_reservas++;
-		aux->total_gasto += q2->total_gasto;
+		aux->total_gasto += getTotalGasto(q2);
 		Q2 *currentQ2 = aux->q2;
 		Q2 *prevQ2 = NULL;
 		
-		while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) >= 0) {
+		while (currentQ2 != NULL && strcmp(getData(currentQ2), getData(q2)) >= 0) {
 			prevQ2 = currentQ2;
-			currentQ2 = currentQ2->next;
+			currentQ2 = getNext(currentQ2);
 		}
 
 		if (prevQ2 == NULL) {
-			q2->next = aux->q2;
+			setNext(q2,aux->q2);
 			aux->q2 = q2;
 		} else {
-			prevQ2->next = q2;
-			q2->next = currentQ2;
+			setNext(prevQ2,q2);
+			setNext(q2,currentQ2);
 		}
 	}
 }
@@ -220,23 +339,20 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
 		Q2 *currentQ2 = aux->q2;
 		Q2 *prevQ2 = NULL;
 		
-		while (currentQ2 != NULL && strcmp(currentQ2->data, q2->data) >= 0) {
+		while (currentQ2 != NULL && strcmp(getData(currentQ2), getData(q2)) >= 0) {
 			prevQ2 = currentQ2;
-			currentQ2 = currentQ2->next;
+			currentQ2 = getNext(currentQ2);
 		}
 
 		if (prevQ2 == NULL) {
-			q2->next = aux->q2;
+			setNext(q2,aux->q2);
 			aux->q2 = q2;
 		} else {
-			prevQ2->next = q2;
-			q2->next = currentQ2;
+			setNext(prevQ2,q2);
+			setNext(q2,currentQ2);
 		}
-	
 	}
 }
-
-
 
 
 //////////////////////////usar esta função quando só aparece a pedir o ano 
@@ -328,9 +444,9 @@ int SomaPassageirosPorAnoUnico(hash_user h, int ano) {
 
             while (q2 != NULL) {
                 // Verificar se é um voo (tipo 2) e se é do ano desejado
-                if (q2->tipo == 2) {
+                if (getTipo(q2) == 2) {
                     int anoVoo;
-                    sscanf(q2->data, "%d", &anoVoo);
+                    sscanf(getData(q2), "%d", &anoVoo);
 
                     if (anoVoo == ano) {
                         viagensNoAno += 1;
@@ -343,7 +459,7 @@ int SomaPassageirosPorAnoUnico(hash_user h, int ano) {
                     }
                 }
 
-                q2 = q2->next;
+                q2 = getNext(q2);
             }
 
             currentUser = currentUser->next;
@@ -368,9 +484,9 @@ int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes) {
 
             while (q2 != NULL) {
                 // Verificar se é um voo (tipo 2) e se é do ano e mês desejados
-                if (q2->tipo == 2) {
+                if (getTipo(q2) == 2) {
                     int anoVoo, mesVoo;
-                    sscanf(q2->data, "%d/%d", &anoVoo, &mesVoo);
+                    sscanf(getData(q2), "%d/%d", &anoVoo, &mesVoo);
 
                     if (anoVoo == ano && mesVoo == mes) {
                         viagensNoAnoMes += 1;
@@ -383,7 +499,7 @@ int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes) {
                     }
                 }
 
-                q2 = q2->next;
+                q2 = getNext(q2);
             }
 
             currentUser = currentUser->next;
@@ -408,9 +524,9 @@ int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
 
             while (q2 != NULL) {
                 // Verificar se é um voo (tipo 2) e se é da data desejada
-                if (q2->tipo == 2) {
+                if (getTipo(q2) == 2) {
                     int anoVoo, mesVoo, diaVoo;
-                    sscanf(q2->data, "%d/%d/%d", &anoVoo, &mesVoo, &diaVoo);
+                    sscanf(getData(q2), "%d/%d/%d", &anoVoo, &mesVoo, &diaVoo);
 
                     if (anoVoo == ano && mesVoo == mes && diaVoo == dia) {
                         viagensNaData += 1;
@@ -423,7 +539,7 @@ int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
                     }
                 }
 
-                q2 = q2->next;
+                q2 = getNext(q2);
             }
 
             currentUser = currentUser->next;
@@ -446,13 +562,13 @@ void ImprimirTodosVoos(hash_user h) {
             Q2 *q2 = currentUser->q2;
 
             while (q2 != NULL) {
-                if (q2->tipo == 1) {
-                    printf("   - ID do Voo: %s\n", q2->id);
-                    printf("     Data: %s\n", q2->data);
-                    printf("     Total Gasto: %.2f\n", q2->total_gasto);
+                if (getTipo(q2) == 1) {
+                    printf("   - ID do Voo: %s\n", getId(q2));
+                    printf("     Data: %s\n", getData(q2));
+                    printf("     Total Gasto: %.2f\n", getTotalGasto(q2));
                 }
 
-                q2 = q2->next;
+                q2 = getNext(q2);
             }
 
             currentUser = currentUser->next;
@@ -460,20 +576,3 @@ void ImprimirTodosVoos(hash_user h) {
     }
 }
 
-
-
-/*
-int userNumber(hash_user h, char *argv){
-
-	int totalUsers = 0;
-
-	for(int i = 0; i<HASHSIZEUSER; i++){
-		if(h[i]!=NULL){
-			User* u = h[i];
-			if(argv[1]==NULL){
-				totalUsers ++;
-			}
-			
-		}
-	}
-}*/
