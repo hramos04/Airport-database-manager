@@ -130,40 +130,57 @@ void remover_horas(char* datetime, char data[]) {
  * f: Indica se o formato de saída é detalhado (1) ou simples (0).
  * fp_output: Ponteiro para o ficheiro de saída.
  */
-void q1(hash_user h_users,hash_voos h_voos,hash_reservas h_reservas, char *arg, int f, FILE *fp_output) {	//Não é preciso f aqui
-	User *user = RetrieveUser(h_users, arg);
-	Voo *voo = RetrieveVoo(h_voos, arg);
-	Reserva *reserva = RetrieveReserva(h_reservas, arg);
-	if(user) {
-		if((strcasecmp(userGetAccountStatus(user), "active") == 0 )) {
-			if(f == 1) {
-				fprintf(fp_output, "--- 1 ---\nname: %s\nsex: %s\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",userGetNome(user),userGetSex(user),calculaIdade(userGetBirth(user)),userGetCountry(user),userGetPassport(user),userGetTotalVoos(user),userGetTotalReservas(user),userGetTotalGasto(user));
-			}
-			else {
-				fprintf(fp_output, "%s;%s;%d;%s;%s;%d;%d;%.3f\n",userGetNome(user),userGetSex(user),calculaIdade(userGetBirth(user)),userGetCountry(user),userGetPassport(user),userGetTotalVoos(user),userGetTotalReservas(user),userGetTotalGasto(user));
-			}
-		}
-	}
-	else if(voo) {
-		if(f == 1) {
-			fprintf(fp_output,"--- 1 ---\nairline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %d\n",vooGetAirline(voo), vooGetPlaneModel(voo),vooGetOrigin(voo), vooGetDestination(voo), vooGetScheduleDepartureDate(voo), vooGetScheduleArrivalDate(voo), vooGetTotalPassengers(voo), vooGetDelay(voo));
-		}
-		else {
-			fprintf(fp_output,"%s;%s;%s;%s;%s;%s;%d;%d\n",vooGetAirline(voo), vooGetPlaneModel(voo),vooGetOrigin(voo), vooGetDestination(voo), vooGetScheduleDepartureDate(voo), vooGetScheduleArrivalDate(voo), vooGetTotalPassengers(voo), vooGetDelay(voo));
-		}
-		
-	}
-	else if(reserva) {
-		reservaGetIncludesBreakfast(reserva)[0] = toupper(reservaGetIncludesBreakfast(reserva)[0]);
-		if(f == 1) {
-			fprintf(fp_output, "--- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",reservaGetHotelId(reserva), reservaGetHotelName(reserva), reservaGetHotelStars(reserva), reservaGetBeginDate(reserva), reservaGetEndDate(reserva), reservaGetIncludesBreakfast(reserva), reservaGetTotalNoites(reserva), reservaGetTotalGasto(reserva));
-		}
-		else {
-			fprintf(fp_output, "%s;%s;%s;%s;%s;%s;%d;%.3f\n",reservaGetHotelId(reserva), reservaGetHotelName(reserva), reservaGetHotelStars(reserva), reservaGetBeginDate(reserva), reservaGetEndDate(reserva), reservaGetIncludesBreakfast(reserva), reservaGetTotalNoites(reserva), reservaGetTotalGasto(reserva));
-		}
-		
-	}
+void q1(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char *arg, int f, FILE *fp_output) {
+    User *user = RetrieveUser(h_users, arg);
+    Voo *voo = RetrieveVoo(h_voos, arg);
+    Reserva *reserva = RetrieveReserva(h_reservas, arg);
+
+    if (user) {
+        char *accountStatusValue = userGetAccountStatus(user);
+
+        if ((strcasecmp(accountStatusValue, "active") == 0)) {
+            char *sexValue = userGetSex(user);
+            char *nomeValue = userGetNome(user);
+            char *birthValue = userGetBirth(user);
+            char *passportValue = userGetPassport(user);
+            char *countryValue = userGetCountry(user);
+
+            if (f == 1) {
+                fprintf(fp_output, "--- 1 ---\nname: %s\nsex: %s\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",
+                        nomeValue, sexValue, calculaIdade(birthValue), countryValue, passportValue, userGetTotalVoos(user), userGetTotalReservas(user), userGetTotalGasto(user));
+            } else {
+                fprintf(fp_output, "%s;%s;%d;%s;%s;%d;%d;%.3f\n",
+                        nomeValue, sexValue, calculaIdade(birthValue), countryValue, passportValue, userGetTotalVoos(user), userGetTotalReservas(user), userGetTotalGasto(user));
+            }
+
+            free(accountStatusValue); // Liberar a memória alocada por userGetAccountStatus
+            free(sexValue);           // Liberar a memória alocada por userGetSex
+            free(nomeValue);          // Liberar a memória alocada por userGetNome
+            free(birthValue);         // Liberar a memória alocada por userGetBirth
+            free(passportValue);      // Liberar a memória alocada por userGetPassport
+            free(countryValue);       // Liberar a memória alocada por userGetCountry
+        }
+    } else if (voo) {
+        if (f == 1) {
+            fprintf(fp_output, "--- 1 ---\nairline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %d\n",
+                    vooGetAirline(voo), vooGetPlaneModel(voo), vooGetOrigin(voo), vooGetDestination(voo), vooGetScheduleDepartureDate(voo), vooGetScheduleArrivalDate(voo), vooGetTotalPassengers(voo), vooGetDelay(voo));
+        } else {
+            fprintf(fp_output, "%s;%s;%s;%s;%s;%s;%d;%d\n",
+                    vooGetAirline(voo), vooGetPlaneModel(voo), vooGetOrigin(voo), vooGetDestination(voo), vooGetScheduleDepartureDate(voo), vooGetScheduleArrivalDate(voo), vooGetTotalPassengers(voo), vooGetDelay(voo));
+        }
+    } else if (reserva) {
+        reservaGetIncludesBreakfast(reserva)[0] = toupper(reservaGetIncludesBreakfast(reserva)[0]);
+        if (f == 1) {
+            fprintf(fp_output, "--- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",
+                    reservaGetHotelId(reserva), reservaGetHotelName(reserva), reservaGetHotelStars(reserva), reservaGetBeginDate(reserva), reservaGetEndDate(reserva), reservaGetIncludesBreakfast(reserva), reservaGetTotalNoites(reserva), reservaGetTotalGasto(reserva));
+        } else {
+            fprintf(fp_output, "%s;%s;%s;%s;%s;%s;%d;%.3f\n",
+                    reservaGetHotelId(reserva), reservaGetHotelName(reserva), reservaGetHotelStars(reserva), reservaGetBeginDate(reserva), reservaGetEndDate(reserva), reservaGetIncludesBreakfast(reserva), reservaGetTotalNoites(reserva), reservaGetTotalGasto(reserva));
+        }
+    }
 }
+
+
 
 /*
  * Função: q2
@@ -328,27 +345,32 @@ void q4(hash_hoteis h_hoteis, char *argv, int f, FILE *fp_output) {
  * fp_output: Ponteiro para o ficheiro de saída.
  */
 void q9(hash_user h_users, char *argv, int f, FILE *fp_output) {
-	User *aux = GetUserPrefix(h_users, argv);
-	int i = 1;
-	if(aux) {
-		while(aux) {
-			if(f == 1) {
-				if(i == 1) {
-					fprintf(fp_output, "--- %d ---\nid: %s\nname: %s\n",i, userGetId(aux), userGetNome(aux));
-				}
-				else {
-					fprintf(fp_output, "\n--- %d ---\nid: %s\nname: %s\n",i, userGetId(aux), userGetNome(aux));
-				}
-				i++;
-			}
-			else {
-				fprintf(fp_output, "%s;%s\n",userGetId(aux), userGetNome(aux));
-			}
-			aux = userGetNext(aux);
-		}
-	}
-	
+    User *aux = GetUserPrefix(h_users, argv);
+    int i = 1;
+    
+    if (aux) {
+        while (aux) {
+            char *userId = userGetId(aux);
+            char *nomeValue = userGetNome(aux);
+
+            if (f == 1) {
+                if (i == 1) {
+                    fprintf(fp_output, "--- %d ---\nid: %s\nname: %s\n", i, userId, nomeValue);
+                } else {
+                    fprintf(fp_output, "\n--- %d ---\nid: %s\nname: %s\n", i, userId, nomeValue);
+                }
+                i++;
+            } else {
+                fprintf(fp_output, "%s;%s\n", userId, nomeValue);
+            }
+
+            free(userId);  // Liberar a memória alocada por userGetId
+            free(nomeValue); // Liberar a memória alocada por userGetNome
+            aux = userGetNext(aux);
+        }
+    }
 }
+
 
 
 /*
