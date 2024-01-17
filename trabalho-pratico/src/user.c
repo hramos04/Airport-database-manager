@@ -130,11 +130,11 @@ void addUserToList(User **list, User *newUser) {
     *list = newUser;
 }
 
-
 /* Função auxiliar que percorre a tabela hash, procurando Users que apresentem o parametro 
 "active" e cujos nomes começam com um determinado prefixo, retornando uma lista ordenada 
 desses Users, com a ajuda das função addUserToList e a função copyUser. */
 User *GetUserPrefix(hash_user h, KeyType k) {
+	
 	User *res = NULL;
     for (int i = 0; i < HASHSIZEUSER; i++) {
         User *currentUser = h[i];

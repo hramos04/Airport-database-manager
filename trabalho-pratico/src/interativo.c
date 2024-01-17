@@ -268,7 +268,7 @@ int programa_interativo (int highlight, WINDOW* win, int query){
         move(10,0);
         clrtoeol();
         refresh();
-    }
+        }
     }
 
     if(highlight == 0){
