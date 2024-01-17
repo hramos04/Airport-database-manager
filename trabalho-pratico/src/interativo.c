@@ -42,7 +42,15 @@ int main_interativo(char* file, hash_user h_users,hash_aeroportos h_aeroportos,h
     int reservas = process_reservas_csv(h_users, h_hoteis, h_reservas, csv_reservas);
     int voos = process_voos_csv(h_users, h_aeroportos, h_voos, csv_voos);
     int passageiros = process_passengers_csv(h_users, h_voos, h_aeroportos, csv_passengers);
-    if(users || reservas || voos || passageiros) return 1;
+    if(users == 1 || reservas == 1 || voos == 1 || passageiros == 1){ 
+        printw("ERRO NO CAMINHO DO FICHEIRO");
+        refresh();
+        napms(1000);
+        move(10,0);
+        clrtoeol();
+        refresh();
+        return 1;
+    }
 
 
 
@@ -108,7 +116,7 @@ void move_pages(FILE *file, WINDOW* win, int n_linhas, int sum){
             clrtoeol();
             printw("(<-) ANTERIOR [%d/%d] SEGUINTE (->)", pag, n_linhas/15+sum);
             move(28,7);
-            printw("(P) PRIMEIRA | ÚLTIMA (U)");
+            printw("(P) PRIMEIRA | ULTIMA (U)");
             refresh();
         }
 
@@ -140,7 +148,7 @@ void move_pages(FILE *file, WINDOW* win, int n_linhas, int sum){
             else pag--;
             break;
         
-        case 'f':
+        case 'p':
             if(n_linhas>15){
                 start = 0;
                 end = 15;
@@ -148,7 +156,7 @@ void move_pages(FILE *file, WINDOW* win, int n_linhas, int sum){
             }
             break;
 
-        case 'l':
+        case 'u':
             if(n_linhas>15){
                 while(end<n_linhas){
                     start += 15;
@@ -191,7 +199,7 @@ int programa_interativo (int highlight, WINDOW* win, int query){
     if (highlight == 1){
 
         if (query == 0){
-            printw("TEM DE SER INSERIDOS OS DADOS PRIMEIRO");
+            printw("INSERIR CAMINHO DOS CSV PRIMEIRO!");
             refresh();
             napms(1000);
             move(10,0);
@@ -203,11 +211,15 @@ int programa_interativo (int highlight, WINDOW* win, int query){
         move(10,0);
         printw(">> INSERIR A QUERY: "); 
         char* input_q = malloc(250);
+        int ch_q;
+        int i;
         int n_linhas=0;
         char buffer[250];
         echo();
         curs_set(1);
-        getstr(input_q);
+        for (i = 0; i < 250 - 1 && (ch_q = getch()) != '\n'; i++) // It stores the written information on an array (input_q)
+        input_q[i] = ch_q;
+        input_q[i] = '\0';
         curs_set(0);
         noecho();
         move(10,0);
@@ -223,7 +235,7 @@ int programa_interativo (int highlight, WINDOW* win, int query){
             ficheiro = fopen("comando_output.txt", "r");
 
             if(fgetc(ficheiro) == EOF){
-                printw(">> NAO HA OUTPUTS PARA ESTA QUERY");
+                printw("QUERY SEM OUTPUT");
                 remove("comando_output.txt");
                 move(12,6);
                 printw("MENU (Q)");
@@ -253,7 +265,7 @@ int programa_interativo (int highlight, WINDOW* win, int query){
         }
 
     else{
-        printw(">> QUERY INVALIDA");
+        printw("QUERY INVALIDA");
         refresh();
         napms(1000);
         move(10,0);
@@ -267,9 +279,13 @@ int programa_interativo (int highlight, WINDOW* win, int query){
         mvwprintw(win, 2, 23, "          ");
         wrefresh(win);
         char* input = malloc(250);
+        int ch;
+        int i;
         echo();
         curs_set(1);
-        getstr(input);
+        for(i = 0; i < 250 - 1 && (ch = getch()) != '\n'; i++) // It stores the written information on an array (input)
+        input[i] = ch;
+        input[i] = '\0';
         noecho();
         curs_set(0);
         mvwprintw(win, 2, 23, "[...]");
@@ -277,12 +293,12 @@ int programa_interativo (int highlight, WINDOW* win, int query){
         refresh();
 
         if(main_interativo(input,h_users,h_aeroportos,h_hoteis,h_reservas,h_voos) == 1){
-            mvwprintw(win, 2, 35, "O CAMINHO ESTA ERRADO");
+            mvwprintw(win, 2, 35, "     ");
             wrefresh(win);
             return 1;
         }
         else{
-            mvwprintw(win, 2, 35, "[CARREGADO]");
+            mvwprintw(win, 2, 40, "[CARREGADO]");
             wrefresh(win);
         }
     }

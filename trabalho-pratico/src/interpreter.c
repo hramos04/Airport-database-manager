@@ -662,7 +662,9 @@ int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_re
 		q10(h_users, h_voos, h_reservas, args, argc,f, fp_output);
 	}
 
-    if (chdir("trabalho-pratico") != 0);
+    if (chdir("trabalho-pratico") != 0){
+		printf("Error");
+	}
     fclose(fp_output);
 
     return 0;
