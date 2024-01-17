@@ -59,14 +59,6 @@ char* userGetNome(User *user){
 	return strdup(user->nome);
 }
 
-char* userGetEmail(User *user){
-	return strdup(user->email);
-}
-
-char* userGetPhone(User *user){
-	return strdup(user->phone);
-}
-
 char* userGetBirth(User *user){
 	return strdup(user->birth);
 }
@@ -81,18 +73,6 @@ char* userGetPassport(User *user){
 
 char* userGetCountry(User *user){
 	return strdup(user->country);
-}
-
-char* userGetAddress(User *user){
-	return strdup(user->address);
-}
-
-char* userGetAccountCreation(User *user){
-	return strdup(user->account_creation);
-}
-
-char* userGetPayMethod(User *user){
-	return strdup(user->pay_method);
 }
 
 char* userGetAccountStatus(User *user){
@@ -437,7 +417,6 @@ int SomaPassageirosPorAnoUnico(hash_user h, int ano) {
         User *currentUser = h[i];
 
         while (currentUser != NULL) {
-            int passageiroEncontrado = 0;  // Flag para evitar contar o mesmo usuário várias vezes
             int viagensNoAno = 0;  // Contador de viagens do usuário no ano fornecido
 
             Q2 *q2 = currentUser->q2;
@@ -454,7 +433,6 @@ int SomaPassageirosPorAnoUnico(hash_user h, int ano) {
                         if (viagensNoAno == 1) {
                             // Incrementar o total de passageiros apenas uma vez por usuário
                             totalPassageiros += 1;  // Cada voo representa um passageiro
-                            passageiroEncontrado = 1;
                         }
                     }
                 }
@@ -477,7 +455,6 @@ int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes) {
         User *currentUser = h[i];
 
         while (currentUser != NULL) {
-            int passageiroEncontrado = 0;  // Flag para evitar contar o mesmo usuário várias vezes
             int viagensNoAnoMes = 0;  // Contador de viagens do usuário no ano e mês fornecidos
 
             Q2 *q2 = currentUser->q2;
@@ -494,7 +471,6 @@ int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes) {
                         if (viagensNoAnoMes == 1) {
                             // Incrementar o total de passageiros apenas uma vez por usuário
                             totalPassageiros += 1;  // Cada voo representa um passageiro
-                            passageiroEncontrado = 1;
                         }
                     }
                 }
@@ -517,7 +493,6 @@ int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
         User *currentUser = h[i];
 
         while (currentUser != NULL) {
-            int passageiroEncontrado = 0;  // Flag para evitar contar o mesmo usuário várias vezes
             int viagensNaData = 0;  // Contador de viagens do usuário na data fornecida
 
             Q2 *q2 = currentUser->q2;
@@ -534,7 +509,6 @@ int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
                         if (viagensNaData == 1) {
                             // Incrementar o total de passageiros apenas uma vez por usuário
                             totalPassageiros += 1;  // Cada voo representa um passageiro
-                            passageiroEncontrado = 1;
                         }
                     }
                 }
