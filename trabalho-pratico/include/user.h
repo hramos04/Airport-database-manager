@@ -1,52 +1,63 @@
 #ifndef USER_H
 #define USER_H
 #define HASHSIZEUSER 81000 
+#include "../include/q2.h"
 
 
 /* Definição do KeyType*/
 typedef char KeyType[300];
 
 
-/* Definição de um nó da lista ligada Q2, onde é armazenada a informção de um flight, ou de uma 
-reserva, dependedo do inteiro "tipo", que toma valor 1, caso se trate de um flight e toma valor 
-2, caso se trate de uma reserva. */
-typedef struct Q2 {
-	char *id;
-	char *data;
-	int tipo; //2-flight, 1-reserva
-	double total_gasto;
-	struct Q2 *next;
-} Q2;
-
 
 /* Definiçao da estrutura do User, que apresenta todos os dados relativos de cada user, 
 sendo ainda acrescentado o número total de reservas, o número total de voos, o total gasto 
 pelo mesmo e ainda apresentamos a lista ligada Q2 que armazena os dados relativos aos flights
 e às reservas. */
-typedef struct User {
-    char *id;
-    char *nome;
-    char *email;
-    char *phone;
-    char *birth;
-    char *sex;
-    char *passport;
-    char *country;
-    char *address;
-    char *account_creation;
-    char *pay_method;
-    char *account_status;
-    int total_reservas;
-    int total_voos;
-    double total_gasto;
-    struct User *next;
-    struct Q2 *q2;
-} User;
+typedef struct User User;
 
 
 /* Definição da tabela hash que vai guardar todos os diferentes users. */
 typedef User *hash_user[HASHSIZEUSER];
 
+User *create_user(char *id, char *nome, char *email, char *phone, char *birth, char *sex, char *passport, char *country, char *address, char *account_creation, char *pay_method,char *account_status);
+
+char* userGetId(User *user);
+
+char* userGetNome(User *user);
+
+char* userGetEmail(User *user);
+
+char* userGetPhone(User *user);
+
+char* userGetBirth(User *user);
+
+char* userGetSex(User *user);
+
+char* userGetPassport(User *user);
+
+char* userGetCountry(User *user);
+
+char* userGetAddress(User *user);
+
+char* userGetAccountCreation(User *user);
+
+char* userGetPayMethod(User *user);
+
+char* userGetAccountStatus(User *user);
+
+int userGetTotalReservas(User *user);
+
+int userGetTotalVoos(User *user);
+
+double userGetTotalGasto(User *user);
+
+User* userGetNext(User *user);
+
+void userSetNext(User *user, User *next);
+
+Q2* userGetQ2(User *user);
+
+void userSetQ2(User *user, Q2 *q2);
 
 /* Função de hash que converte uma chave num índice na tabela hash. */
 int Hash(KeyType k);
@@ -102,14 +113,30 @@ void InsertReservaUser(hash_user h, KeyType k, Q2 *q2);
 flights na lista ligada Q2, de forma ordenada. */
 void InsertVooUser(hash_user h, KeyType k, Q2 *q2);
 
+//////////////////////////usar esta função quando só aparece a pedir o ano 
+/* Função que conta quantos usuários têm o ano de criação da conta igual ao ano fornecido. */
 int CountUsersByYear(hash_user h, int year);
+
+////Função que conta os usuários, mas que dá todos os meses
+/* Função que imprime o número de usuários para cada mês em um determinado ano. */
 int CountUsersByMonth(hash_user h, int year, int month);
+
+
 int CountUsersByDate(hash_user h, int year, int month, int day);
-void ImprimirTodosVoos(hash_user h);
+
+
+// Função que retorna o número total de passageiros para um determinado ano
 int SomaPassageirosPorAnoUnico(hash_user h, int ano);
+
+// Função que retorna o número total de passageiros para um determinado ano e mês
 int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes);
+
+// Função que retorna o número total de passageiros para um determinado ano, mês e dia
 int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia);
 
+
+// Função que imprime todos os voos de todos os usuários
+void ImprimirTodosVoos(hash_user h);
 
 
 #endif
