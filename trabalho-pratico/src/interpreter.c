@@ -183,13 +183,14 @@ void q1(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char *arg
         free(scheduleDepartureDateValue);
         free(scheduleArrivalDateValue);
     } else if (reserva) {
-        reservaGetIncludesBreakfast(reserva)[0] = toupper(reservaGetIncludesBreakfast(reserva)[0]);
         char *hotelIdValue = reservaGetHotelId(reserva);
         char *hotelNameValue = reservaGetHotelName(reserva);
         char *hotelStarsValue = reservaGetHotelStars(reserva);
         char *beginDateValue = reservaGetBeginDate(reserva);
         char *endDateValue = reservaGetEndDate(reserva);
         char *includesBreakfastValue = reservaGetIncludesBreakfast(reserva);
+        includesBreakfastValue[0] = toupper(includesBreakfastValue[0]);
+
 
         if (f == 1) {
             fprintf(fp_output, "--- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",
@@ -453,6 +454,11 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
             char *destinationValue = vooResumoGetDestination(aux);
             char *airlineValue = vooResumoGetAirline(aux);
             char *planeModelValue = vooResumoGetPlaneModel(aux);
+
+            // Converter todos os caracteres para maiúsculas
+            for (int j = 0; destinationValue[j]; j++) {
+                destinationValue[j] = toupper(destinationValue[j]);
+            }
 
             if (f == 1) {
                 if (i == 1) {
