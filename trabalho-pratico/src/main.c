@@ -13,7 +13,6 @@
 #include "time.h"
 
 
-
 int main(int argc, char *argv[]) {
 	/*Iniciar o relógio para medir o tempo de execução*/
 	clock_t start, end, duration;

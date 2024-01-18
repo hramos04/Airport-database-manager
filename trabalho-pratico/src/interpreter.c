@@ -238,7 +238,7 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
             remover_horas(dataGet, data);
             if (argc == 3) {
                 if (strcmp(argv[2], "reservations") == 0) {
-                    if (getTipo(q2) == 1) {
+                    if (getTipo(q2) != 2) {
                         if (f == 1) {
                             if (i == 1) {
                                 fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n", i, getId(q2), data);
@@ -272,7 +272,7 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
                     }
                 }
             } else {
-                if (getTipo(q2) == 1) {
+                if (getTipo(q2) != 2) {
                     if (f == 1) {
                         if (i == 1) {
                             fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\ntype: reservation\n", i, getId(q2), data);
