@@ -80,5 +80,7 @@ int ContarReservasPorMes(hash_reservas h, int ano, int mes);
 
 int ContarReservasPorData(hash_reservas h, int ano, int mes, int dia);
 
+void freeReserva(Reserva *reserva);
+
 #endif
 

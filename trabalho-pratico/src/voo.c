@@ -62,7 +62,7 @@ char *vooGetPlaneModel(Voo *voo){ //verificado os leaks
     return strdup(voo->plane_model);
 }
 
-char *vooGetOrigin(Voo *voo){  //falta os leaks no aeroporto.c desta 
+char *vooGetOrigin(Voo *voo){  //verificado os leaks 
     return strdup(voo->origin);
 }
 
@@ -70,7 +70,7 @@ char *vooGetDestination(Voo *voo){  //verificado os leaks
     return strdup(voo->destination);
 }
 
-char *vooGetScheduleDepartureDate(Voo *voo){ //verificado os leaks, falta no aeroporto
+char *vooGetScheduleDepartureDate(Voo *voo){ //verificado os leaks
     return strdup(voo->schedule_departure_date);
 }
 
@@ -227,6 +227,30 @@ void PrintHashVoos(hash_voos h_voos) {
         }
     }
 }
+
+void freeVoo(Voo *voo) {
+    if (voo == NULL) {
+        return;
+    }
+
+    free(voo->id);
+    free(voo->airline);
+    free(voo->plane_model);
+    free(voo->total_seats);
+    free(voo->origin);
+    free(voo->destination);
+    free(voo->schedule_departure_date);
+    free(voo->schedule_arrival_date);
+    free(voo->real_departure_date);
+    free(voo->real_arrival_date);
+    free(voo->pilot);
+    free(voo->copilot);
+    free(voo->notes);
+
+    free(voo);
+}
+
+
 
 
 /*

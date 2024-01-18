@@ -610,10 +610,9 @@ int process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_rese
 				
 				InsertTableHoteis(h_hoteis, hotel_id, novo_resumo);
 				InsertTableReservas(h_reservas, id, nova_reserva);
-				
 				Q2 *nova_q2  = create_q2(id,begin_date,total_gasto,1);
-				
 				InsertReservaUser(h, user_id, nova_q2);
+				//freeQ2(nova_q2);
 			}
 		}
 	}
@@ -664,6 +663,7 @@ int process_passengers_csv(hash_user h, hash_voos h_voos, hash_aeroportos h_aero
             // Libertar memória alocada
             free(id);
             free(data);
+
         }
 
         if (valid_flight(h_voos, flight_id) == 0 || valid_user(h, user_id) == 0) {
@@ -773,10 +773,10 @@ int process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voos
 			Voo *novo_voo = createVoo(id,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot,notes);
 			
 			InsertTableVoos(h_voos, id, novo_voo);
-			
+			//freeVoo(novo_voo);
 			VooResumo *novo_resumo =createVooResumo(id,schedule_departure_date,real_departure_date,destination,airline,plane_model);
-	
 			InsertTableAeroporto(h_aeroportos, origin, novo_resumo);
+			//freeVooResumo(novo_resumo);
 		  }
 	}
 	

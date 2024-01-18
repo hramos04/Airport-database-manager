@@ -76,7 +76,7 @@ int GetLucro(hash_hoteis h, KeyType k, char *start_date, char *end_date);
 
 
 
-
+void freeReservaResumo(ReservaResumo *reservaResumo);
 
 
 

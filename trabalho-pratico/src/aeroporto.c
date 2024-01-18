@@ -682,3 +682,17 @@ void destroiMedianaAeroporto(MedianaAeroporto *medianaAeroporto){
     free(medianaAeroporto);
 }
 
+void freeVooResumo(VooResumo *resumo) {
+    if (resumo == NULL) {
+        return;
+    }
+
+    free(resumo->id);
+    free(resumo->schedule_departure_date);
+    free(resumo->real_departure_date);
+    free(resumo->destination);
+    free(resumo->airline);
+    free(resumo->plane_model);
+
+    free(resumo);
+}

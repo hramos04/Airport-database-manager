@@ -50,6 +50,30 @@ Reserva *createReserva(char *id, char *user_id, char *hotel_id, char *hotel_name
 	return reserva;
 }
 
+void freeReserva(Reserva *reserva) {
+    if (reserva == NULL) {
+        return;
+    }
+
+    free(reserva->id);
+    free(reserva->user_id);
+    free(reserva->hotel_id);
+    free(reserva->hotel_name);
+    free(reserva->hotel_stars);
+    free(reserva->city_tax);
+    free(reserva->address);
+    free(reserva->begin_date);
+    free(reserva->end_date);
+    free(reserva->price_per_night);
+    free(reserva->includes_breakfast);
+    free(reserva->room_details);
+    free(reserva->rating);
+    free(reserva->comment);
+
+    free(reserva);
+}
+
+
 /* Função de hash que converte uma chave num índice na tabela hash das reservas. */
 int HashReservas(KeyType k) {
     int i = 0;

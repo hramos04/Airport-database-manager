@@ -44,6 +44,20 @@ ReservaResumo *createReservaResumo(char *id, char *begin_date, char *end_date, c
     return reservaResumo;
 }
 
+void freeReservaResumo(ReservaResumo *reservaResumo) {
+    if (reservaResumo == NULL) {
+        return;
+    }
+
+    free(reservaResumo->id);
+    free(reservaResumo->begin_date);
+    free(reservaResumo->end_date);
+    free(reservaResumo->user_id);
+    free(reservaResumo->price_per_night);
+    
+}
+
+
 char *reservaResumoGetId(ReservaResumo *reservaResumo){ //já está tratado os leaks 
     return strdup(reservaResumo->id);
 }
