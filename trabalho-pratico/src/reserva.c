@@ -76,60 +76,29 @@ void InitializeTableReservas(hash_reservas h) {
         h[i] = NULL;
 }
 
-char *reservaGetId(Reserva *reserva){
-	return strdup(reserva->id);
-}
 
-char *reservaGetUserId(Reserva *reserva){
-	return strdup(reserva->user_id);
-}
-
-char *reservaGetHotelId(Reserva *reserva){
+char *reservaGetHotelId(Reserva *reserva){ //já verificado os memory leaks 
 	return strdup(reserva->hotel_id);
 }
 
-char *reservaGetHotelName(Reserva *reserva){
+char *reservaGetHotelName(Reserva *reserva){ // já verificado os memory leaks 
 	return strdup(reserva->hotel_name);
 }
 
-char *reservaGetHotelStars(Reserva *reserva){
+char *reservaGetHotelStars(Reserva *reserva){ //já verificado os memory leaks 
 	return strdup(reserva->hotel_stars);
 }
 
-char *reservaGetCityTax(Reserva *reserva){
-	return strdup(reserva->city_tax);
-}
-
-char *reservaGetAddress(Reserva *reserva){
-	return strdup(reserva->address);
-}
-
-char *reservaGetBeginDate(Reserva *reserva){
+char *reservaGetBeginDate(Reserva *reserva){ // já verificado os memory leaks 
 	return strdup(reserva->begin_date);
 }
 
-char *reservaGetEndDate(Reserva *reserva){
+char *reservaGetEndDate(Reserva *reserva){ //já verificado os memory leaks 
 	return strdup(reserva->end_date);
 }
 
-char *reservaGetPricePerNight(Reserva *reserva){
-	return strdup(reserva->price_per_night);
-}
-
-char *reservaGetIncludesBreakfast(Reserva *reserva){
+char *reservaGetIncludesBreakfast(Reserva *reserva){ //já verificado, falta corrigir apenas a linha 186 do interpreter
 	return strdup(reserva->includes_breakfast);
-}
-
-char *reservaGetRoomDetails(Reserva *reserva){
-	return strdup(reserva->room_details);
-}
-
-char *reservaGetRating(Reserva *reserva){
-	return strdup(reserva->rating);
-}
-
-char *reservaGetComment(Reserva *reserva){
-	return strdup(reserva->comment);
 }
 
 int reservaGetTotalNoites(Reserva *reserva){

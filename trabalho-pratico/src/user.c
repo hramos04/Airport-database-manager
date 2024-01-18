@@ -527,28 +527,5 @@ int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
 
 */
 
-// Função que imprime todos os voos de todos os usuários
-void ImprimirTodosVoos(hash_user h) {
-    for (int i = 0; i < HASHSIZEUSER; i++) {
-        User *currentUser = h[i];
 
-        while (currentUser != NULL) {
-            printf("Voos do usuário %s:\n", currentUser->id);
-
-            Q2 *q2 = currentUser->q2;
-
-            while (q2 != NULL) {
-                if (getTipo(q2) == 1) {
-                    printf("   - ID do Voo: %s\n", getId(q2));
-                    printf("     Data: %s\n", getData(q2));
-                    printf("     Total Gasto: %.2f\n", getTotalGasto(q2));
-                }
-
-                q2 = getNext(q2);
-            }
-
-            currentUser = currentUser->next;
-        }
-    }
-}
 

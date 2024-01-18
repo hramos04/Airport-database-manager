@@ -50,56 +50,32 @@ Voo *createVoo(char *id, char *airline, char *plane_model, char *total_seats, ch
     return voo;
 }
 
-char *vooGetId(Voo *voo){
+char *vooGetId(Voo *voo){ //verificado os leaks
     return strdup(voo->id);
 }
 
-char *vooGetAirline(Voo *voo){
+char *vooGetAirline(Voo *voo){ //verificado os leaks 
     return strdup(voo->airline);
 }
 
-char *vooGetPlaneModel(Voo *voo){
+char *vooGetPlaneModel(Voo *voo){ //verificado os leaks
     return strdup(voo->plane_model);
 }
 
-char *vooGetTotalSeats(Voo *voo){
-    return strdup(voo->total_seats);
-}
-
-char *vooGetOrigin(Voo *voo){
+char *vooGetOrigin(Voo *voo){  //falta os leaks no aeroporto.c desta 
     return strdup(voo->origin);
 }
 
-char *vooGetDestination(Voo *voo){
+char *vooGetDestination(Voo *voo){  //verificado os leaks 
     return strdup(voo->destination);
 }
 
-char *vooGetScheduleDepartureDate(Voo *voo){
+char *vooGetScheduleDepartureDate(Voo *voo){ //verificado os leaks, falta no aeroporto
     return strdup(voo->schedule_departure_date);
 }
 
-char *vooGetScheduleArrivalDate(Voo *voo){
+char *vooGetScheduleArrivalDate(Voo *voo){ //verificado os leaks
     return strdup(voo->schedule_arrival_date);
-}
-
-char *vooGetRealDepartureDate(Voo *voo){
-    return strdup(voo->real_departure_date);
-}
-
-char *vooGetRealArrivalDate(Voo *voo){
-    return strdup(voo->real_arrival_date);
-}
-
-char *vooGetPilot(Voo *voo){
-    return strdup(voo->pilot);
-}
-
-char *vooGetCopilot(Voo *voo){
-    return strdup(voo->copilot);
-}
-
-char *vooGetNotes(Voo *voo){
-    return strdup(voo->notes);
 }
 
 int vooGetTotalPassengers(Voo *voo){

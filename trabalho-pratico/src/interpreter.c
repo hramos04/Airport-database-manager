@@ -153,32 +153,65 @@ void q1(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char *arg
                         nomeValue, sexValue, calculaIdade(birthValue), countryValue, passportValue, userGetTotalVoos(user), userGetTotalReservas(user), userGetTotalGasto(user));
             }
 
-            free(accountStatusValue); // Liberar a memória alocada por userGetAccountStatus
-            free(sexValue);           // Liberar a memória alocada por userGetSex
-            free(nomeValue);          // Liberar a memória alocada por userGetNome
-            free(birthValue);         // Liberar a memória alocada por userGetBirth
-            free(passportValue);      // Liberar a memória alocada por userGetPassport
-            free(countryValue);       // Liberar a memória alocada por userGetCountry
+            free(accountStatusValue);
+            free(sexValue);
+            free(nomeValue);
+            free(birthValue);
+            free(passportValue);
+            free(countryValue);
         }
     } else if (voo) {
+        char *airlineValue = vooGetAirline(voo);
+        char *planeModelValue = vooGetPlaneModel(voo);
+        char *originValue = vooGetOrigin(voo);
+        char *destinationValue = vooGetDestination(voo);
+        char *scheduleDepartureDateValue = vooGetScheduleDepartureDate(voo);
+        char *scheduleArrivalDateValue = vooGetScheduleArrivalDate(voo);
+
         if (f == 1) {
             fprintf(fp_output, "--- 1 ---\nairline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %d\n",
-                    vooGetAirline(voo), vooGetPlaneModel(voo), vooGetOrigin(voo), vooGetDestination(voo), vooGetScheduleDepartureDate(voo), vooGetScheduleArrivalDate(voo), vooGetTotalPassengers(voo), vooGetDelay(voo));
+                    airlineValue, planeModelValue, originValue, destinationValue, scheduleDepartureDateValue, scheduleArrivalDateValue, vooGetTotalPassengers(voo), vooGetDelay(voo));
         } else {
             fprintf(fp_output, "%s;%s;%s;%s;%s;%s;%d;%d\n",
-                    vooGetAirline(voo), vooGetPlaneModel(voo), vooGetOrigin(voo), vooGetDestination(voo), vooGetScheduleDepartureDate(voo), vooGetScheduleArrivalDate(voo), vooGetTotalPassengers(voo), vooGetDelay(voo));
+                    airlineValue, planeModelValue, originValue, destinationValue, scheduleDepartureDateValue, scheduleArrivalDateValue, vooGetTotalPassengers(voo), vooGetDelay(voo));
         }
+
+        free(airlineValue);
+        free(planeModelValue);
+        free(originValue);
+        free(destinationValue);
+        free(scheduleDepartureDateValue);
+        free(scheduleArrivalDateValue);
     } else if (reserva) {
         reservaGetIncludesBreakfast(reserva)[0] = toupper(reservaGetIncludesBreakfast(reserva)[0]);
+        char *hotelIdValue = reservaGetHotelId(reserva);
+        char *hotelNameValue = reservaGetHotelName(reserva);
+        char *hotelStarsValue = reservaGetHotelStars(reserva);
+        char *beginDateValue = reservaGetBeginDate(reserva);
+        char *endDateValue = reservaGetEndDate(reserva);
+        char *includesBreakfastValue = reservaGetIncludesBreakfast(reserva);
+
         if (f == 1) {
             fprintf(fp_output, "--- 1 ---\nhotel_id: %s\nhotel_name: %s\nhotel_stars: %s\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",
-                    reservaGetHotelId(reserva), reservaGetHotelName(reserva), reservaGetHotelStars(reserva), reservaGetBeginDate(reserva), reservaGetEndDate(reserva), reservaGetIncludesBreakfast(reserva), reservaGetTotalNoites(reserva), reservaGetTotalGasto(reserva));
+                    hotelIdValue, hotelNameValue, hotelStarsValue, beginDateValue, endDateValue, includesBreakfastValue, reservaGetTotalNoites(reserva), reservaGetTotalGasto(reserva));
         } else {
             fprintf(fp_output, "%s;%s;%s;%s;%s;%s;%d;%.3f\n",
-                    reservaGetHotelId(reserva), reservaGetHotelName(reserva), reservaGetHotelStars(reserva), reservaGetBeginDate(reserva), reservaGetEndDate(reserva), reservaGetIncludesBreakfast(reserva), reservaGetTotalNoites(reserva), reservaGetTotalGasto(reserva));
+                    hotelIdValue, hotelNameValue, hotelStarsValue, beginDateValue, endDateValue, includesBreakfastValue, reservaGetTotalNoites(reserva), reservaGetTotalGasto(reserva));
         }
+
+        free(hotelIdValue);
+        free(hotelNameValue);
+        free(hotelStarsValue);
+        free(beginDateValue);
+        free(endDateValue);
+        free(includesBreakfastValue);
     }
 }
+
+
+
+
+
 
 
 
@@ -194,86 +227,93 @@ void q1(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char *arg
  * fp_output: Ponteiro para o ficheiro de saída.
  */
 void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
-	char data[100];
-	User *user = RetrieveUser(h_users, argv[1]);
-	int i = 1;
-	if(user && (strcasecmp(userGetAccountStatus(user), "active") == 0 )) {
-		Q2 *q2 = userGetQ2(user);
-		while(q2) {
-			remover_horas(getData(q2), data);
-			if(argc == 3) {
-				if(strcmp(argv[2], "reservations") == 0) {
-					if(getTipo(q2) == 1) {
-						if(f == 1) {
-							if(i == 1) {
-								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
-							}
-							else {
-								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
-							}
-						}
-						else {
-							fprintf(fp_output, "%s;%s\n",getId(q2),data);
-						}
-						i++;
-						
-					}
-				}
-				else if(strcmp(argv[2], "flights") == 0) {
-					if(getTipo(q2) == 2) {
-						if(f == 1) {
-							if(i == 1) {
-								fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
-							}
-							else {
-								fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n",i,getId(q2),data);
-							}
-							
-						}
-						else {
-							fprintf(fp_output,"%s;%s\n",getId(q2),data);
-						}
-						i++;
-					}
-				}
-			}
-			else {
-				if(getTipo(q2) == 1) {
-					if(f == 1) {
-						if(i == 1) {
-							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, getId(q2),data);
-						}
-						else {
-							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: reservation\n",i, getId(q2),data);
-						}
-						
-					}
-					else {
-						fprintf(fp_output,"%s;%s;reservation\n",getId(q2),data);
-					}
-					
-				}
-				else {
-					if(f == 1) {
-						if(i == 1) {
-							fprintf(fp_output,"--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i,getId(q2),data);
-						}
-						else {
-							fprintf(fp_output,"\n--- %d ---\nid: %s\ndate: %s\ntype: flight\n",i,getId(q2),data);
-						}
-						
-					}
-					else {
-						fprintf(fp_output,"%s;%s;flight\n",getId(q2),data);
-					}
-				}
-				i++;
-			}
-			
-			q2 = getNext(q2);
-		}
-	}
+    char data[100];
+    User *user = RetrieveUser(h_users, argv[1]);
+    int i = 1;
+    if (user && (strcasecmp(userGetAccountStatus(user), "active") == 0)) {
+        Q2 *q2 = userGetQ2(user);
+        while (q2) {
+            remover_horas(getData(q2), data);
+            if (argc == 3) {
+                if (strcmp(argv[2], "reservations") == 0) {
+                    if (getTipo(q2) == 1) {
+                        if (f == 1) {
+                            if (i == 1) {
+                                fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n", i, getId(q2), data);
+                            } else {
+                                fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n", i, getId(q2), data);
+                            }
+                        } else {
+                            fprintf(fp_output, "%s;%s\n", getId(q2), data);
+                        }
+                        i++;
+
+                        // Liberar a memória alocada para a string id
+                        free(getId(q2));
+                    }
+                } else if (strcmp(argv[2], "flights") == 0) {
+                    if (getTipo(q2) == 2) {
+                        if (f == 1) {
+                            if (i == 1) {
+                                fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\n", i, getId(q2), data);
+                            } else {
+                                fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\n", i, getId(q2), data);
+                            }
+
+                        } else {
+                            fprintf(fp_output, "%s;%s\n", getId(q2), data);
+                        }
+                        i++;
+
+                        // Liberar a memória alocada para a string id
+                        free(getId(q2));
+                    }
+                }
+            } else {
+                if (getTipo(q2) == 1) {
+                    if (f == 1) {
+                        if (i == 1) {
+                            fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\ntype: reservation\n", i, getId(q2), data);
+                        } else {
+                            fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\ntype: reservation\n", i, getId(q2), data);
+                        }
+
+                    } else {
+                        fprintf(fp_output, "%s;%s;reservation\n", getId(q2), data);
+                    }
+
+                    i++;
+
+                    // Liberar a memória alocada para a string id
+                    free(getId(q2));
+                } else {
+                    if (f == 1) {
+                        if (i == 1) {
+                            fprintf(fp_output, "--- %d ---\nid: %s\ndate: %s\ntype: flight\n", i, getId(q2), data);
+                        } else {
+                            fprintf(fp_output, "\n--- %d ---\nid: %s\ndate: %s\ntype: flight\n", i, getId(q2), data);
+                        }
+
+                    } else {
+                        fprintf(fp_output, "%s;%s;flight\n", getId(q2), data);
+                    }
+
+                    i++;
+
+                    // Liberar a memória alocada para a string id
+                    free(getId(q2));
+                }
+            }
+
+            // Liberar a memória alocada para a string data
+            free(getData(q2));
+
+            q2 = getNext(q2);
+        }
+    }
 }
+
+
 
 /*
  * Função: q3

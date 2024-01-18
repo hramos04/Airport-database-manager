@@ -625,49 +625,60 @@ int process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_rese
 
 /* Função responsável por efetuar o parsing de todas as linhas do csv dos passageiros e verificar 
 se todos os campos são válidos, inserindo os valores nas hash tables. */
-int process_passengers_csv(hash_user h, hash_voos h_voos,hash_aeroportos h_aeroportos, char *ficheiro) {
-	char linha[MAX_LINE_LENGTH];
-	FILE *invalidFile = fopen("Resultados/passengers_errors.csv", "w");
-	FILE *fp = fopen(ficheiro,"r");
-	if(!fp) return 1;
-	char flight_id[MAX_LINE_LENGTH], user_id[MAX_LINE_LENGTH];
-	
-	while((fgets(linha, 1024, fp)) != NULL) {
-	
-		linha[strlen(linha)-1] = '\0';
-		int i=0, j=0;
-		for(j=0; linha[i] != ';'; i++, j++) {
-			flight_id[j] = linha[i];
-		}
-		flight_id[j] = '\0';
-		
-		for(j=0, i++; linha[i] != ';' && linha[i] != '\0' && linha[i] != '\r'; i++, j++) {
-			user_id[j] = linha[i];
-		}
-		user_id[j] = '\0';
-		Voo *voo = RetrieveVoo(h_voos, flight_id);
-		User *aux = RetrieveUser(h, user_id);
-		if(voo && aux) {
+int process_passengers_csv(hash_user h, hash_voos h_voos, hash_aeroportos h_aeroportos, char *ficheiro) {
+    char linha[MAX_LINE_LENGTH];
+    FILE *invalidFile = fopen("Resultados/passengers_errors.csv", "w");
+    FILE *fp = fopen(ficheiro, "r");
 
-			char *id = vooGetId(voo);
-			char *data = vooGetScheduleDepartureDate(voo);
+    if (!fp) return 1;
 
-			Q2 *q2 = create_q2_without_totalGasto(id,data,2);   
-			
-			InsertVooUser(h, user_id, q2);
-			InsertPassengerVoo(h_voos, vooGetId(voo));
-			InsertPassengerVooResumo(h_aeroportos, vooGetId(voo));
-		}
-		if(valid_flight(h_voos,flight_id)==0 || valid_user(h,user_id)==0){
-			if (invalidFile != NULL) {
-				fprintf(invalidFile, "%s\n", linha);
-				}
-		}
-	}
-	fclose(invalidFile);
-	fclose(fp);
-	return 0;
+    char flight_id[MAX_LINE_LENGTH], user_id[MAX_LINE_LENGTH];
+
+    while ((fgets(linha, 1024, fp)) != NULL) {
+        linha[strlen(linha) - 1] = '\0';
+        int i = 0, j = 0;
+
+        for (j = 0; linha[i] != ';'; i++, j++) {
+            flight_id[j] = linha[i];
+        }
+        flight_id[j] = '\0';
+
+        for (j = 0, i++; linha[i] != ';' && linha[i] != '\0' && linha[i] != '\r'; i++, j++) {
+            user_id[j] = linha[i];
+        }
+        user_id[j] = '\0';
+
+        Voo *voo = RetrieveVoo(h_voos, flight_id);
+        User *aux = RetrieveUser(h, user_id);
+
+        if (voo && aux) {
+            char *id = vooGetId(voo);
+            char *data = vooGetScheduleDepartureDate(voo);
+
+            Q2 *q2 = create_q2_without_totalGasto(id, data, 2);
+
+            InsertVooUser(h, user_id, q2);
+            InsertPassengerVoo(h_voos, id); // Utilizar a cópia do identificador
+            InsertPassengerVooResumo(h_aeroportos, id); // Utilizar a cópia do identificador
+
+            // Libertar memória alocada
+            free(id);
+            free(data);
+        }
+
+        if (valid_flight(h_voos, flight_id) == 0 || valid_user(h, user_id) == 0) {
+            if (invalidFile != NULL) {
+                fprintf(invalidFile, "%s\n", linha);
+            }
+        }
+    }
+
+    fclose(invalidFile);
+    fclose(fp);
+    return 0;
 }
+
+
 
 /* Função responsável por efetuar o parsing de todas as linhas do csv dos voos e verificar se todos os campos são válidos, inserindo os valores nas hash tables. */
 int process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voos, char *ficheiro) {

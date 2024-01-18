@@ -38,7 +38,7 @@ Q2 *create_q2_without_totalGasto(char *id, char *data, int tipo) {
 }
 
 
-char* getId(Q2 *q2){
+char* getId(Q2 *q2){ //já vi os memory leaks 
     return strdup(q2->id);
 }
 
