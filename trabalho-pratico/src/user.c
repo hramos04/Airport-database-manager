@@ -162,8 +162,8 @@ void destroiTableUser(hash_user h) {
 			free(position->pay_method);
 			free(position->account_status);
 			destroiQ2(position->q2);
+            free(position);
 		}
-		free(h[i]);
 	}
 }
 
@@ -189,6 +189,14 @@ User* copyUser(User *original) {
     copy->nome = strdup(original->nome);
     copy->next = NULL;
     return copy;
+}
+
+void freeUser(User *user){
+    if(user){
+        free(user->id);
+        free(user->nome);
+        free(user);
+    }
 }
 
 
@@ -284,11 +292,22 @@ void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
 		Q2 *currentQ2 = aux->q2;
 		Q2 *prevQ2 = NULL;
 		
-		while (currentQ2 != NULL && strcmp(getData(currentQ2), getData(q2)) >= 0) {
-			prevQ2 = currentQ2;
-			currentQ2 = getNext(currentQ2);
-		}
+        char* dataQ2 = getData(q2);
+    
+        while (currentQ2 != NULL) {
+            
+            char *dataCurrentQ2 = getData(currentQ2);
 
+            if (strcmp(dataCurrentQ2, dataQ2) < 0) {
+                break;
+            }
+
+            prevQ2 = currentQ2;
+            currentQ2 = getNext(currentQ2);
+            
+            free(dataCurrentQ2);
+        } 
+            
 		if (prevQ2 == NULL) {
 			setNext(q2,aux->q2);
 			aux->q2 = q2;
@@ -296,6 +315,7 @@ void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
 			setNext(prevQ2,q2);
 			setNext(q2,currentQ2);
 		}
+        free(dataQ2);
 	}
 }
 
@@ -303,35 +323,49 @@ void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
 /* A função InsertVooUser segue a mesmo linha de pensamento que a função InsertReservaUser, inserindo os 
 flights na lista ligada Q2, de forma ordenada. */
 void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
-	User *aux = RetrieveUser(h, k);
-	if(!aux) {
-		return;
-	}
-	while(aux) {
-		if(strcmp(k, aux->id) == 0) {
-			break;
-		}
-		aux = aux->next;
-	}
-	
-	if(aux) {
-		aux->total_voos++;
-		Q2 *currentQ2 = aux->q2;
-		Q2 *prevQ2 = NULL;
-		
-		while (currentQ2 != NULL && strcmp(getData(currentQ2), getData(q2)) >= 0) {
-			prevQ2 = currentQ2;
-			currentQ2 = getNext(currentQ2);
-		}
+    User *aux = RetrieveUser(h, k);
+    if (!aux) {
+        return;
+    }
 
-		if (prevQ2 == NULL) {
-			setNext(q2,aux->q2);
-			aux->q2 = q2;
-		} else {
-			setNext(prevQ2,q2);
-			setNext(q2,currentQ2);
-		}
-	}
+    while (aux) {
+        if (strcmp(k, aux->id) == 0) {
+            break;
+        }
+        aux = aux->next;
+    }
+
+    if (aux) {
+        aux->total_voos++;
+        Q2 *currentQ2 = aux->q2;
+        Q2 *prevQ2 = NULL;
+
+        char *dataQ2 = getData(q2);
+
+        while (currentQ2 != NULL) {
+            
+            char *dataCurrentQ2 = getData(currentQ2);
+
+            if (strcmp(dataCurrentQ2, dataQ2) < 0) {
+                break;
+            }
+
+            prevQ2 = currentQ2;
+            currentQ2 = getNext(currentQ2);
+            
+            free(dataCurrentQ2);
+        }
+        
+
+        if (prevQ2 == NULL) {
+            setNext(q2, aux->q2);
+            aux->q2 = q2;
+        } else {
+            setNext(prevQ2, q2);
+            setNext(q2, currentQ2);
+        }
+        free(dataQ2);
+    }
 }
 
 /*

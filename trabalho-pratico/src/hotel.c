@@ -185,6 +185,7 @@ void destroiReservaResumo(ReservaResumo *reservaResumo){
 		free(atual->begin_date);
 		free(atual->end_date);	
 		free(atual->user_id);
+        free(atual);
 	}
 	free(reservaResumo);
 }

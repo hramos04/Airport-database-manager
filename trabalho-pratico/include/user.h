@@ -80,6 +80,8 @@ User *RetrieveUser(hash_user h, KeyType k);
 /* Função auxiliar que cria uma copia de um determinado User. */
 User* copyUser(User *original);
 
+void freeUser(User *user);
+
 
 /* Função auxiliar que compara duas strings, que neste caso em concreto, vai ser utilizada para
 comparar nomes, com a particularidade de ignorar hífens nos mesmos. */

@@ -151,8 +151,8 @@ void destroiTableReserva(hash_reservas h) {
 			free(position->room_details);
 			free(position->rating);
 			free(position->comment);
+            free(position);
 		}
-		free(h[i]);
 	}
 }
 

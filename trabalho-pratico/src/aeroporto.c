@@ -146,8 +146,8 @@ void destroiTableAeroporto(hash_aeroportos h){
                 atual = atual->next;
                 free(position->name);
                 destroiVooResumo(position->next_resumo);
+                free(position);
             }
-        free(h[i]);
 	}
 }
 
@@ -343,13 +343,18 @@ SomaPassageirosAno *criarListaSomaPassageirosAno(hash_voos h, int ano, int n) {
         Voo *voo = h[i];
         
         while (voo != NULL) {
+            char* origin = vooGetOrigin(voo);
+            char* destination = vooGetDestination(voo);
             // Adicionar origem à lista de aeroportos
-            adicionarAeroporto(listaAeroportos,vooGetOrigin(voo));
+            adicionarAeroporto(listaAeroportos,origin);
             
             // Adicionar destino à lista de aeroportos
-            adicionarAeroporto(listaAeroportos, vooGetDestination(voo));
+            adicionarAeroporto(listaAeroportos,destination);
             
             voo = vooGetNext(voo);
+
+            free(origin);
+            free(destination);
         }
     }
 
@@ -367,14 +372,20 @@ SomaPassageirosAno *criarListaSomaPassageirosAno(hash_voos h, int ano, int n) {
             Voo *voo = h[i];
 
             while (voo != NULL) {
-                int anoVoo = obterAno(vooGetScheduleDepartureDate(voo));
+                char* origin = vooGetOrigin(voo);
+                char* destination = vooGetDestination(voo);
+                char* departureDate = vooGetScheduleDepartureDate(voo);
+                int anoVoo = obterAno(departureDate);
 
-                if (anoVoo == ano && (strcasecmp(vooGetOrigin(voo), aeroportoNode->nomeAeroporto) == 0 ||
-                                      strcasecmp(vooGetDestination(voo), aeroportoNode->nomeAeroporto) == 0)) {
+                if (anoVoo == ano && (strcasecmp(origin, aeroportoNode->nomeAeroporto) == 0 ||
+                                      strcasecmp(destination, aeroportoNode->nomeAeroporto) == 0)) {
                     totalPassageirosAeroporto += vooGetTotalPassengers(voo);
                 }
 
                 voo = vooGetNext(voo);
+                free(departureDate);
+                free(origin);
+                free(destination);
             }
         }
 
@@ -420,18 +431,6 @@ SomaPassageirosAno *criarListaSomaPassageirosAno(hash_voos h, int ano, int n) {
     destruirListaAeroportos(listaAeroportos);
 
     return head;
-}
-
-
-// Função para libertar a memória da lista ligada SomaPassageirosAno
-void liberarListaSomaPassageirosAno(SomaPassageirosAno *head) {
-    SomaPassageirosAno *current = head;
-    while (current != NULL) {
-        SomaPassageirosAno *temp = current;
-        current = current->next;
-        free(temp->nomeAeroporto);
-        free(temp);
-    }
 }
 
 
@@ -658,5 +657,28 @@ VooResumo *GetVoosAeroportoEntreDatas(hash_aeroportos h, KeyType k, char *begin_
 		}	
 	}
     return result;
+}
+
+
+
+void destroiSomaPassageirosAno(SomaPassageirosAno *somaPassageirosAno){
+    while(somaPassageirosAno!=NULL){
+        SomaPassageirosAno *atual = somaPassageirosAno;
+        somaPassageirosAno = somaPassageirosAno->next;
+        free(atual->nomeAeroporto);
+        free(atual);
+    }
+    free(somaPassageirosAno);
+}
+
+void destroiMedianaAeroporto(MedianaAeroporto *medianaAeroporto){
+    while(medianaAeroporto!=NULL){
+        MedianaAeroporto *atual = medianaAeroporto;
+        medianaAeroporto = medianaAeroporto->next;
+        free(atual->name);
+        free(atual->atrasos);
+        free(atual);
+    }
+    free(medianaAeroporto);
 }
 

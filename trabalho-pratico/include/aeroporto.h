@@ -110,8 +110,6 @@ void destruirListaAeroportos(ListaAeroportos *lista);
 
 SomaPassageirosAno *criarListaSomaPassageirosAno(hash_voos h, int ano, int n);
 
-// Função para libertar a memória da lista ligada SomaPassageirosAno
-void liberarListaSomaPassageirosAno(SomaPassageirosAno *head);
 
 // Função para imprimir a lista de soma de passageiros por ano
 void imprimirListaSomaPassageirosAno(SomaPassageirosAno *lista);
@@ -158,6 +156,10 @@ VooResumo *vooResumoGetNext(VooResumo *voo_resumo);
 void setNextVooResumo(struct VooResumo *voo_resumo, struct VooResumo *next_voo_resumo);
 
 void destroiVooResumo(VooResumo *vooResumo);
+
+void destroiSomaPassageirosAno(SomaPassageirosAno *somaPassageirosAno);
+
+void destroiMedianaAeroporto(MedianaAeroporto *medianaAeroporto);
 
 
 #endif

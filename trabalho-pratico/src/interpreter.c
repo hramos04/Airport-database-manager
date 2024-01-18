@@ -233,7 +233,8 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
     if (user && (strcasecmp(userGetAccountStatus(user), "active") == 0)) {
         Q2 *q2 = userGetQ2(user);
         while (q2) {
-            remover_horas(getData(q2), data);
+            char *dataGet = getData(q2);
+            remover_horas(dataGet, data);
             if (argc == 3) {
                 if (strcmp(argv[2], "reservations") == 0) {
                     if (getTipo(q2) == 1) {
@@ -306,7 +307,7 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
             }
 
             // Liberar a memória alocada para a string data
-            free(getData(q2));
+            free(dataGet);
 
             q2 = getNext(q2);
         }
@@ -406,7 +407,9 @@ void q9(hash_user h_users, char *argv, int f, FILE *fp_output) {
 
             free(userId);  // Liberar a memória alocada por userGetId
             free(nomeValue); // Liberar a memória alocada por userGetNome
+            freeUser(aux);
             aux = userGetNext(aux);
+        
         }
     }
 }
@@ -474,6 +477,7 @@ void q6(hash_voos h_voos, char *ano_str, char *N_str, int f, FILE *fp_output) {
         }
         current = somaGetNext(current);
     }
+    destroiSomaPassageirosAno(listaSomaPassageiros);
 }
 
 
@@ -482,22 +486,24 @@ void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output) {
 	int i = 0;
 	MedianaAeroporto *aux = GetMedianaAeroportos(h_aeroportos);
 	while(aux && i++ < N) {
-		if(f == 1) {
+		char* nome = medianaGetNome(aux);
+        if(f == 1) {
 			if(i == 1) {
-				fprintf(fp_output,"--- %d ---\nname: %s\nmedian: %d\n",i,medianaGetNome(aux),medianaGetMediana(aux));
+				fprintf(fp_output,"--- %d ---\nname: %s\nmedian: %d\n",i,nome,medianaGetMediana(aux));
 			}
 			else {
-				fprintf(fp_output,"\n--- %d ---\nname: %s\nmedian: %d\n",i,medianaGetNome(aux),medianaGetMediana(aux));
+				fprintf(fp_output,"\n--- %d ---\nname: %s\nmedian: %d\n",i,nome,medianaGetMediana(aux));
 			}
 			
 		}
 		else {
-			fprintf(fp_output,"%s;%d\n",medianaGetNome(aux),medianaGetMediana(aux));
+			fprintf(fp_output,"%s;%d\n",nome,medianaGetMediana(aux));
 		}
 		
 		aux = medianaGetNext(aux);
+        free(nome);
 	}
-	
+    destroiMedianaAeroporto(aux);	
 }
 
 void q8(hash_hoteis h_hoteis,char *argv, char *start_date, char *end_date, int f, FILE *fp_output) {
