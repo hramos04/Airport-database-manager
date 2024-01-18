@@ -478,6 +478,7 @@ void q8(hash_hoteis h_hoteis,char *argv, char *start_date, char *end_date, int f
 	
 }
 
+/*
 void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **argv, int argc, int f, FILE *fp_output) {
     int yearToCount = -1;
     int monthToCount = -1;
@@ -572,7 +573,7 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
 		}
 	}
 }
-
+*/
 
 /*
  * Função: comando
@@ -623,9 +624,9 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 	else if(strcmp(args[0], "9") == 0 || strcmp(args[0], "9F") == 0) {
 		q9(h_users, args[1], f, fp_output);
 	}
-	else if(strcmp(args[0], "10") == 0 || strcmp(args[0], "10F") == 0) {
-		q10(h_users, h_voos, h_reservas, args, argc,f, fp_output);
-	}
+	//else if(strcmp(args[0], "10") == 0 || strcmp(args[0], "10F") == 0) {
+	//	q10(h_users, h_voos, h_reservas, args, argc,f, fp_output);
+	//}
 	
 	
 	
@@ -680,9 +681,9 @@ int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_re
 	else if(strcmp(args[0], "9") == 0 || strcmp(args[0], "9F") == 0) {
 		q9(h_users, args[1], f, fp_output);
 	}
-	else if(strcmp(args[0], "10") == 0 || strcmp(args[0], "10F") == 0) {
-		q10(h_users, h_voos, h_reservas, args, argc,f, fp_output);
-	}
+	//else if(strcmp(args[0], "10") == 0 || strcmp(args[0], "10F") == 0) {
+	//	q10(h_users, h_voos, h_reservas, args, argc,f, fp_output);
+	//}
 
     if (chdir("trabalho-pratico") != 0){
 		printf("Error");

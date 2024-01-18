@@ -253,7 +253,7 @@ void PrintHashVoos(hash_voos h_voos) {
 }
 
 
-
+/*
 ////////////////////////////////////////função que dá o número total de passageiros num ano 
 // Função para somar o total de passageiros para voos em um determinado ano
 int SomaPassageirosPorAno(hash_voos h, int ano) {
@@ -407,3 +407,4 @@ int SomaVoosPorDia(hash_voos h, int ano, int mes, int dia) {
     return totalVoos;
 }
 
+*/

@@ -202,7 +202,7 @@ void InsertTableReservas(hash_reservas h, KeyType k, Reserva *reserva) {
     }
 }
 
-
+/*
 int ContarReservasPorAno(hash_reservas h, int ano) {
     int totalReservas = 0;
 
@@ -272,3 +272,5 @@ int ContarReservasPorData(hash_reservas h, int ano, int mes, int dia) {
     // Retornar o resultado
     return totalReservasNaData;
 }
+
+*/

@@ -334,9 +334,9 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
 	}
 }
 
-
+/*
 //////////////////////////usar esta função quando só aparece a pedir o ano 
-/* Função que conta quantos usuários têm o ano de criação da conta igual ao ano fornecido. */
+
 int CountUsersByYear(hash_user h, int year) {
     int count = 0;
 
@@ -360,8 +360,10 @@ int CountUsersByYear(hash_user h, int year) {
     return count;
 }
 
+
+
 ////Função que conta os usuários, mas que dá todos os meses
-/* Função que imprime o número de usuários para cada mês em um determinado ano. */
+
 int CountUsersByMonth(hash_user h, int year, int month) {
     int userCount = 0;
 
@@ -523,7 +525,7 @@ int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
     return totalPassageiros;
 }
 
-
+*/
 
 // Função que imprime todos os voos de todos os usuários
 void ImprimirTodosVoos(hash_user h) {
