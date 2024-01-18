@@ -351,28 +351,43 @@ void q3(hash_hoteis h_hoteis, char *argv,  int f,FILE *fp_output) {
  * fp_output: Ponteiro para o ficheiro de saída.
  */
 void q4(hash_hoteis h_hoteis, char *argv, int f, FILE *fp_output) {
-	int i = 1;
-	Hotel *aux = RetrieveHotel(h_hoteis, argv);
-	if(aux) {
-		ReservaResumo *reserva = hotelGetNextResumo(aux);
-		while(reserva)  {
-			if(f == 1) {
-				if(i == 1) {
-					fprintf(fp_output, "--- %d ---\nid: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.0f\ntotal_price: %.3f\n",i, reservaResumoGetId(reserva), reservaResumoGetBeginDate(reserva), reservaResumoGetEndDate(reserva),reservaResumoGetUserId(reserva), reservaResumoGetRating(reserva), reservaResumoGetTotalPrice(reserva));
-				} 
-				else {
-					fprintf(fp_output, "\n--- %d ---\nid: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.0f\ntotal_price: %.3f\n",i, reservaResumoGetId(reserva), reservaResumoGetBeginDate(reserva), reservaResumoGetEndDate(reserva),reservaResumoGetUserId(reserva), reservaResumoGetRating(reserva), reservaResumoGetTotalPrice(reserva));
-				}
-			}
-			else {
-				fprintf(fp_output, "%s;%s;%s;%s;%.0f;%.3f\n",reservaResumoGetId(reserva), reservaResumoGetBeginDate(reserva), reservaResumoGetEndDate(reserva),reservaResumoGetUserId(reserva), reservaResumoGetRating(reserva), reservaResumoGetTotalPrice(reserva));
-			}
-			i++;
-			reserva = reservaResumoGetNext(reserva);
-		}
-	}
-	
+    int i = 1;
+    Hotel *aux = RetrieveHotel(h_hoteis, argv);
+    if (aux) {
+        ReservaResumo *reserva = hotelGetNextResumo(aux);
+        while (reserva)  {
+            char *idValue = reservaResumoGetId(reserva);
+            char *beginDateValue = reservaResumoGetBeginDate(reserva);
+            char *endDateValue = reservaResumoGetEndDate(reserva);
+            char *userIdValue = reservaResumoGetUserId(reserva);
+
+            if (f == 1) {
+                if (i == 1) {
+                    fprintf(fp_output, "--- %d ---\nid: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.0f\ntotal_price: %.3f\n",
+                            i, idValue, beginDateValue, endDateValue, userIdValue, reservaResumoGetRating(reserva), reservaResumoGetTotalPrice(reserva));
+                } else {
+                    fprintf(fp_output, "\n--- %d ---\nid: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.0f\ntotal_price: %.3f\n",
+                            i, idValue, beginDateValue, endDateValue, userIdValue, reservaResumoGetRating(reserva), reservaResumoGetTotalPrice(reserva));
+                }
+            } else {
+                fprintf(fp_output, "%s;%s;%s;%s;%.0f;%.3f\n", idValue, beginDateValue, endDateValue, userIdValue, reservaResumoGetRating(reserva), reservaResumoGetTotalPrice(reserva));
+            }
+
+            // Liberar a memória alocada para a string id, beginDate, endDate e userId
+            free(idValue);
+            free(beginDateValue);
+            free(endDateValue);
+            free(userIdValue);
+
+            i++;
+            reserva = reservaResumoGetNext(reserva);
+        }
+    }
 }
+
+
+
+
 
 
 /*
@@ -429,28 +444,45 @@ void q9(hash_user h_users, char *argv, int f, FILE *fp_output) {
  * fp_output: Ponteiro para o ficheiro de saída.
  */
 void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_date, int f, FILE *fp_output) {
-	VooResumo *aux = GetVoosAeroportoEntreDatas(h_aeroportos, origin, begin_date, end_date);
-	int i = 1;
-	if(aux) {
-		while(aux) {
-			if(f == 1) {
-				if(i == 1) {
-					fprintf(fp_output, "--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, vooResumoGetId(aux), vooResumoGetScheduleDepartureDate(aux),vooResumoGetDestination(aux), vooResumoGetAirline(aux), vooResumoGetPlaneModel(aux));
-				}
-				else {
-					fprintf(fp_output, "\n--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",i, vooResumoGetId(aux), vooResumoGetScheduleDepartureDate(aux),vooResumoGetDestination(aux), vooResumoGetAirline(aux), vooResumoGetPlaneModel(aux));
-				}
-				i++;
-			}
-			else {
-				fprintf(fp_output, "%s;%s;%s;%s;%s\n",vooResumoGetId(aux), vooResumoGetScheduleDepartureDate(aux),vooResumoGetDestination(aux), vooResumoGetAirline(aux), vooResumoGetPlaneModel(aux));
-			}
-			
-			//fprintf(fp_output, "%s;%s;%s;%s;%.0f;%.3f\n",reserva->id, reserva->begin_date, reserva->end_date,reserva->user_id, reserva->rating, reserva->total_price);
-			aux = vooResumoGetNext(aux);
-		}
-	}
+    VooResumo *aux = GetVoosAeroportoEntreDatas(h_aeroportos, origin, begin_date, end_date);
+    int i = 1;
+    if (aux) {
+        while (aux) {
+            char *idValue = vooResumoGetId(aux);
+            char *scheduleDepartureDateValue = vooResumoGetScheduleDepartureDate(aux);
+            char *destinationValue = vooResumoGetDestination(aux);
+            char *airlineValue = vooResumoGetAirline(aux);
+            char *planeModelValue = vooResumoGetPlaneModel(aux);
+
+            if (f == 1) {
+                if (i == 1) {
+                    fprintf(fp_output, "--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",
+                            i, idValue, scheduleDepartureDateValue, destinationValue, airlineValue, planeModelValue);
+                } else {
+                    fprintf(fp_output, "\n--- %d ---\nid: %s\nschedule_departure_date: %s\ndestination: %s\nairline: %s\nplane_model: %s\n",
+                            i, idValue, scheduleDepartureDateValue, destinationValue, airlineValue, planeModelValue);
+                }
+                i++;
+            } else {
+                fprintf(fp_output, "%s;%s;%s;%s;%s\n", idValue, scheduleDepartureDateValue, destinationValue, airlineValue, planeModelValue);
+            }
+
+            // Liberar a memória alocada para as strings id, scheduleDepartureDate, destination, airline e plane_model
+            free(idValue);
+            free(scheduleDepartureDateValue);
+            free(destinationValue);
+            free(airlineValue);
+            free(planeModelValue);
+
+            aux = vooResumoGetNext(aux);
+        }
+    }
 }
+
+
+
+
+
 
 
 void q6(hash_voos h_voos, char *ano_str, char *N_str, int f, FILE *fp_output) {
@@ -465,46 +497,57 @@ void q6(hash_voos h_voos, char *ano_str, char *N_str, int f, FILE *fp_output) {
     int i = 1;
     SomaPassageirosAno *current = listaSomaPassageiros;
     while (current != NULL) {
+        char *nomeAeroporto = somaGetNomeAeroporto(current);
+
         if (f == 1) {
             if (i == 1) {
-                fprintf(fp_output, "--- %d ---\nname: %s\npassengers: %d\n", i, somaGetNomeAeroporto(current), somaGetTotalPassageiros(current));
+                fprintf(fp_output, "--- %d ---\nname: %s\npassengers: %d\n", i, nomeAeroporto, somaGetTotalPassageiros(current));
             } else {
-                fprintf(fp_output, "\n--- %d ---\nname: %s\npassengers: %d\n", i, somaGetNomeAeroporto(current), somaGetTotalPassageiros(current));
+                fprintf(fp_output, "\n--- %d ---\nname: %s\npassengers: %d\n", i, nomeAeroporto, somaGetTotalPassageiros(current));
             }
             i++;
         } else {
-            fprintf(fp_output, "%s;%d\n", somaGetNomeAeroporto(current), somaGetTotalPassageiros(current));
+            fprintf(fp_output, "%s;%d\n", nomeAeroporto, somaGetTotalPassageiros(current));
         }
+
+        // Liberar a memória alocada para a string do nome do aeroporto
+        free(nomeAeroporto);
+
         current = somaGetNext(current);
     }
+
+    // Liberar a memória alocada para a lista
     destroiSomaPassageirosAno(listaSomaPassageiros);
 }
 
 
+
 void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output) {
-	
-	int i = 0;
-	MedianaAeroporto *aux = GetMedianaAeroportos(h_aeroportos);
-	while(aux && i++ < N) {
-		char* nome = medianaGetNome(aux);
-        if(f == 1) {
-			if(i == 1) {
-				fprintf(fp_output,"--- %d ---\nname: %s\nmedian: %d\n",i,nome,medianaGetMediana(aux));
-			}
-			else {
-				fprintf(fp_output,"\n--- %d ---\nname: %s\nmedian: %d\n",i,nome,medianaGetMediana(aux));
-			}
-			
-		}
-		else {
-			fprintf(fp_output,"%s;%d\n",nome,medianaGetMediana(aux));
-		}
-		
-		aux = medianaGetNext(aux);
+    int i = 0;
+    MedianaAeroporto *aux = GetMedianaAeroportos(h_aeroportos);
+    while (aux && i++ < N) {
+        char *nome = medianaGetNome(aux);
+
+        if (f == 1) {
+            if (i == 1) {
+                fprintf(fp_output, "--- %d ---\nname: %s\nmedian: %d\n", i, nome, medianaGetMediana(aux));
+            } else {
+                fprintf(fp_output, "\n--- %d ---\nname: %s\nmedian: %d\n", i, nome, medianaGetMediana(aux));
+            }
+        } else {
+            fprintf(fp_output, "%s;%d\n", nome, medianaGetMediana(aux));
+        }
+
+        // Liberar a memória alocada para a string do nome do aeroporto
         free(nome);
-	}
-    destroiMedianaAeroporto(aux);	
+
+        aux = medianaGetNext(aux);
+    }
+
+    // Liberar a memória alocada para a lista
+    destroiMedianaAeroporto(aux);
 }
+
 
 void q8(hash_hoteis h_hoteis,char *argv, char *start_date, char *end_date, int f, FILE *fp_output) {
 	int i = 0;

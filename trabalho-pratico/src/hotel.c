@@ -44,24 +44,20 @@ ReservaResumo *createReservaResumo(char *id, char *begin_date, char *end_date, c
     return reservaResumo;
 }
 
-char *reservaResumoGetId(ReservaResumo *reservaResumo){
+char *reservaResumoGetId(ReservaResumo *reservaResumo){ //já está tratado os leaks 
     return strdup(reservaResumo->id);
 }
 
-char *reservaResumoGetBeginDate(ReservaResumo *reservaResumo){
+char *reservaResumoGetBeginDate(ReservaResumo *reservaResumo){ //já está tratado os leaks 
     return strdup(reservaResumo->begin_date);
 }
 
-char *reservaResumoGetEndDate(ReservaResumo *reservaResumo){
+char *reservaResumoGetEndDate(ReservaResumo *reservaResumo){ //já está tratado os leaks 
     return strdup(reservaResumo->end_date);
 }
 
-char *reservaResumoGetUserId(ReservaResumo *reservaResumo){
+char *reservaResumoGetUserId(ReservaResumo *reservaResumo){ //já está tratado os leaks 
     return strdup(reservaResumo->user_id);
-}
-
-char *reservaResumoGetPricePerNight(ReservaResumo *reservaResumo){
-    return strdup(reservaResumo->price_per_night);
 }
 
 double reservaResumoGetTotalPrice(ReservaResumo *reservaResumo){
@@ -74,10 +70,6 @@ double reservaResumoGetRating(ReservaResumo *reservaResumo){
 
 ReservaResumo *reservaResumoGetNext(ReservaResumo *reservaResumo){
     return reservaResumo->next_resumo;
-}
-
-char *hotelGetId(Hotel *hotel){
-    return strdup(hotel->hotel_id);
 }
 
 Hotel *hotelGetNext(Hotel *hotel){
@@ -185,6 +177,7 @@ void destroiReservaResumo(ReservaResumo *reservaResumo){
 		free(atual->begin_date);
 		free(atual->end_date);	
 		free(atual->user_id);
+        free(atual->price_per_night);
         free(atual);
 	}
 	free(reservaResumo);

@@ -42,7 +42,7 @@ char* getId(Q2 *q2){ //já vi os memory leaks
     return strdup(q2->id);
 }
 
-char* getData(Q2 *q2){
+char* getData(Q2 *q2){ //já vi os memory leaks 
     return strdup(q2->data);
 }
 

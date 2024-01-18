@@ -63,11 +63,11 @@ Aeroporto *createAeroporto(char *name){
 }
 
 
-char *aeroportoGetName(Aeroporto *aeroporto){
+char *aeroportoGetName(Aeroporto *aeroporto){ //já está sem leaks 
     return strdup(aeroporto->name);
 }
 
-Aeroporto *aeroportoGetNext(Aeroporto *aeroporto){
+Aeroporto *aeroportoGetNext(Aeroporto *aeroporto){ 
     return aeroporto->next;
 }
 
@@ -85,7 +85,7 @@ void setNextVooResumoAeroporto(Aeroporto *aeroporto, VooResumo *next){
 }
 
 
-char *somaGetNomeAeroporto(SomaPassageirosAno *somaPassageirosAno){
+char *somaGetNomeAeroporto(SomaPassageirosAno *somaPassageirosAno){ //já está sem leaks 
     return strdup(somaPassageirosAno->nomeAeroporto);
 }
 
@@ -97,7 +97,7 @@ SomaPassageirosAno *somaGetNext (SomaPassageirosAno *somaPassageirosAno){
     return somaPassageirosAno->next;
 }
 
-char *medianaGetNome(MedianaAeroporto *medianaAeroporto){
+char *medianaGetNome(MedianaAeroporto *medianaAeroporto){ //já está sem leaks 
     return strdup(medianaAeroporto->name);
 }
 
@@ -554,27 +554,27 @@ VooResumo *createVooResumo(char *id, char *schedule_departure_date, char *real_d
     return voo_resumo;
 }
 
-char *vooResumoGetId(VooResumo *voo_resumo) {
+char *vooResumoGetId(VooResumo *voo_resumo) { //já estão tratados os leaks 
     return strdup(voo_resumo->id);
 }
 
-char *vooResumoGetScheduleDepartureDate(VooResumo *voo_resumo) {
+char *vooResumoGetScheduleDepartureDate(VooResumo *voo_resumo) { //Já estão tratados os leaks no interpreter, falta no aeroporto.c
     return strdup(voo_resumo->schedule_departure_date);
 }
 
-char *vooResumoGetRealDepartureDate(VooResumo *voo_resumo) {
+char *vooResumoGetRealDepartureDate(VooResumo *voo_resumo) { //falta no aeroporto.c
     return strdup(voo_resumo->real_departure_date);
 }
 
-char *vooResumoGetDestination(VooResumo *voo_resumo) {
+char *vooResumoGetDestination(VooResumo *voo_resumo) { //Já estão tratados os leaks no interpreter, falta no aeroporto.c
     return strdup(voo_resumo->destination);
 }
 
-char *vooResumoGetAirline(VooResumo *voo_resumo) {
+char *vooResumoGetAirline(VooResumo *voo_resumo) { //Já estão tratados os leaks 
     return strdup(voo_resumo->airline);
 }
 
-char *vooResumoGetPlaneModel(VooResumo *voo_resumo) {
+char *vooResumoGetPlaneModel(VooResumo *voo_resumo) { //Já estão tratados os leaks 
     return strdup(voo_resumo->plane_model);
 }
 
