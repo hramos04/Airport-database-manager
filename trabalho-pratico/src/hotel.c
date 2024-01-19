@@ -307,9 +307,3 @@ int GetLucro(hash_hoteis h, KeyType k, char *start_date, char *end_date) {
     }
     return -1; // Retorna -1 se o hotel não for encontrado
 }
-
-
-
-
-
-

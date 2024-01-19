@@ -124,7 +124,3 @@ int main(int argc, char *argv[]) {
 	destroiTableHotel(h_hoteis);
     return 0;   
 }
-
-
-
-

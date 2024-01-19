@@ -173,7 +173,6 @@ void InsertTableAeroporto(hash_aeroportos h, KeyType k, VooResumo *vooresumo) {
     }
     int i = HashAeroportos(k);
     Aeroporto *aux = RetrieveAeroporto(h, k);
-    
     convertToUpper(vooResumoGetDestination(vooresumo));
     if(!aux) {
 		Aeroporto *novo = (Aeroporto *)malloc(sizeof(Aeroporto));
@@ -494,7 +493,6 @@ MedianaAeroporto * GetMedianaAeroportos(hash_aeroportos h) {
 			
 			while(ae) {
 				MedianaAeroporto *novo = (MedianaAeroporto*)malloc(sizeof(MedianaAeroporto));
-
 				novo->name = aeroportoGetName(ae);
 				novo->tamanho = 0;
 				novo->capacidade = 1;
@@ -608,7 +606,7 @@ void destroiVooResumo(VooResumo *vooResumo){
         free(atual->plane_model);
         free(atual);
 	}
-    free(vooResumo);
+	free(vooResumo);
 }
 
 /* Função para incrementar o número total de passageiros na lista ligada VooResumo de um Aeroporto */
@@ -659,7 +657,6 @@ VooResumo *GetVoosAeroportoEntreDatas(hash_aeroportos h, KeyType k, char *begin_
 				result = copia;
 			}
 			vooResumo = vooResumo->next_resumo;
-
 		}
 	}
     return result;
@@ -687,4 +684,3 @@ void destroiMedianaAeroporto(MedianaAeroporto *medianaAeroporto){
     }
     free(medianaAeroporto);
 }
-

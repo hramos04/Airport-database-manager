@@ -231,7 +231,6 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
     char data[100];
     User *user = RetrieveUser(h_users, argv[1]);
     int i = 1;
-    
     if (user && (strcasecmp(userGetAccountStatus(user), "active") == 0)) {
         Q2 *q2 = userGetQ2(user);
         while (q2) {
@@ -250,6 +249,9 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
                             fprintf(fp_output, "%s;%s\n", getId(q2), data);
                         }
                         i++;
+
+                        // Liberar a memória alocada para a string id
+                        free(getId(q2));
                     }
                 } else if (strcmp(argv[2], "flights") == 0) {
                     if (getTipo(q2) == 2) {
@@ -264,6 +266,9 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
                             fprintf(fp_output, "%s;%s\n", getId(q2), data);
                         }
                         i++;
+
+                        // Liberar a memória alocada para a string id
+                        free(getId(q2));
                     }
                 }
             } else {
@@ -281,6 +286,8 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
 
                     i++;
 
+                    // Liberar a memória alocada para a string id
+                    free(getId(q2));
                 } else {
                     if (f == 1) {
                         if (i == 1) {
@@ -294,15 +301,18 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
                     }
 
                     i++;
+
+                    // Liberar a memória alocada para a string id
+                    free(getId(q2));
                 }
             }
 
+            // Liberar a memória alocada para a string data
             free(dataGet);
 
             q2 = getNext(q2);
         }
     }
-
 }
 
 
@@ -438,7 +448,6 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
     VooResumo *aux = GetVoosAeroportoEntreDatas(h_aeroportos, origin, begin_date, end_date);
     int i = 1;
     if (aux) {
-        VooResumo *temp = aux;
         while (aux) {
             char *idValue = vooResumoGetId(aux);
             char *scheduleDepartureDateValue = vooResumoGetScheduleDepartureDate(aux);
@@ -446,6 +455,7 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
             char *airlineValue = vooResumoGetAirline(aux);
             char *planeModelValue = vooResumoGetPlaneModel(aux);
 
+            // Converter todos os caracteres para maiúsculas
             for (int j = 0; destinationValue[j]; j++) {
                 destinationValue[j] = toupper(destinationValue[j]);
             }
@@ -463,7 +473,7 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
                 fprintf(fp_output, "%s;%s;%s;%s;%s\n", idValue, scheduleDepartureDateValue, destinationValue, airlineValue, planeModelValue);
             }
 
-
+            // Liberar a memória alocada para as strings id, scheduleDepartureDate, destination, airline e plane_model
             free(idValue);
             free(scheduleDepartureDateValue);
             free(destinationValue);
@@ -472,7 +482,6 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
 
             aux = vooResumoGetNext(aux);
         }
-        destroiVooResumo(temp);
     }
 }
 
@@ -540,6 +549,7 @@ void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output) {
 
         aux = medianaGetNext(aux);
     }
+
     destroiMedianaAeroporto(aux);
 }
 

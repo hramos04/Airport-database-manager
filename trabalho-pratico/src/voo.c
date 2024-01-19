@@ -142,9 +142,8 @@ void destroiTableVoo(hash_voos h) {
 			free(position->pilot);
 			free(position->copilot);
             free(position->notes);
-            
-        }
-        free(h[i]);
+		}
+		free(h[i]);
 	}
 }
 
