@@ -610,7 +610,7 @@ int process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_rese
 				
 				InsertTableHoteis(h_hoteis, hotel_id, novo_resumo);
 				InsertTableReservas(h_reservas, id, nova_reserva);
-				Q2 *nova_q2  = create_q2(id,begin_date,total_gasto,1);
+				Q2 *nova_q2  = create_q2(id,begin_date,1,total_gasto);
 				InsertReservaUser(h, user_id, nova_q2);
 				//freeQ2(nova_q2);
 			}
@@ -770,7 +770,7 @@ int process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voos
 				}
 		  }
 		  else {
-			Voo *novo_voo = createVoo(id,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot,notes);
+			Voo *novo_voo = createVoo(id,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot,notes, calcularDiferencaSegundos(schedule_departure_date, real_departure_date));
 			
 			InsertTableVoos(h_voos, id, novo_voo);
 			//freeVoo(novo_voo);

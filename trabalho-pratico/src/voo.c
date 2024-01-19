@@ -26,7 +26,7 @@ struct Voo {
 };
 
 
-Voo *createVoo(char *id, char *airline, char *plane_model, char *total_seats, char *origin, char *destination, char *schedule_departure_date, char *schedule_arrival_date, char *real_departure_date, char *real_arrival_date, char *pilot, char *copilot, char *notes){
+Voo *createVoo(char *id, char *airline, char *plane_model, char *total_seats, char *origin, char *destination, char *schedule_departure_date, char *schedule_arrival_date, char *real_departure_date, char *real_arrival_date, char *pilot, char *copilot, char *notes, int delay){
     Voo *voo = malloc(sizeof(struct Voo));
 
     voo->id = strdup(id);
@@ -44,7 +44,7 @@ Voo *createVoo(char *id, char *airline, char *plane_model, char *total_seats, ch
     voo->notes = strdup(notes);
     
     voo->total_passengers = 0;
-    voo->delay = 0;
+    voo->delay = delay;
     voo->next_voo = NULL;
 
     return voo;

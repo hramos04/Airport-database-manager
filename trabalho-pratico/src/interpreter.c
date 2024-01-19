@@ -12,6 +12,7 @@
 
 
 
+
 //Definição das constantes
 #define CURRENT_YEAR 2023
 #define CURRENT_MONTH 10
@@ -146,10 +147,10 @@ void q1(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char *arg
             char *countryValue = userGetCountry(user);
 
             if (f == 1) {
-                fprintf(fp_output, "--- 1 ---\nname: %s\nsex: %s\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",
+                fprintf(fp_output, "--- 1 ---\nname: %s\nsex: %s\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3lf\n",
                         nomeValue, sexValue, calculaIdade(birthValue), countryValue, passportValue, userGetTotalVoos(user), userGetTotalReservas(user), userGetTotalGasto(user));
             } else {
-                fprintf(fp_output, "%s;%s;%d;%s;%s;%d;%d;%.3f\n",
+                fprintf(fp_output, "%s;%s;%d;%s;%s;%d;%d;%.3lf\n",
                         nomeValue, sexValue, calculaIdade(birthValue), countryValue, passportValue, userGetTotalVoos(user), userGetTotalReservas(user), userGetTotalGasto(user));
             }
 

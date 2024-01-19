@@ -13,6 +13,7 @@
 #include "time.h"
 
 
+
 int main(int argc, char *argv[]) {
 	/*Iniciar o relógio para medir o tempo de execução*/
 	clock_t start, end, duration;
@@ -111,7 +112,7 @@ int main(int argc, char *argv[]) {
 
     // Imprimir a lista de soma de passageiros por ano
     //imprimirListaSomaPassageirosAno(listaSomaPassageiros);
-
+	
 
 	free(csv_passengers);
 	free(csv_reservas);
