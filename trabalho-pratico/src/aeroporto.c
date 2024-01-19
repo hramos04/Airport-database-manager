@@ -531,7 +531,7 @@ MedianaAeroporto * GetMedianaAeroportos(hash_aeroportos h) {
                     novo->next = temp->next;
                     temp->next = novo;
                 }
-				 ae = aeroportoGetNext(ae);				 
+				 ae = aeroportoGetNext(ae);	
 			 }
 		 }
 	}
@@ -658,8 +658,6 @@ VooResumo *GetVoosAeroportoEntreDatas(hash_aeroportos h, KeyType k, char *begin_
 			}
 			vooResumo = vooResumo->next_resumo;
 		}
-        destroiVooResumo(aeroporto->next_resumo);
-        aeroporto->next_resumo = NULL;
 	}
     return result;
 }
