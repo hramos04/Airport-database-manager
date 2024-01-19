@@ -299,6 +299,7 @@ void InsertReservaUser(hash_user h, KeyType k, Q2 *q2) {
             char *dataCurrentQ2 = getData(currentQ2);
 
             if (strcmp(dataCurrentQ2, dataQ2) < 0) {
+                free(dataCurrentQ2);
                 break;
             }
 
@@ -347,6 +348,7 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
             char *dataCurrentQ2 = getData(currentQ2);
 
             if (strcmp(dataCurrentQ2, dataQ2) < 0) {
+                free(dataCurrentQ2);
                 break;
             }
 
