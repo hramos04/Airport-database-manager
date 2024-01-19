@@ -602,7 +602,6 @@ int process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_rese
 				double total_gasto = calcularDiasDatas(begin_date, end_date) * strtod(price_per_night, &endptr) + ( ((calcularDiasDatas(begin_date, end_date) * strtod(price_per_night, &endptr) / 100)* strtod(city_tax, &endptr)));
 				Reserva *nova_reserva = createReserva(id,user_id,hotel_id,hotel_name,hotel_stars,city_tax,address,begin_date,end_date,price_per_night,includes_breakfast,room_details,rating,comment,total_noites,total_gasto);
 			
-				
 				double rat = strtod(rating, &endptr);
 				double total =  calcularDiasDatas(begin_date, end_date) * strtod(price_per_night, &endptr) + ( ((calcularDiasDatas(begin_date, end_date) * strtod(price_per_night, &endptr) / 100)* strtod(city_tax, &endptr)));
 
@@ -612,7 +611,6 @@ int process_reservas_csv(hash_user h, hash_hoteis h_hoteis, hash_reservas h_rese
 				InsertTableReservas(h_reservas, id, nova_reserva);
 				Q2 *nova_q2  = create_q2(id,begin_date,total_gasto,1);
 				InsertReservaUser(h, user_id, nova_q2);
-				//freeQ2(nova_q2);
 			}
 		}
 	}
