@@ -502,10 +502,14 @@ MedianaAeroporto * GetMedianaAeroportos(hash_aeroportos h) {
 				 
 				 VooResumo *vooresumo = aeroportoGetNextResumo(ae);
 				 while(vooresumo) {
-					 int segundos = diferencaEmSegundos(vooResumoGetScheduleDepartureDate(vooresumo), vooResumoGetRealDepartureDate(vooresumo));
+                    char* scheduleDepartureDate = vooResumoGetScheduleDepartureDate(vooresumo);
+                    char* realDepartureDate = vooResumoGetRealDepartureDate(vooresumo);
+					int segundos = diferencaEmSegundos(scheduleDepartureDate,realDepartureDate);
 					inserirAtraso(novo, segundos);
 					 
-					 vooresumo = vooResumoGetNext(vooresumo);
+					vooresumo = vooResumoGetNext(vooresumo);
+                    free(scheduleDepartureDate);
+                    free(realDepartureDate);
 				 }
 				 qsort(novo->atrasos, novo->tamanho, sizeof(int), comparar);
 				 if(novo->tamanho % 2 != 0) {
@@ -527,8 +531,7 @@ MedianaAeroporto * GetMedianaAeroportos(hash_aeroportos h) {
                     novo->next = temp->next;
                     temp->next = novo;
                 }
-				 ae = aeroportoGetNext(ae);
-				 
+				 ae = aeroportoGetNext(ae);				 
 			 }
 		 }
 	}
@@ -654,7 +657,9 @@ VooResumo *GetVoosAeroportoEntreDatas(hash_aeroportos h, KeyType k, char *begin_
 				result = copia;
 			}
 			vooResumo = vooResumo->next_resumo;
-		}	
+		}
+        destroiVooResumo(aeroporto->next_resumo);
+        aeroporto->next_resumo = NULL;
 	}
     return result;
 }
@@ -682,17 +687,3 @@ void destroiMedianaAeroporto(MedianaAeroporto *medianaAeroporto){
     free(medianaAeroporto);
 }
 
-void freeVooResumo(VooResumo *resumo) {
-    if (resumo == NULL) {
-        return;
-    }
-
-    free(resumo->id);
-    free(resumo->schedule_departure_date);
-    free(resumo->real_departure_date);
-    free(resumo->destination);
-    free(resumo->airline);
-    free(resumo->plane_model);
-
-    free(resumo);
-}

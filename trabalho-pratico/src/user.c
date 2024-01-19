@@ -334,7 +334,7 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
         }
         aux = aux->next;
     }
-
+    
     if (aux) {
         aux->total_voos++;
         Q2 *currentQ2 = aux->q2;

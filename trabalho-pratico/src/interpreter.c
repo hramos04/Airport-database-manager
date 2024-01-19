@@ -550,8 +550,6 @@ void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output) {
         aux = medianaGetNext(aux);
     }
 
-    // Liberar a memória alocada para a lista
-    destroiMedianaAeroporto(aux);
 }
 
 

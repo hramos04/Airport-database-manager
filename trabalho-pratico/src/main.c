@@ -113,7 +113,10 @@ int main(int argc, char *argv[]) {
     //imprimirListaSomaPassageirosAno(listaSomaPassageiros);
 
 
-
+	free(csv_passengers);
+	free(csv_reservas);
+	free(csv_users);
+	free(csv_voos);
 	destroiTableUser(h_users);
 	destroiTableVoo(h_voos);
 	destroiTableAeroporto(h_aeroportos);
