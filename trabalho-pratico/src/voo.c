@@ -228,11 +228,8 @@ void PrintHashVoos(hash_voos h_voos) {
     }
 }
 
+// Adicione esta função para libertar a memória alocada em createVoo
 void freeVoo(Voo *voo) {
-    if (voo == NULL) {
-        return;
-    }
-
     free(voo->id);
     free(voo->airline);
     free(voo->plane_model);
@@ -246,7 +243,6 @@ void freeVoo(Voo *voo) {
     free(voo->pilot);
     free(voo->copilot);
     free(voo->notes);
-
     free(voo);
 }
 

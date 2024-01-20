@@ -83,6 +83,7 @@ void split(char *line, int *arg_count, char *args[MAX_ARGS]) {
 }
 
 
+
 /*
  * Função: calculaIdade
  * ---------------------
@@ -424,9 +425,9 @@ void q9(hash_user h_users, char *argv, int f, FILE *fp_output) {
 
             free(userId);  // Liberar a memória alocada por userGetId
             free(nomeValue); // Liberar a memória alocada por userGetNome
-            freeUser(aux);
+            User *temp = aux;  // Salvar a referência para o usuário atual
             aux = userGetNext(aux);
-        
+            freeUser(temp);  // Liberar a memória alocada para o usuário atual
         }
     }
 }
@@ -723,7 +724,9 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
 	//	q10(h_users, h_voos, h_reservas, args, argc,f, fp_output);
 	//}
 	
-	
+	for (int i = 0; i < argc; i++) {
+        free(args[i]);
+    }
 	
 	return 1;
 }
