@@ -674,12 +674,7 @@ void destroiSomaPassageirosAno(SomaPassageirosAno *somaPassageirosAno){
 }
 
 void destroiMedianaAeroporto(MedianaAeroporto *medianaAeroporto){
-    while(medianaAeroporto!=NULL){
-        MedianaAeroporto *atual = medianaAeroporto;
-        medianaAeroporto = medianaAeroporto->next;
-        free(atual->name);
-        free(atual->atrasos);
-        free(atual);
-    }
-    free(medianaAeroporto);
+        free(medianaAeroporto->name);
+        free(medianaAeroporto->atrasos);
+        free(medianaAeroporto);
 }

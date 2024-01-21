@@ -537,11 +537,10 @@ void q7(hash_aeroportos h_aeroportos, int N, int f, FILE *fp_output) {
 
         // Liberar a memória alocada para a string do nome do aeroporto
         free(nome);
-
+        MedianaAeroporto *temp=aux;
         aux = medianaGetNext(aux);
+        destroiMedianaAeroporto(temp);
     }
-
-    destroiMedianaAeroporto(aux);
 }
 
 
