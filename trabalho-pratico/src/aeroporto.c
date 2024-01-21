@@ -661,6 +661,14 @@ VooResumo *GetVoosAeroportoEntreDatas(hash_aeroportos h, KeyType k, char *begin_
     return result;
 }
 
+void destroiVooAeroportoEntreDatas(VooResumo *voo_resumo) {
+    free(voo_resumo->id);
+    free(voo_resumo->schedule_departure_date);
+    free(voo_resumo->destination);
+    free(voo_resumo->airline);
+    free(voo_resumo->plane_model);
+}
+
 
 
 void destroiSomaPassageirosAno(SomaPassageirosAno *somaPassageirosAno){

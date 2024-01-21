@@ -470,8 +470,9 @@ void q5(hash_aeroportos h_aeroportos, char *origin, char *begin_date, char *end_
             free(airlineValue);
             free(planeModelValue);
             
-
+            VooResumo *temp=aux;
             aux = vooResumoGetNext(aux);
+            destroiVooAeroportoEntreDatas(temp);
         }
     }
 }

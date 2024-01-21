@@ -161,5 +161,6 @@ void destroiSomaPassageirosAno(SomaPassageirosAno *somaPassageirosAno);
 
 void destroiMedianaAeroporto(MedianaAeroporto *medianaAeroporto);
 
+void destroiVooAeroportoEntreDatas(VooResumo *voo_resumo);
 
 #endif
