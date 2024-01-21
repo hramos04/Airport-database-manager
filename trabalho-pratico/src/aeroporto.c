@@ -137,18 +137,17 @@ void InitializeTableAeroportos(hash_aeroportos h) {
 }
 
 
-void destroiTableAeroporto(hash_aeroportos h){
-    	
-        for(int i = 0; i<HASHSIZEVOO; i++){
-            Aeroporto *atual = h[i];
-            while(atual!=NULL){
-                Aeroporto *position = atual;
-                atual = atual->next;
-                free(position->name);
-                destroiVooResumo(position->next_resumo);
-                free(position);
-            }
-	}
+void destroiTableAeroporto(hash_aeroportos h) {
+    for (int i = 0; i < HASHSIZEVOO; i++) {
+        Aeroporto *atual = h[i];
+        while (atual != NULL) {
+            Aeroporto *position = atual;
+            atual = atual->next;
+            free(position->name);
+            destroiVooResumo(position->next_resumo);
+            free(position);
+        }
+    }
 }
 
 
@@ -593,21 +592,22 @@ void setNextVooResumo(struct VooResumo *voo_resumo, struct VooResumo *next_voo_r
     voo_resumo->next_resumo = next_voo_resumo;
 }
 
-void destroiVooResumo(VooResumo *vooResumo){
-
-	while(vooResumo!=NULL){
-		VooResumo *atual = vooResumo;
-		vooResumo = vooResumo->next_resumo;
-		free(atual->id);
-		free(atual->schedule_departure_date);
+void destroiVooResumo(VooResumo *vooResumo) {
+    while (vooResumo != NULL) {
+        VooResumo *atual = vooResumo;
+        vooResumo = vooResumo->next_resumo;
+        free(atual->id);
+        free(atual->schedule_departure_date);
         free(atual->real_departure_date);
-		free(atual->destination);
+        free(atual->destination);
         free(atual->airline);
         free(atual->plane_model);
         free(atual);
-	}
-	free(vooResumo);
+    }
+    free(vooResumo);
 }
+
+
 
 /* Função para incrementar o número total de passageiros na lista ligada VooResumo de um Aeroporto */
 int InsertPassengerVooResumo(hash_aeroportos h_aeroportos, KeyType voo_id) {

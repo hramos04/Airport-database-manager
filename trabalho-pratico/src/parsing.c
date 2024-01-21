@@ -776,7 +776,7 @@ int process_voos_csv(hash_user h, hash_aeroportos h_aeroportos, hash_voos h_voos
 			//freeVoo(novo_voo);
 			VooResumo *novo_resumo =createVooResumo(id,schedule_departure_date,real_departure_date,destination,airline,plane_model);
 			InsertTableAeroporto(h_aeroportos, origin, novo_resumo);
-			//freeVooResumo(novo_resumo);
+			//(novo_resumo);
 		  }
 	}
 	
