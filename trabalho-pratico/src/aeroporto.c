@@ -172,7 +172,6 @@ void InsertTableAeroporto(hash_aeroportos h, KeyType k, VooResumo *vooresumo) {
     }
     int i = HashAeroportos(k);
     Aeroporto *aux = RetrieveAeroporto(h, k);
-    convertToUpper(vooResumoGetDestination(vooresumo));
     if(!aux) {
 		Aeroporto *novo = (Aeroporto *)malloc(sizeof(Aeroporto));
 		novo->name = strdup(k);
