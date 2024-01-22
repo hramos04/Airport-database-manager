@@ -43,12 +43,13 @@ int main_interativo(char* file, hash_user h_users,hash_aeroportos h_aeroportos,h
     int voos = process_voos_csv(h_users, h_aeroportos, h_voos, csv_voos);
     int passageiros = process_passengers_csv(h_users, h_voos, h_aeroportos, csv_passengers);
     if(users == 1 || reservas == 1 || voos == 1 || passageiros == 1){ 
-        printw("ERRO NO CAMINHO DO FICHEIRO");
+        printw("CAMINHO INVALIDO");
         refresh();
         napms(1000);
         move(10,0);
         clrtoeol();
         refresh();
+        napms(500);
         return 1;
     }
 
@@ -92,12 +93,12 @@ void move_pages(FILE *file, WINDOW* win, int n_linhas, int sum){
 
     if(n_linhas > 15){
         move(30,14);
-        printw("MENU (Q)");
+        printw("MENU (E)");
         isLarge = 1;
     }
     else{
         move(n_linhas+11,0);
-        printw("MENU (Q)");
+        printw("MENU (E)");
         isLarge = 1;
     }
 
@@ -116,7 +117,6 @@ void move_pages(FILE *file, WINDOW* win, int n_linhas, int sum){
             clrtoeol();
             printw("(<-) ANTERIOR [%d/%d] SEGUINTE (->)", pag, n_linhas/15+sum);
             move(28,7);
-            printw("(P) PRIMEIRA | ULTIMA (U)");
             refresh();
         }
 
@@ -147,26 +147,8 @@ void move_pages(FILE *file, WINDOW* win, int n_linhas, int sum){
             }
             else pag--;
             break;
-        
-        case 'p':
-            if(n_linhas>15){
-                start = 0;
-                end = 15;
-                pag = 1;
-            }
-            break;
 
-        case 'u':
-            if(n_linhas>15){
-                while(end<n_linhas){
-                    start += 15;
-                    end += 15;
-                }
-                pag = n_linhas/15+sum;
-            }
-            break;
-        
-        case 'q':
+        case 'e':
             for(int i = 0; i < 30; i++){
                 move(i+9, 0);
                 clrtoeol();
@@ -217,7 +199,7 @@ int programa_interativo (int highlight, WINDOW* win, int query){
         char buffer[250];
         echo();
         curs_set(1);
-        for (i = 0; i < 250 - 1 && (ch_q = getch()) != '\n'; i++) // It stores the written information on an array (input_q)
+        for (i = 0; i < 250 - 1 && (ch_q = getch()) != '\n'; i++) 
         input_q[i] = ch_q;
         input_q[i] = '\0';
         curs_set(0);
@@ -238,10 +220,10 @@ int programa_interativo (int highlight, WINDOW* win, int query){
                 printw("QUERY SEM OUTPUT");
                 remove("comando_output.txt");
                 move(12,6);
-                printw("MENU (Q)");
+                printw("MENU (E)");
                 refresh();
                 
-                while(wgetch(win) != 'q');
+                while(wgetch(win) != 'e');
                 for(int i = 9; i < 30; i++){
                     move(i,0);
                     clrtoeol();
@@ -275,15 +257,15 @@ int programa_interativo (int highlight, WINDOW* win, int query){
     }
 
     if(highlight == 0){
-        printw(">> INSERIR O CAMINHO PARA A PASTA ONDE ESTAO OS CSV: ");
-        mvwprintw(win, 2, 23, "          ");
+        printw(">> INSERIR O CAMINHO PARA A PASTA ONDE ESTAO OS CSV's: ");
+        mvwprintw(win, 2, 23,"");
         wrefresh(win);
         char* input = malloc(250);
         int ch;
         int i;
         echo();
         curs_set(1);
-        for(i = 0; i < 250 - 1 && (ch = getch()) != '\n'; i++) // It stores the written information on an array (input)
+        for(i = 0; i < 250 - 1 && (ch = getch()) != '\n'; i++) 
         input[i] = ch;
         input[i] = '\0';
         noecho();
@@ -293,15 +275,11 @@ int programa_interativo (int highlight, WINDOW* win, int query){
         refresh();
 
         if(main_interativo(input,h_users,h_aeroportos,h_hoteis,h_reservas,h_voos) == 1){
-            mvwprintw(win, 2, 35, "     ");
+            mvwprintw(win, 2, 35, "");
             wrefresh(win);
             return 1;
         }
-        else{
-            mvwprintw(win, 2, 40, "[CARREGADO]");
-            wrefresh(win);
         }
-    }
     return 0;
 }
 
@@ -322,7 +300,7 @@ void interativo (void){
     curs_set(0);
     raw();
 
-    const char* choices[] = {"INSERIR CAMINHO PARA A PASTA", "INSERIR QUERY", "SAIR"};
+    const char* choices[] = {"INSERIR O CAMINHO PARA A PASTA ONDE ESTAO OS CSV's", "EXECUTAR QUERY", "SAIR"};
     int choice;
     int highlight = 0;
     int i;

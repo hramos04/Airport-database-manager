@@ -732,7 +732,6 @@ int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_re
 
     FILE *fp_output = fopen("comando_output.txt", "w");
     if (fp_output == NULL) {
-        // Tratar erro de abertura de arquivo
         return 1;
     }
 
