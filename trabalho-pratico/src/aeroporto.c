@@ -481,7 +481,6 @@ int diferencaEmSegundos(char *datetime1, char *datetime2) {
     return diferenca < 0 ? -diferenca : diferenca;
 }
 
-
 MedianaAeroporto * GetMedianaAeroportos(hash_aeroportos h) {
 	MedianaAeroporto *aux = NULL;
 	int i = 0;
@@ -607,7 +606,6 @@ void destroiVooResumo(VooResumo *vooResumo) {
 }
 
 
-
 /* Função para incrementar o número total de passageiros na lista ligada VooResumo de um Aeroporto */
 int InsertPassengerVooResumo(hash_aeroportos h_aeroportos, KeyType voo_id) {
     for (int i = 0; i <HASHSIZEVOO; i++) {
@@ -667,6 +665,7 @@ void destroiVooAeroportoEntreDatas(VooResumo *voo_resumo) {
     free(voo_resumo->destination);
     free(voo_resumo->airline);
     free(voo_resumo->plane_model);
+    free(voo_resumo);
 }
 
 

@@ -301,8 +301,6 @@ void q2(hash_user h_users, char **argv, int argc, int f, FILE *fp_output) {
             q2 = getNext(q2);
             free(idCopy);
         }
-
-        // Liberar a memória alocada para a string id após o loop
     }
 }
 
