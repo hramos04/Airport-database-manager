@@ -25,4 +25,6 @@ void setNext(Q2 *q2, Q2 *next);
 
 void destroiQ2(Q2 *q2);
 
+void freeQ2(Q2 *atual);
+
 #endif

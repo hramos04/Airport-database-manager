@@ -370,7 +370,7 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
     }
 }
 
-/*
+
 //////////////////////////usar esta função quando só aparece a pedir o ano 
 
 int CountUsersByYear(hash_user h, int year) {
@@ -460,10 +460,11 @@ int SomaPassageirosPorAnoUnico(hash_user h, int ano) {
             Q2 *q2 = currentUser->q2;
 
             while (q2 != NULL) {
+                char *data=getData(q2);
                 // Verificar se é um voo (tipo 2) e se é do ano desejado
                 if (getTipo(q2) == 2) {
                     int anoVoo;
-                    sscanf(getData(q2), "%d", &anoVoo);
+                    sscanf(data, "%d", &anoVoo);
 
                     if (anoVoo == ano) {
                         viagensNoAno += 1;
@@ -474,7 +475,7 @@ int SomaPassageirosPorAnoUnico(hash_user h, int ano) {
                         }
                     }
                 }
-
+                free(data);
                 q2 = getNext(q2);
             }
 
@@ -499,9 +500,10 @@ int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes) {
 
             while (q2 != NULL) {
                 // Verificar se é um voo (tipo 2) e se é do ano e mês desejados
+                char *data=getData(q2);
                 if (getTipo(q2) == 2) {
                     int anoVoo, mesVoo;
-                    sscanf(getData(q2), "%d/%d", &anoVoo, &mesVoo);
+                    sscanf(data, "%d/%d", &anoVoo, &mesVoo);
 
                     if (anoVoo == ano && mesVoo == mes) {
                         viagensNoAnoMes += 1;
@@ -512,7 +514,7 @@ int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes) {
                         }
                     }
                 }
-
+                free(data);
                 q2 = getNext(q2);
             }
 
@@ -522,6 +524,9 @@ int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes) {
 
     return totalPassageiros;
 }
+
+
+
 
 // Função que retorna o número total de passageiros para um determinado ano, mês e dia
 int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
@@ -537,9 +542,10 @@ int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
 
             while (q2 != NULL) {
                 // Verificar se é um voo (tipo 2) e se é da data desejada
+                char *data=getData(q2);
                 if (getTipo(q2) == 2) {
                     int anoVoo, mesVoo, diaVoo;
-                    sscanf(getData(q2), "%d/%d/%d", &anoVoo, &mesVoo, &diaVoo);
+                    sscanf(data, "%d/%d/%d", &anoVoo, &mesVoo, &diaVoo);
 
                     if (anoVoo == ano && mesVoo == mes && diaVoo == dia) {
                         viagensNaData += 1;
@@ -550,7 +556,7 @@ int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
                         }
                     }
                 }
-
+                free(data);
                 q2 = getNext(q2);
             }
 
@@ -561,5 +567,5 @@ int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
     return totalPassageiros;
 }
 
-*/
+
 

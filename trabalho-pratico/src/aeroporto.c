@@ -451,11 +451,28 @@ void imprimirListaSomaPassageirosAno(SomaPassageirosAno *lista) {
 
 void inserirAtraso(MedianaAeroporto *aeroporto, int valor) {
     if (aeroporto->tamanho == aeroporto->capacidade) {
-        aeroporto->capacidade *= 2;
-        aeroporto->atrasos = (int *)realloc(aeroporto->atrasos, aeroporto->capacidade * sizeof(int));
+        aeroporto->capacidade += 1;
+
+        int *novoArray = (int *)malloc(aeroporto->capacidade * sizeof(int));
+
+        if (novoArray == NULL) {
+            // Tratar erro de alocação
+            exit(EXIT_FAILURE);
+        }
+
+        for (int i = 0; i < aeroporto->tamanho; i++) {
+            novoArray[i] = aeroporto->atrasos[i];
+        }
+
+        free(aeroporto->atrasos);
+        aeroporto->atrasos = novoArray;
+
     }
+
     aeroporto->atrasos[aeroporto->tamanho++] = valor;
 }
+
+
 
 int comparar(const void *a, const void *b) {
     return (*(int *)a - *(int *)b);
@@ -494,8 +511,9 @@ MedianaAeroporto * GetMedianaAeroportos(hash_aeroportos h) {
 				novo->tamanho = 0;
 				novo->capacidade = 1;
 				novo->mediana = 0;
+                novo->atrasos = (int *)malloc(sizeof(int));
 				novo->next = NULL;
-				novo->atrasos = (int *)malloc(sizeof(int));
+
 				 
 				 VooResumo *vooresumo = aeroportoGetNextResumo(ae);
 				 while(vooresumo) {

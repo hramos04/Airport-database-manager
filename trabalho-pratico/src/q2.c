@@ -73,3 +73,8 @@ void destroiQ2(Q2 *q2){
 	}
 	free(q2);
 }
+
+void freeQ2(Q2 *atual) {
+    free(atual->id);
+
+}
