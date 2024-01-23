@@ -5,6 +5,7 @@
 #include "../include/voo.h"
 #include "../include/aeroporto.h"
 #include "../include/hotel.h"
+#include "../include/catalog/catalog_voo.h"
 
 
 
