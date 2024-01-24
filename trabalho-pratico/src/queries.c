@@ -427,6 +427,9 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
 				fprintf(fp_output, "%d;%d;%d;%d;%d;%d\n", j, totalUsersAno, totalVoosAno, totalPassageirosAno, total, totalReservasAno);
 			}
 		}
+        if(f==1) {
+        fprintf(fp_output,"\n");
+        }
 	}
 
     // Análise de meses
@@ -452,7 +455,9 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
 				}
 			}
 		}
+        if(f==1) {
         fprintf(fp_output,"\n");
+        }
 	}
 
 
@@ -482,6 +487,9 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
 				fprintf(fp_output, "%d;%d;%d;%d;%d;%d\n", d, totalUsersNaData, totalVoosNaData, totalPassageirosDia, total2, totalReservasNaData);
 			}
 		}
+        if(f==1) {
+        fprintf(fp_output,"\n");
+        }
 	}
 }
 
