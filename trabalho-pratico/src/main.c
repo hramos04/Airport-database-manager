@@ -15,17 +15,17 @@
 
 
 int main(int argc, char *argv[]) {
-	/*Iniciar o relógio para medir o tempo de execução*/
+	//Iniciar o relógio para medir o tempo de execução
 	clock_t start, end, duration;
     start = clock(); 
 
 	setlocale(LC_COLLATE, "en_US.UTF-8");
-	/*Verificação do número de argumentos do input*/
+	//Verificação do número de argumentos do input
 	char linha[1024];
 	
 	if(argc <= 1) {
 		interativo();
-		return 0;	//Encerra o programa se o número de argumentos for insuficiente
+		return 0;//Encerra o programa se o número de argumentos for insuficiente
 	}
 
 	/*Inicialização das tabelas hash*/
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     InitializeTableVoos(h_voos);
     InitializeTableAeroportos(h_aeroportos);
     
-     /*Leitura e parsing do ficheiro "users.csv"*/
+    //Leitura e parsing dos ficheiros 
 	char *csv_users = (char*)malloc(256);
 	strcpy(csv_users, argv[1]);
 	strcat(csv_users, "/users.csv");
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	
-	/*Leitura do ficheiro de input e execução dos comandos*/
+	//Leitura do ficheiro de input e execução dos comandos
 	FILE *fp = fopen(argv[2], "r");
 	FILE *fp_output = NULL;
 	int i = 1;
@@ -84,35 +84,28 @@ int main(int argc, char *argv[]) {
 			if(comp > 1 && linha[comp-2] == '\r') {
 				linha[comp-2] = '\0';
 			}
-			/* path do ficheiro de saída*/
+			//Path do ficheiro de saída
 			strcpy(destination_folder, "Resultados/command");
 			sprintf(str_i, "%d",i);
 			strcat(destination_folder, str_i);
 			strcat(destination_folder, "_output.txt");
-			/*Abertura do ficheiro de saída*/
+			//Abertura do ficheiro de saída
 			fp_output = fopen(destination_folder, "w");
-			/*Execução dos comandos*/
+			//Execução dos comandos
 			comando(linha, h_users, h_voos, h_reservas, h_hoteis, h_aeroportos, fp_output);
-			/*Fechar o ficheiro*/
+			//Fechar o ficheiro
 			fclose(fp_output);
 			i++;
 		}
 		fclose(fp);
 	}
-	/* Terminar o relógio e calcular*/
+	//Terminar o relógio e calcular
 	end = clock();
 
     duration = (end - start);
 
     printf("Processor cycles taken : %f cycles\n", (float)duration);
     printf("Processor time taken : %f seconds\n", (float)duration/CLOCKS_PER_SEC);
-	//PrintHashAeroportos(h_aeroportos);
-    //PrintHashVoos(h_voos);
-	//SomaPassageirosAno *listaSomaPassageiros = criarListaSomaPassageirosAno(h_voos, 2021, 10);
-
-    // Imprimir a lista de soma de passageiros por ano
-    //imprimirListaSomaPassageirosAno(listaSomaPassageiros);
-	
 
 	free(csv_passengers);
 	free(csv_reservas);

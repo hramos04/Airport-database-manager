@@ -8,7 +8,6 @@
 typedef char KeyType[300];
 
 
-
 /* Definiçao da estrutura do User, que apresenta todos os dados relativos de cada user, 
 sendo ainda acrescentado o número total de reservas, o número total de voos, o total gasto 
 pelo mesmo e ainda apresentamos a lista ligada Q2 que armazena os dados relativos aos flights
@@ -19,57 +18,77 @@ typedef struct User User;
 /* Definição da tabela hash que vai guardar todos os diferentes users. */
 typedef User *hash_user[HASHSIZEUSER];
 
+
+/*Função que cria e retorna uma estrutura User com as informações fornecidas.*/
 User *create_user(char *id, char *nome, char *email, char *phone, char *birth, char *sex, char *passport, char *country, char *address, char *account_creation, char *pay_method,char *account_status);
 
+
+/*Obtém o identificador único associado ao Utilizador.*/
 char* userGetId(User *user);
 
+
+/*Obtém o nome associado ao Utilizador.*/
 char* userGetNome(User *user);
 
-char* userGetEmail(User *user);
 
-char* userGetPhone(User *user);
-
+/*Obtém a data de nascimento associada ao Utilizador.*/
 char* userGetBirth(User *user);
 
+
+/*Obtém o gênero associado ao Utilizador.*/
 char* userGetSex(User *user);
 
+
+/*Obtém o número do passaporte associado ao Utilizador.*/
 char* userGetPassport(User *user);
 
+
+/*Obtém o país de origem associado ao Utilizador.*/
 char* userGetCountry(User *user);
 
-char* userGetAddress(User *user);
 
-char* userGetAccountCreation(User *user);
-
-char* userGetPayMethod(User *user);
-
+/* Obtém o status da conta associado ao Utilizador.*/
 char* userGetAccountStatus(User *user);
 
+
+/*Obtém o número total de reservas associado ao Utilizador.*/
 int userGetTotalReservas(User *user);
 
+
+/*Obtém o número total de voos associado ao Utilizador.*/
 int userGetTotalVoos(User *user);
 
+
+/*Obtém o valor total gasto associado ao Utilizador.*/
 double userGetTotalGasto(User *user);
 
+
+/*Obtém o ponteiro para o próximo nó da tabela hash de usuários.*/
 User* userGetNext(User *user);
 
+
+/*Define o ponteiro para o próximo nó da tabela hash de usuários.*/
 void userSetNext(User *user, User *next);
 
+
+/*Obtém o ponteiro para a lista ligada Q2 associada ao Utilizador.*/
 Q2* userGetQ2(User *user);
 
+
+/*Define o ponteiro para a lista ligada Q2 associada ao Utilizador.*/
 void userSetQ2(User *user, Q2 *q2);
+
 
 /* Função de hash que converte uma chave num índice na tabela hash. */
 int Hash(KeyType k);
 
+
 /* Função que inicializa a tabela de hash User. */
 void InitializeTable(hash_user h);
 
+
+/*Função que liberta a memória utilizada na hash dos users*/
 void destroiTableUser(hash_user h);
-
-void destroiQ2(Q2 *q2);
-
-
 
 
 /* Função que retorna o User pretendido, caso este se encontre na hash, através da sua respetiva 
@@ -80,6 +99,8 @@ User *RetrieveUser(hash_user h, KeyType k);
 /* Função auxiliar que cria uma copia de um determinado User. */
 User* copyUser(User *original);
 
+
+/*Função que liberta a memória alocada para um User*/
 void freeUser(User *user);
 
 
@@ -115,31 +136,30 @@ void InsertReservaUser(hash_user h, KeyType k, Q2 *q2);
 flights na lista ligada Q2, de forma ordenada. */
 void InsertVooUser(hash_user h, KeyType k, Q2 *q2);
 
-//////////////////////////usar esta função quando só aparece a pedir o ano 
-/* Função que conta quantos usuários têm o ano de criação da conta igual ao ano fornecido. */
+
+/* Função que conta quantos utilizadores têm o ano de criação da conta igual ao ano fornecido. */
 int CountUsersByYear(hash_user h, int year);
 
-////Função que conta os usuários, mas que dá todos os meses
-/* Função que imprime o número de usuários para cada mês em um determinado ano. */
+
+/* Função que conta o número de utilizadores que tem o determinado mês e o determinado ano de criaçao da conta. */
 int CountUsersByMonth(hash_user h, int year, int month);
 
 
+/* Função que conta o número de utilizadores que tem o determinado dia, o determinado mês e o determinado ano de 
+criaçao da conta. */
 int CountUsersByDate(hash_user h, int year, int month, int day);
 
 
-// Função que retorna o número total de passageiros para um determinado ano
+/* Função que retorna o número total de passageiros para um determinado ano */
 int SomaPassageirosPorAnoUnico(hash_user h, int ano);
 
-// Função que retorna o número total de passageiros para um determinado ano e mês
+
+/* Função que retorna o número total de passageiros para um determinado ano e mês*/
 int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes);
 
-// Função que retorna o número total de passageiros para um determinado ano, mês e dia
+
+/* Função que retorna o número total de passageiros para um determinado ano, mês e dia */
 int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia);
-
-
-// Função que imprime todos os voos de todos os usuários
-void ImprimirTodosVoos(hash_user h);
-
 
 
 #endif

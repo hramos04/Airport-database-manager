@@ -2,7 +2,8 @@
 #define AEROPORTO_H
 #define HASHSIZEVOO 10050 // Tamanho da tabela hash
 
-#include "../include/catalog/catalog_voo.h"
+#include "../include/voo.h"
+
 
 
 

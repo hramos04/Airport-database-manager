@@ -5,10 +5,6 @@
 #include "../include/hotel.h"
 
 
-
-
-/* Definição de um nó da lista ligada ReservaResumo, que apresenta dados filtrados e importantes 
-de cada reserva. */
 struct ReservaResumo {
     char *id;
     char *begin_date;
@@ -21,13 +17,12 @@ struct ReservaResumo {
 };
 
 
-/* Definição da estrutura Hotel, que apresenta o respetivo id de cada hotel e a lista ligada 
-ReservaResumo que apresenta então todas as reservas associadas ao determinado hotel. */
 struct Hotel {
 	char *hotel_id;
 	struct Hotel *next;
 	struct ReservaResumo *next_resumo;
 };
+
 
 ReservaResumo *createReservaResumo(char *id, char *begin_date, char *end_date, char *user_id, char *price_per_night, double total_price, double rating){
     ReservaResumo *reservaResumo = malloc(sizeof(ReservaResumo));
@@ -44,6 +39,7 @@ ReservaResumo *createReservaResumo(char *id, char *begin_date, char *end_date, c
     return reservaResumo;
 }
 
+
 void freeReservaResumo(ReservaResumo *reservaResumo) {
     if (reservaResumo == NULL) {
         return;
@@ -58,51 +54,61 @@ void freeReservaResumo(ReservaResumo *reservaResumo) {
 }
 
 
-char *reservaResumoGetId(ReservaResumo *reservaResumo){ //já está tratado os leaks 
+char *reservaResumoGetId(ReservaResumo *reservaResumo){ 
     return strdup(reservaResumo->id);
 }
 
-char *reservaResumoGetBeginDate(ReservaResumo *reservaResumo){ //já está tratado os leaks 
+
+char *reservaResumoGetBeginDate(ReservaResumo *reservaResumo){ 
     return strdup(reservaResumo->begin_date);
 }
 
-char *reservaResumoGetEndDate(ReservaResumo *reservaResumo){ //já está tratado os leaks 
+
+char *reservaResumoGetEndDate(ReservaResumo *reservaResumo){  
     return strdup(reservaResumo->end_date);
 }
 
-char *reservaResumoGetUserId(ReservaResumo *reservaResumo){ //já está tratado os leaks 
+
+char *reservaResumoGetUserId(ReservaResumo *reservaResumo){  
     return strdup(reservaResumo->user_id);
 }
+
 
 double reservaResumoGetTotalPrice(ReservaResumo *reservaResumo){
     return reservaResumo->total_price;
 }
 
+
 double reservaResumoGetRating(ReservaResumo *reservaResumo){
     return reservaResumo->rating;
 }
+
 
 ReservaResumo *reservaResumoGetNext(ReservaResumo *reservaResumo){
     return reservaResumo->next_resumo;
 }
 
+
 Hotel *hotelGetNext(Hotel *hotel){
     return hotel->next;
 }
+
 
 void setNextHotel(Hotel *hotel, Hotel *next){
     hotel->next = next;
 }
 
+
 ReservaResumo *hotelGetNextResumo(Hotel *hotel){
     return hotel->next_resumo;
 }
+
 
 void setNextHotelResumo(Hotel *hotel, Hotel *next){
     hotel->next = next;
 }
 
-/* Função de hash que converte uma chave num índice na tabela hash dos hoteis. */
+
 int HashHoteis(KeyType k) {
     int i = 0;
     unsigned h = 0;
@@ -118,7 +124,7 @@ int HashHoteis(KeyType k) {
     return h % HASHSIZERESERVA;
 }
 
-/* Função que inicializa a tabela de hash Hoteis. */
+
 void InitializeTableHoteis(hash_hoteis h) {
     int i;
     for (i = 0; i < HASHSIZERESERVA; ++i)
@@ -126,9 +132,6 @@ void InitializeTableHoteis(hash_hoteis h) {
 }
 
 
-/* A função verifica se um Hotel está presente na tabela hash. Caso não esteja, adiciona o novo Hotel 
-à tabela. Posteriormente, insere ordenadamente um novo ReservaResumo associado a esse hotel, na 
-lista ligada, vinculada a esse Hotel .*/
 void InsertTableHoteis(hash_hoteis h, KeyType k, ReservaResumo *reserva) {
     int i = HashHoteis(k);
     
@@ -158,18 +161,15 @@ void InsertTableHoteis(hash_hoteis h, KeyType k, ReservaResumo *reserva) {
 	}
 
 	if (prevQ2 == NULL) {
-		// Inserir no início
 		reserva->next_resumo = aux->next_resumo;
 		aux->next_resumo = reserva;
 	} else {
-		// Inserir no meio ou no final
 		prevQ2->next_resumo = reserva;
 		reserva->next_resumo = currentQ2;
 	}
 }
 
-/* Função que retorna o Hotel pretendido, caso este se encontre na hash, através da sua respetiva 
-chave. */
+
 Hotel *RetrieveHotel(hash_hoteis h, KeyType k) {
 	 int i = HashHoteis(k);
 	 Hotel *res;
@@ -197,6 +197,7 @@ void destroiReservaResumo(ReservaResumo *reservaResumo){
 	free(reservaResumo);
 }
 
+
 void destroiTableHotel(hash_hoteis h) {
 
 	for(int i = 0; i<HASHSIZERESERVA; i++){
@@ -212,8 +213,6 @@ void destroiTableHotel(hash_hoteis h) {
 }
 
 
-/* Função que calcula a média das classificações de um hotel, percorrendo a lista ligada 
-das reservas e somando os diferentes ratings em cada reserva. */
 double GetRatingByHotel(hash_hoteis h, KeyType k) {
 	Hotel *aux = RetrieveHotel(h, k);
 	if(aux) {
@@ -239,14 +238,12 @@ double GetRatingByHotel(hash_hoteis h, KeyType k) {
 
 
 int CalcularNumeroNoitesDias(char *start_date, char *end_date) {
-    // Converte as datas para um formato que pode ser manipulado mais facilmente
     int start_year, start_month, start_day;
     int end_year, end_month, end_day;
 
     sscanf(start_date, "%d/%d/%d", &start_year, &start_month, &start_day);
     sscanf(end_date, "%d/%d/%d", &end_year, &end_month, &end_day);
 
-    // Calcula o número de noites (arredondando para cima)
     int num_noites;
 
     num_noites = (end_day - start_day) +1;
@@ -254,56 +251,47 @@ int CalcularNumeroNoitesDias(char *start_date, char *end_date) {
     return num_noites;
 }
 
+
 int CalcularNumeroNoitesMes(char *start_date, char *end_date) {
-    // Converte as datas para um formato que pode ser manipulado mais facilmente
     int start_year, start_month, start_day;
     int end_year, end_month, end_day;
 
     sscanf(start_date, "%d/%d/%d", &start_year, &start_month, &start_day);
     sscanf(end_date, "%d/%d/%d", &end_year, &end_month, &end_day);
 
-    // Calcula o número de noites (arredondando para cima)
     int num_noites;
     num_noites = (end_year - start_year) * 365 + (end_month - start_month) * 29 + (end_day - start_day);
     
 
     return num_noites;
 }
-/* Função para obter o lucro de um hotel entre duas datas */
+
+
 int GetLucro(hash_hoteis h, KeyType k, char *start_date, char *end_date) {
     Hotel *hotel = RetrieveHotel(h, k);
     if (hotel) {
         int lucro = 0;
 
-        // Percorre a lista ligada de ReservaResumo do hotel
         ReservaResumo *reserva_resumo = hotel->next_resumo;
         while (reserva_resumo != NULL) {
-            // Verifica se há sobreposição de datas entre a reserva e o intervalo estabelecido
             if (strcmp(reserva_resumo->end_date, start_date) < 0 || strcmp(reserva_resumo->begin_date, end_date) > 0) {
-                // Não há sobreposição, continua para a próxima reserva
                 reserva_resumo = reserva_resumo->next_resumo;
                 continue;
             }
 
-            // Ajusta as datas de início e fim para o cálculo do lucro
             char *inicio_reserva = (strcmp(reserva_resumo->begin_date, start_date) >= 0) ? reserva_resumo->begin_date : start_date;
             char *fim_reserva = (strcmp(reserva_resumo->end_date, end_date) <= 0) ? reserva_resumo->end_date : end_date;
 
-            // Verifica se apenas os dias mudaram
             if (strcmp(inicio_reserva, start_date) == 0 && strcmp(fim_reserva, end_date) == 0) {
                 int num_noites = CalcularNumeroNoitesDias(inicio_reserva, fim_reserva);
                 lucro += num_noites * atof(reserva_resumo->price_per_night);
             } else {
-                // Caso geral, incluindo quando meses e dias mudam
                 int num_noites = CalcularNumeroNoitesMes(inicio_reserva, fim_reserva);
                 lucro += num_noites * atof(reserva_resumo->price_per_night);
             }
-
-            // Avança para a próxima reserva na lista
             reserva_resumo = reserva_resumo->next_resumo;
         }
-
         return lucro;
     }
-    return -1; // Retorna -1 se o hotel não for encontrado
+    return -1; 
 }

@@ -51,70 +51,75 @@ User *create_user(char *id, char *nome, char *email, char *phone, char *birth, c
     return user;
 }
 
+
 char* userGetId(User *user){
 	return strdup(user->id);
 }
+
 
 char* userGetNome(User *user){
 	return strdup(user->nome);
 }
 
+
 char* userGetBirth(User *user){
 	return strdup(user->birth);
 }
+
 
 char* userGetSex(User *user){
 	return strdup(user->sex);
 }
 
+
 char* userGetPassport(User *user){
 	return strdup(user->passport);
 }
+
 
 char* userGetCountry(User *user){
 	return strdup(user->country);
 }
 
+
 char* userGetAccountStatus(User *user){
 	return strdup(user->account_status);
 }
+
 
 int userGetTotalReservas(User *user){
 	return user->total_reservas;
 }
 
+
 int userGetTotalVoos(User *user){
 	return user->total_voos;
 }
+
 
 double userGetTotalGasto(User *user){
 	return user->total_gasto;
 }
 
+
 User* userGetNext(User *user){
 	return user->next;
 }
+
 
 void userSetNext(User *user, User *next){
 	user->next = next;
 }
 
+
 Q2* userGetQ2(User *user){
 	return user->q2;
 }
 
+
 void userSetQ2(User *user, Q2 *q2){
 	user->q2 = q2;
 }
-
-
-
-
-
-
-
-
-
 
 
 /* Função de hash que converte uma chave num índice na tabela hash. */
@@ -191,6 +196,7 @@ User* copyUser(User *original) {
     return copy;
 }
 
+
 void freeUser(User *user){
     if(user){
         free(user->id);
@@ -237,6 +243,7 @@ void addUserToList(User **list, User *newUser) {
     *list = newUser;
 }
 
+
 /* Função auxiliar que percorre a tabela hash, procurando Users que apresentem o parametro 
 "active" e cujos nomes começam com um determinado prefixo, retornando uma lista ordenada 
 desses Users, com a ajuda das função addUserToList e a função copyUser. */
@@ -255,6 +262,7 @@ User *GetUserPrefix(hash_user h, KeyType k) {
     }
     return res;
 }
+
 
 /* A fução InsertTable calcula o indice da chave, com o auxilio da função Hash, e coloca o User na 
 tabela Hash. Caso a posição calculada estiver vazia, o User é adicionado diretamente, caso contrário, 
@@ -371,8 +379,6 @@ void InsertVooUser(hash_user h, KeyType k, Q2 *q2) {
 }
 
 
-//////////////////////////usar esta função quando só aparece a pedir o ano 
-
 int CountUsersByYear(hash_user h, int year) {
     int count = 0;
 
@@ -380,11 +386,9 @@ int CountUsersByYear(hash_user h, int year) {
         User *currentUser = h[i];
 
         while (currentUser != NULL) {
-            // Extraindo o ano da string de criação da conta
             int accountYear;
             sscanf(currentUser->account_creation, "%d", &accountYear);
 
-            // Verificando se o ano coincide
             if (accountYear == year) {
                 count++;
             }
@@ -392,13 +396,9 @@ int CountUsersByYear(hash_user h, int year) {
             currentUser = currentUser->next;
         }
     }
-
     return count;
 }
 
-
-
-////Função que conta os usuários, mas que dá todos os meses
 
 int CountUsersByMonth(hash_user h, int year, int month) {
     int userCount = 0;
@@ -407,20 +407,17 @@ int CountUsersByMonth(hash_user h, int year, int month) {
         User *currentUser = h[i];
 
         while (currentUser != NULL) {
-            // Extraindo o ano e o mês da string de criação da conta
             int accountYear, accountMonth;
             if (sscanf(currentUser->account_creation, "%d/%d", &accountYear, &accountMonth) == 2 && accountYear == year && accountMonth == month) {
-                // Incrementando o contador para o mês correspondente
                 userCount++;
             }
 
             currentUser = currentUser->next;
         }
     }
-
-    // Retornando o resultado
     return userCount;
 }
+
 
 int CountUsersByDate(hash_user h, int year, int month, int day) {
     int userCount = 0;
@@ -429,25 +426,19 @@ int CountUsersByDate(hash_user h, int year, int month, int day) {
         User *currentUser = h[i];
 
         while (currentUser != NULL) {
-            // Extraindo o ano, mês e dia da string de criação da conta
             int accountYear, accountMonth, accountDay;
             if (sscanf(currentUser->account_creation, "%d/%d/%d", &accountYear, &accountMonth, &accountDay) == 3 &&
                 accountYear == year && accountMonth == month && accountDay == day) {
-                // Incrementando o contador para a data correspondente
                 userCount++;
             }
 
             currentUser = currentUser->next;
         }
     }
-
-    // Retornando o resultado
     return userCount;
 }
 
 
-
-// Função que retorna o número total de passageiros para um determinado ano
 int SomaPassageirosPorAnoUnico(hash_user h, int ano) {
     int totalPassageiros = 0;
 
@@ -455,23 +446,20 @@ int SomaPassageirosPorAnoUnico(hash_user h, int ano) {
         User *currentUser = h[i];
 
         while (currentUser != NULL) {
-            int viagensNoAno = 0;  // Contador de viagens do usuário no ano fornecido
+            int viagensNoAno = 0; 
 
             Q2 *q2 = currentUser->q2;
 
             while (q2 != NULL) {
                 char *data=getData(q2);
-                // Verificar se é um voo (tipo 2) e se é do ano desejado
                 if (getTipo(q2) == 2) {
                     int anoVoo;
                     sscanf(data, "%d", &anoVoo);
 
                     if (anoVoo == ano) {
                         viagensNoAno += 1;
-                        // Verificar se é a única viagem do usuário no ano
                         if (viagensNoAno == 1) {
-                            // Incrementar o total de passageiros apenas uma vez por usuário
-                            totalPassageiros += 1;  // Cada voo representa um passageiro
+                            totalPassageiros += 1; 
                         }
                     }
                 }
@@ -482,11 +470,10 @@ int SomaPassageirosPorAnoUnico(hash_user h, int ano) {
             currentUser = currentUser->next;
         }
     }
-
     return totalPassageiros;
 }
 
-// Função que retorna o número total de passageiros para um determinado ano e mês
+
 int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes) {
     int totalPassageiros = 0;
 
@@ -494,12 +481,11 @@ int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes) {
         User *currentUser = h[i];
 
         while (currentUser != NULL) {
-            int viagensNoAnoMes = 0;  // Contador de viagens do usuário no ano e mês fornecidos
+            int viagensNoAnoMes = 0;  
 
             Q2 *q2 = currentUser->q2;
 
             while (q2 != NULL) {
-                // Verificar se é um voo (tipo 2) e se é do ano e mês desejados
                 char *data=getData(q2);
                 if (getTipo(q2) == 2) {
                     int anoVoo, mesVoo;
@@ -507,10 +493,8 @@ int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes) {
 
                     if (anoVoo == ano && mesVoo == mes) {
                         viagensNoAnoMes += 1;
-                        // Verificar se é a única viagem do usuário no ano e mês
                         if (viagensNoAnoMes == 1) {
-                            // Incrementar o total de passageiros apenas uma vez por usuário
-                            totalPassageiros += 1;  // Cada voo representa um passageiro
+                            totalPassageiros += 1;  
                         }
                     }
                 }
@@ -521,14 +505,10 @@ int SomaPassageirosPorAnoMesUnico(hash_user h, int ano, int mes) {
             currentUser = currentUser->next;
         }
     }
-
     return totalPassageiros;
 }
 
 
-
-
-// Função que retorna o número total de passageiros para um determinado ano, mês e dia
 int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
     int totalPassageiros = 0;
 
@@ -536,12 +516,11 @@ int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
         User *currentUser = h[i];
 
         while (currentUser != NULL) {
-            int viagensNaData = 0;  // Contador de viagens do usuário na data fornecida
+            int viagensNaData = 0;  
 
             Q2 *q2 = currentUser->q2;
 
             while (q2 != NULL) {
-                // Verificar se é um voo (tipo 2) e se é da data desejada
                 char *data=getData(q2);
                 if (getTipo(q2) == 2) {
                     int anoVoo, mesVoo, diaVoo;
@@ -549,10 +528,8 @@ int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
 
                     if (anoVoo == ano && mesVoo == mes && diaVoo == dia) {
                         viagensNaData += 1;
-                        // Verificar se é a única viagem do usuário na data
                         if (viagensNaData == 1) {
-                            // Incrementar o total de passageiros apenas uma vez por usuário
-                            totalPassageiros += 1;  // Cada voo representa um passageiro
+                            totalPassageiros += 1; 
                         }
                     }
                 }
@@ -563,7 +540,6 @@ int SomaPassageirosPorAnoMesDataUnica(hash_user h, int ano, int mes, int dia) {
             currentUser = currentUser->next;
         }
     }
-
     return totalPassageiros;
 }
 

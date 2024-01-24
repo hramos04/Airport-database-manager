@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include "../include/q2.h"
 
+
 struct Q2 {
 	char *id;
 	char *data;
@@ -25,6 +26,7 @@ Q2 *create_q2(char *id, char *data, int tipo, double total_gasto) {
     return q2;
 }
 
+
 Q2 *create_q2_without_totalGasto(char *id, char *data, int tipo) {
     Q2 *q2 = malloc(sizeof(struct Q2));
 
@@ -38,29 +40,35 @@ Q2 *create_q2_without_totalGasto(char *id, char *data, int tipo) {
 }
 
 
-char* getId(Q2 *q2){ //já vi os memory leaks 
+char* getId(Q2 *q2){ 
     return strdup(q2->id);
 }
 
-char* getData(Q2 *q2){ //já vi os memory leaks 
+
+char* getData(Q2 *q2){ 
     return strdup(q2->data);
 }
+
 
 int getTipo(Q2 *q2){
     return q2->tipo;
 }
 
+
 double getTotalGasto(Q2 *q2){
     return q2->total_gasto;
 }
+
 
 Q2* getNext(Q2 *q2){
     return q2->next;
 }
 
+
 void setNext(Q2 *q2, Q2 *next){
     q2->next = next;
 }
+
 
 void destroiQ2(Q2 *q2){
 
@@ -73,6 +81,7 @@ void destroiQ2(Q2 *q2){
 	}
 	free(q2);
 }
+
 
 void freeQ2(Q2 *atual) {
     free(atual->id);

@@ -50,6 +50,7 @@ Reserva *createReserva(char *id, char *user_id, char *hotel_id, char *hotel_name
 	return reserva;
 }
 
+
 void freeReserva(Reserva *reserva) {
     if (reserva == NULL) {
         return;
@@ -74,7 +75,6 @@ void freeReserva(Reserva *reserva) {
 }
 
 
-/* Função de hash que converte uma chave num índice na tabela hash das reservas. */
 int HashReservas(KeyType k) {
     int i = 0;
     unsigned h = 0;
@@ -91,9 +91,6 @@ int HashReservas(KeyType k) {
 }
 
 
-
-
-/* Função que inicializa a tabela de hash Reservas. */
 void InitializeTableReservas(hash_reservas h) {
     int i;
     for (i = 0; i < HASHSIZERESERVA; ++i)
@@ -101,46 +98,51 @@ void InitializeTableReservas(hash_reservas h) {
 }
 
 
-char *reservaGetHotelId(Reserva *reserva){ //já verificado os memory leaks 
+char *reservaGetHotelId(Reserva *reserva){ 
 	return strdup(reserva->hotel_id);
 }
 
-char *reservaGetHotelName(Reserva *reserva){ // já verificado os memory leaks 
+
+char *reservaGetHotelName(Reserva *reserva){ 
 	return strdup(reserva->hotel_name);
 }
 
-char *reservaGetHotelStars(Reserva *reserva){ //já verificado os memory leaks 
+
+char *reservaGetHotelStars(Reserva *reserva){ 
 	return strdup(reserva->hotel_stars);
 }
 
-char *reservaGetBeginDate(Reserva *reserva){ // já verificado os memory leaks 
+
+char *reservaGetBeginDate(Reserva *reserva){ 
 	return strdup(reserva->begin_date);
 }
 
-char *reservaGetEndDate(Reserva *reserva){ //já verificado os memory leaks 
+
+char *reservaGetEndDate(Reserva *reserva){ 
 	return strdup(reserva->end_date);
 }
 
-char *reservaGetIncludesBreakfast(Reserva *reserva){ //já verificado, falta corrigir apenas a linha 186 do interpreter
+
+char *reservaGetIncludesBreakfast(Reserva *reserva){ 
 	return strdup(reserva->includes_breakfast);
 }
+
 
 int reservaGetTotalNoites(Reserva *reserva){
 	return reserva->total_noites;
 }
 
+
 double reservaGetTotalGasto(Reserva *reserva){
 	return reserva->total_gasto;
 }
+
 
 Reserva *reservaGetNext(Reserva *reserva){
 	return reserva->next_reserva;
 }
 
 
-
-/* Função que retorna a Reserva pretendida, caso esta se encontre na hash, através da sua respetiva 
-chave. */
 Reserva *RetrieveReserva(hash_reservas h, KeyType k) {
 	 int i = HashReservas(k);
 	 Reserva *res;
@@ -151,7 +153,6 @@ Reserva *RetrieveReserva(hash_reservas h, KeyType k) {
 	 }
 	 return NULL;
 }
-
 
 
 void destroiTableReserva(hash_reservas h) {
@@ -181,9 +182,6 @@ void destroiTableReserva(hash_reservas h) {
 }
 
 
-/* A função insere uma Reserva na tabela hash das Reservas, caso a posição estiver livre coloca a 
-Reserva nessa posição, caso a posição já estiver ocupada, adiciona a reserva no início da lista 
-encadeada dessa posição. */
 void InsertTableReservas(hash_reservas h, KeyType k, Reserva *reserva) {
     int i = HashReservas(k);
     if (h[i] == NULL) {
@@ -202,11 +200,9 @@ int ContarReservasPorAno(hash_reservas h, int ano) {
     for (int i = 0; i < HASHSIZERESERVA; ++i) {
         Reserva *res = h[i];
         while (res != NULL) {
-            // Extrair o ano da data de início da reserva
             int anoReserva;
             sscanf(res->begin_date, "%d", &anoReserva);
 
-            // Verificar se o ano coincide e incrementar o total
             if (anoReserva == ano) {
                 totalReservas++;
             }
@@ -218,29 +214,26 @@ int ContarReservasPorAno(hash_reservas h, int ano) {
     return totalReservas;
 }
 
+
 int ContarReservasPorMes(hash_reservas h, int ano, int mes) {
     int totalReservasNoMes = 0;
 
     for (int i = 0; i < HASHSIZERESERVA; ++i) {
         Reserva *res = h[i];
         while (res != NULL) {
-            // Extrair o ano e mês da data de início da reserva
             int anoReserva, mesReserva;
             sscanf(res->begin_date, "%d/%d", &anoReserva, &mesReserva);
 
-            // Verificar se o ano e mês coincidem
             if (anoReserva == ano && mesReserva == mes) {
-                // Incrementar o total de reservas para o mês correspondente
                 totalReservasNoMes++;
             }
 
             res = res->next_reserva;
         }
     }
-
-    // Retornar o resultado
     return totalReservasNoMes;
 }
+
 
 int ContarReservasPorData(hash_reservas h, int ano, int mes, int dia) {
     int totalReservasNaData = 0;
@@ -248,21 +241,16 @@ int ContarReservasPorData(hash_reservas h, int ano, int mes, int dia) {
     for (int i = 0; i < HASHSIZERESERVA; ++i) {
         Reserva *res = h[i];
         while (res != NULL) {
-            // Extrair o ano, mês e dia da data de início da reserva
             int anoReserva, mesReserva, diaReserva;
             sscanf(res->begin_date, "%d/%d/%d", &anoReserva, &mesReserva, &diaReserva);
 
-            // Verificar se a data coincide
             if (anoReserva == ano && mesReserva == mes && diaReserva == dia) {
-                // Incrementar o total de reservas para a data correspondente
                 totalReservasNaData++;
             }
 
             res = res->next_reserva;
         }
     }
-
-    // Retornar o resultado
     return totalReservasNaData;
 }
 

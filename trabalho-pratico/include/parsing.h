@@ -5,7 +5,6 @@
 #include "../include/voo.h"
 #include "../include/aeroporto.h"
 #include "../include/hotel.h"
-#include "../include/catalog/catalog_voo.h"
 
 
 
@@ -61,6 +60,10 @@ int valid_aeroport(char *string);
 /* Função que verifica se o número de estrelas do hotel é válido, retornando 1 caso este seja válido, 
 ou 0 caso contrário. */
 int valid_stars(char *string);
+
+/*Função que verifica se o id fornecido é válido, retornando 1 caso este seja válido, 
+ou 0 caso contrário.*/
+int valid_id(char *string);
 
 
 /* Função que verifica se a data inicial é anterior à data final, retornando 1 caso seja verdade, 

@@ -11,6 +11,7 @@
 #include "../include/interativo.h"
 #include <curses.h>
 
+
 int main_interativo(char* file, hash_user h_users,hash_aeroportos h_aeroportos,hash_hoteis h_hoteis,hash_reservas h_reservas,hash_voos h_voos){
 
     
@@ -20,7 +21,6 @@ int main_interativo(char* file, hash_user h_users,hash_aeroportos h_aeroportos,h
     InitializeTableVoos(h_voos);
     InitializeTableAeroportos(h_aeroportos);
     
-    //Leitura e parsing do ficheiro "users.csv"
 	char *csv_users = (char*)malloc(256);
 	strcpy(csv_users, file);
 	strcat(csv_users, "/users.csv");
@@ -37,7 +37,6 @@ int main_interativo(char* file, hash_user h_users,hash_aeroportos h_aeroportos,h
 	strcpy(csv_passengers, file);
 	strcat(csv_passengers, "/passengers.csv");
 
-	//Processamento dos arquivos
     int users= process_users_csv(h_users, csv_users);
     int reservas = process_reservas_csv(h_users, h_hoteis, h_reservas, csv_reservas);
     int voos = process_voos_csv(h_users, h_aeroportos, h_voos, csv_voos);
@@ -57,6 +56,7 @@ int main_interativo(char* file, hash_user h_users,hash_aeroportos h_aeroportos,h
 
     return 0;
 }
+
 
 void display_page (FILE *file, int start, int end, int n_linhas, int isLarge){
     rewind(file);
@@ -85,6 +85,7 @@ void display_page (FILE *file, int start, int end, int n_linhas, int isLarge){
     }
     refresh();
 }
+
 
 void move_pages(FILE *file, WINDOW* win, int n_linhas, int sum){
     int isLarge = 0;
@@ -160,6 +161,7 @@ void move_pages(FILE *file, WINDOW* win, int n_linhas, int sum){
     }
 
 }
+
 
 int programa_interativo (int highlight, WINDOW* win, int query){
     hash_user h_users; 
@@ -282,6 +284,7 @@ int programa_interativo (int highlight, WINDOW* win, int query){
         }
     return 0;
 }
+
 
 void interativo (void){
     initscr();
