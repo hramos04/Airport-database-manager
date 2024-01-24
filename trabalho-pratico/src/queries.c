@@ -451,8 +451,8 @@ void q10(hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, char **a
 					fprintf(fp_output, "%d;%d;%d;%d;%d;%d\n", i, totalUsersNoMes, totalVoosNoMes, totalPassageirosMes, total1, totalReservasNoMes);
 				}
 			}
-            printf("\n");
 		}
+        fprintf(fp_output,"\n");
 	}
 
 
