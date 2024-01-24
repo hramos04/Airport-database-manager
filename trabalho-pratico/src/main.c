@@ -15,9 +15,6 @@
 
 
 int main(int argc, char *argv[]) {
-	//Iniciar o relógio para medir o tempo de execução
-	clock_t start, end, duration;
-    start = clock(); 
 
 	setlocale(LC_COLLATE, "en_US.UTF-8");
 	//Verificação do número de argumentos do input
@@ -99,13 +96,6 @@ int main(int argc, char *argv[]) {
 		}
 		fclose(fp);
 	}
-	//Terminar o relógio e calcular
-	end = clock();
-
-    duration = (end - start);
-
-    printf("Processor cycles taken : %f cycles\n", (float)duration);
-    printf("Processor time taken : %f seconds\n", (float)duration/CLOCKS_PER_SEC);
 
 	free(csv_passengers);
 	free(csv_reservas);
