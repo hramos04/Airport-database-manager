@@ -196,7 +196,7 @@ int main(int argc, char *argv[]) {
         if (comparaOutputs(fp_expectavel, fp_real) == 1) {
             printf("O resultado do %s está correto \n", real );
         } else {
-            printf("O resultado do %s nao é iguail ao esperado\n", real);
+            printf("O resultado do %s não é igual ao esperado\n", real);
         }
 
         fclose(fp_expectavel);
