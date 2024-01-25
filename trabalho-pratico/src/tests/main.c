@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     float total_q10 = 0.0;
 
     // Iniciar o relógio para medir o tempo de execução
-    clock_t start, end, duration, start_users, end_users, start_reservas, end_reservas, start_voos, end_voos, start_passageiros, end_passageiros;
+    clock_t start, end, duration, start_users_p, end_users_p, start_users_proc,end_users_proc, start_reservas_p, end_reservas_p, start_reservas_proc, end_reservas_proc, start_voos_p, end_voos_p, start_voos_proc, end_voos_proc, start_passageiros_p, end_passageiros_p,start_passageiros_proc, end_passageiros_proc;
     double time_users, time_reservas, time_voos, time_passageiros;
     start = clock();
 
@@ -53,42 +53,50 @@ int main(int argc, char *argv[]) {
     InitializeTableAeroportos(h_aeroportos);
 
     // Leitura e parsing dos ficheiros
+    start_users_p = clock();
     char *csv_users = (char *)malloc(256);
     strcpy(csv_users, argv[1]);
     strcat(csv_users, "/users.csv");
+    end_users_p = clock();
 
+    start_reservas_p = clock();
     char *csv_reservas = (char *)malloc(256);
     strcpy(csv_reservas, argv[1]);
     strcat(csv_reservas, "/reservations.csv");
+    end_reservas_p = clock();
 
+    start_voos_p = clock();
     char *csv_voos = (char *)malloc(256);
     strcpy(csv_voos, argv[1]);
     strcat(csv_voos, "/flights.csv");
+    end_voos_p = clock();
 
+    start_passageiros_p = clock();
     char *csv_passengers = (char *)malloc(256);
     strcpy(csv_passengers, argv[1]);
     strcat(csv_passengers, "/passengers.csv");
+    end_passageiros_p = clock();
 
     // Processamento dos arquivos e tempo
-    start_users = clock();
+    start_users_proc = clock();
     int users = process_users_csv(h_users, csv_users);
-    end_users = clock();
-    time_users = ((double) (end_users - start_users)) / CLOCKS_PER_SEC;
+    end_users_proc = clock();
+    time_users = ((double) ((end_users_p - start_users_p) + (end_users_proc - start_users_proc))) / CLOCKS_PER_SEC;
     
-    start_reservas = clock();
+    start_reservas_proc = clock();
     int reservas = process_reservas_csv(h_users, h_hoteis, h_reservas, csv_reservas);
-    end_reservas = clock();
-    time_reservas = ((double) (end_reservas - start_reservas)) / CLOCKS_PER_SEC;
+    end_reservas_proc = clock();
+    time_reservas = ((double) ((end_reservas_p - start_reservas_p) + (end_reservas_proc - start_reservas_proc))) / CLOCKS_PER_SEC;
 
-    start_voos = clock();
+    start_voos_proc = clock();
     int voos = process_voos_csv(h_users, h_aeroportos, h_voos, csv_voos);
-    end_voos = clock();
-    time_voos = ((double) (end_voos - start_voos)) / CLOCKS_PER_SEC;
+    end_voos_proc = clock();
+    time_voos = ((double) ((end_voos_p - start_voos_p) + (end_voos_proc - start_voos_proc))) / CLOCKS_PER_SEC;
 
-    start_passageiros = clock();
+    start_passageiros_proc = clock();
     int passageiros = process_passengers_csv(h_users, h_voos, h_aeroportos, csv_passengers);
-    end_passageiros = clock();
-    time_passageiros = ((double) (end_passageiros - start_passageiros)) / CLOCKS_PER_SEC;
+    end_passageiros_proc = clock();
+    time_passageiros = ((double) ((end_passageiros_p - start_passageiros_p) +(end_passageiros_proc - start_passageiros_proc))) / CLOCKS_PER_SEC;
 
 
     if (users || reservas || voos || passageiros) {
