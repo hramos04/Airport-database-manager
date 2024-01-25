@@ -25,6 +25,15 @@
 int calculaIdade(char *birthDate);
 
 
+/*
+ * Função: comparaOutputs
+ * ---------------------
+ * Compara o resultado da query na pasta Resultados com o 
+ * resultado na pasta outputs.
+ *
+ * expectavel: O resultado da query na pasta outputs.
+ * real: O resultado da query na pasta Resultados .
+ */
 int comparaOutputs(FILE *expectavel, FILE *real);
 
 
