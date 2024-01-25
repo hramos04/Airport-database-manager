@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
 			//Abertura do ficheiro de saída
 			fp_output = fopen(destination_folder, "w");
 			//Execução dos comandos
-			comando(linha, h_users, h_voos, h_reservas, h_hoteis, h_aeroportos, fp_output);
+			comando(linha, h_users, h_voos, h_reservas, h_hoteis, h_aeroportos, fp_output, 0);
 			//Fechar o ficheiro
 			fclose(fp_output);
 			i++;

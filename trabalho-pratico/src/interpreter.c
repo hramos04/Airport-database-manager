@@ -10,6 +10,8 @@
 #include "../include/aeroporto.h"
 #include "../include/hotel.h"
 #include "../include/queries.h"
+#include <time.h>
+#include <locale.h>
 #define MAX_ARGS 5
 #define MAX_LINE_LENGTH 1024
 
@@ -54,12 +56,13 @@ void split(char *line, int *arg_count, char *args[MAX_ARGS]) {
 }
 
 
-int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, hash_aeroportos h_aeroportos, FILE *fp_output) {
-	int argc = 0;
-	char *args[MAX_ARGS];
-	split(linha, &argc, args);
-	int f = 0;
-	int i = 0;
+
+int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, hash_aeroportos h_aeroportos, FILE *fp_output, int tempo) {
+    int argc = 0;
+    char *args[MAX_ARGS];
+    split(linha, &argc, args);
+    int f = 0;
+    int i = 0;
     while (isdigit(linha[i])) {
         i++;
     }
@@ -67,45 +70,43 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
     if (linha[i] == 'F') {
         f = 1;
     }
-	
-	if(strcmp(args[0], "1") == 0 || strcmp(args[0], "1F") == 0) {
-		q1(h_users, h_voos, h_reservas, args[1], f, fp_output);
-	}
-	else if(strcmp(args[0], "2") == 0 || strcmp(args[0], "2F") == 0) {
-		q2(h_users, args, argc, f, fp_output);
-	}
-	else if(strcmp(args[0], "3") == 0 || strcmp(args[0], "3F") == 0) {
-		q3(h_hoteis, args[1], f, fp_output);
-	}
-	else if(strcmp(args[0], "4") == 0 || strcmp(args[0], "4F") == 0) {
-		q4(h_hoteis, args[1], f, fp_output);
-	}
-	else if(strcmp(args[0], "5") == 0 || strcmp(args[0], "5F") == 0) {
-		q5(h_aeroportos, args[1], args[2], args[3], f, fp_output);
-	}
-	else if(strcmp(args[0], "6") == 0 || strcmp(args[0], "6F") == 0) {
-		q6(h_voos, args[1], args[2], f, fp_output);
-	}
-	else if(strcmp(args[0], "7") == 0 || strcmp(args[0], "7F") == 0) {
-		q7(h_aeroportos, atoi(args[1]), f, fp_output);
-	}
-	else if(strcmp(args[0], "8") == 0 || strcmp(args[0], "8F") == 0) {
-		q8(h_hoteis, args[1], args[2],args[3], f, fp_output);
-	}
-	else if(strcmp(args[0], "9") == 0 || strcmp(args[0], "9F") == 0) {
-		q9(h_users, args[1], f, fp_output);
-	}
-	else if(strcmp(args[0], "10") == 0 || strcmp(args[0], "10F") == 0) {
-		q10(h_users, h_voos, h_reservas, args, argc,f, fp_output);
-	}
-	
-	for (int i = 0; i < argc; i++) {
+
+    clock_t start, end;
+    start = clock(); // Início da medição de tempo
+
+    if (strcmp(args[0], "1") == 0 || strcmp(args[0], "1F") == 0) {
+        q1(h_users, h_voos, h_reservas, args[1], f, fp_output);
+    } else if (strcmp(args[0], "2") == 0 || strcmp(args[0], "2F") == 0) {
+        q2(h_users, args, argc, f, fp_output);
+    } else if (strcmp(args[0], "3") == 0 || strcmp(args[0], "3F") == 0) {
+        q3(h_hoteis, args[1], f, fp_output);
+    } else if (strcmp(args[0], "4") == 0 || strcmp(args[0], "4F") == 0) {
+        q4(h_hoteis, args[1], f, fp_output);
+    } else if (strcmp(args[0], "5") == 0 || strcmp(args[0], "5F") == 0) {
+        q5(h_aeroportos, args[1], args[2], args[3], f, fp_output);
+    } else if (strcmp(args[0], "6") == 0 || strcmp(args[0], "6F") == 0) {
+        q6(h_voos, args[1], args[2], f, fp_output);
+    } else if (strcmp(args[0], "7") == 0 || strcmp(args[0], "7F") == 0) {
+        q7(h_aeroportos, atoi(args[1]), f, fp_output);
+    } else if (strcmp(args[0], "8") == 0 || strcmp(args[0], "8F") == 0) {
+        q8(h_hoteis, args[1], args[2], args[3], f, fp_output);
+    } else if (strcmp(args[0], "9") == 0 || strcmp(args[0], "9F") == 0) {
+        q9(h_users, args[1], f, fp_output);
+    } else if (strcmp(args[0], "10") == 0 || strcmp(args[0], "10F") == 0) {
+        q10(h_users, h_voos, h_reservas, args, argc, f, fp_output);
+    }
+
+    end = clock();
+    if (tempo == 1) {
+        printf("Tempo para executar %s: %f segundos\n", args[0], (float)(end - start) / CLOCKS_PER_SEC);
+    }
+
+    for (int i = 0; i < argc; i++) {
         free(args[i]);
     }
-	
-	return 1;
-}
 
+    return 1;
+}
 
 int comando_interativo(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, hash_aeroportos h_aeroportos){
     int argc = 0;

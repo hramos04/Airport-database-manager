@@ -49,7 +49,7 @@ void split(char *line, int *arg_count, char *args[MAX_ARGS]);
  * fp_output: Ponteiro para o ficheiro de saída.
  * Retorna: 1 se o comando for executado com sucesso, 0 caso contrário.
  */
-int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis,hash_aeroportos h_aeroportos, FILE *fp_output);
+int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, hash_aeroportos h_aeroportos, FILE *fp_output, int tempo);
 
 
 /*
