@@ -78,7 +78,7 @@ void display_page (FILE *file, int start, int end, int n_linhas, int isLarge){
             break;
         }
         if(i>=start && i<end){
-            move(i % 15 + 10, 0);
+            move(i % 10 + 10, 0);
             printw("%d - %s",i + 1, buffer);
         }
         i++;
@@ -92,7 +92,7 @@ void move_pages(FILE *file, WINDOW* win, int n_linhas, int sum){
     move(9,0);
     printw("OUTPUTS:");
 
-    if(n_linhas > 15){
+    if(n_linhas > 10){
         move(30,14);
         printw("MENU (E)");
         isLarge = 1;
@@ -106,17 +106,17 @@ void move_pages(FILE *file, WINDOW* win, int n_linhas, int sum){
     refresh();
     rewind(file);
     int start = 0;
-    int end = 15;
+    int end = 10;
     int botao;
     int flag = 0;
     int pag = 1;
     move(10,0);
 
     while(1){
-        if(n_linhas>15){
+        if(n_linhas>10){
             move(26,5);
             clrtoeol();
-            printw("(<-) ANTERIOR [%d/%d] SEGUINTE (->)", pag, n_linhas/15+sum);
+            printw("(<-) ANTERIOR [%d/%d] SEGUINTE (->)", pag, n_linhas/10+sum);
             move(28,7);
             refresh();
         }
@@ -129,22 +129,22 @@ void move_pages(FILE *file, WINDOW* win, int n_linhas, int sum){
         switch (botao)
         {
         case KEY_RIGHT:
-            start += 15;
-            end += 15;
-            if(end-15>=n_linhas){
+            start += 10;
+            end += 10;
+            if(end-10>=n_linhas){
                 start -= 0;
-                end -= 15;
+                end -= 10;
                 flag = 1;
             }
             else pag++;
             break;
 
         case KEY_LEFT:
-            start -= 15;
-            end -= 15;
+            start -= 10;
+            end -= 10;
             if(start < 0){
                 start = 0;
-                end = 15;
+                end = 10;
             }
             else pag--;
             break;
@@ -241,7 +241,7 @@ int programa_interativo (int highlight, WINDOW* win, int query){
                 n_linhas++;
             }
 
-            if(n_linhas % 15 != 0) move_pages(ficheiro, win, n_linhas, 1);
+            if(n_linhas % 10 != 0) move_pages(ficheiro, win, n_linhas, 1);
             else move_pages(ficheiro, win, n_linhas, 0);
 
             remove("comando_output.txt");
@@ -280,6 +280,10 @@ int programa_interativo (int highlight, WINDOW* win, int query){
             mvwprintw(win, 2, 35, "");
             wrefresh(win);
             return 1;
+        }
+        else{
+            mvwprintw(win,2,55, "CARREGADO COM SUCESSO");
+            wrefresh(win);
         }
         }
     return 0;
