@@ -107,13 +107,13 @@ int HashHoteis(KeyType k) {
     h += (h << 3);
     h ^= (h >> 11);
     h += (h << 15);
-    return h % HASHSIZERESERVA;
+    return h % HASHSIZEHOTEL;
 }
 
 
 void InitializeTableHoteis(hash_hoteis h) {
     int i;
-    for (i = 0; i < HASHSIZERESERVA; ++i)
+    for (i = 0; i < HASHSIZEHOTEL; ++i)
         h[i] = NULL;
 }
 
@@ -186,7 +186,7 @@ void destroiReservaResumo(ReservaResumo *reservaResumo){
 
 void destroiTableHotel(hash_hoteis h) {
 
-	for(int i = 0; i<HASHSIZERESERVA; i++){
+	for(int i = 0; i<HASHSIZEHOTEL; i++){
 		Hotel *atual = h[i];
 		while(atual!=NULL){
 			Hotel *position = atual;

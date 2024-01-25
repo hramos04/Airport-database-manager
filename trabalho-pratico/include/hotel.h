@@ -1,6 +1,6 @@
 #ifndef HOTEL_H
 #define HOTEL_H
-#define HASHSIZERESERVA 41000 // Tamanho da tabela hash
+#define HASHSIZEHOTEL 41000 // Tamanho da tabela hash
 
 /* Definição do KeyType*/
 typedef char KeyType[300];
@@ -18,7 +18,7 @@ typedef struct Hotel Hotel;
 
 
 /* Definição da tabela hash que vai guardar todos os diferentes Hoteis. */
-typedef Hotel *hash_hoteis[HASHSIZERESERVA];
+typedef Hotel *hash_hoteis[HASHSIZEHOTEL];
 
 
 /*Função que cria e retorna uma estrutura ReservaResumo com as informações fornecidas*/
