@@ -30,7 +30,8 @@ int main(int argc, char *argv[]) {
     float total_q10 = 0.0;
 
     // Iniciar o relógio para medir o tempo de execução
-    clock_t start, end, duration;
+    clock_t start, end, duration, start_users, end_users, start_reservas, end_reservas, start_voos, end_voos, start_passageiros, end_passageiros;
+    double time_users, time_reservas, time_voos, time_passageiros;
     start = clock();
 
     setlocale(LC_COLLATE, "en_US.UTF-8");
@@ -68,11 +69,28 @@ int main(int argc, char *argv[]) {
     strcpy(csv_passengers, argv[1]);
     strcat(csv_passengers, "/passengers.csv");
 
-    // Processamento dos arquivos
+    // Processamento dos arquivos e tempo
+    start_users = clock();
     int users = process_users_csv(h_users, csv_users);
+    end_users = clock();
+    time_users = ((double) (end_users - start_users)) / CLOCKS_PER_SEC;
+    
+    start_reservas = clock();
     int reservas = process_reservas_csv(h_users, h_hoteis, h_reservas, csv_reservas);
+    end_reservas = clock();
+    time_reservas = ((double) (end_reservas - start_reservas)) / CLOCKS_PER_SEC;
+
+    start_voos = clock();
     int voos = process_voos_csv(h_users, h_aeroportos, h_voos, csv_voos);
+    end_voos = clock();
+    time_voos = ((double) (end_voos - start_voos)) / CLOCKS_PER_SEC;
+
+    start_passageiros = clock();
     int passageiros = process_passengers_csv(h_users, h_voos, h_aeroportos, csv_passengers);
+    end_passageiros = clock();
+    time_passageiros = ((double) (end_passageiros - start_passageiros)) / CLOCKS_PER_SEC;
+
+
     if (users || reservas || voos || passageiros) {
         printf("ERRO NO CAMINHO DOS FICHEIROS\n");
         return 1;
@@ -145,6 +163,10 @@ int main(int argc, char *argv[]) {
         printf("Tempo execucao query 9: %f segundos\n", total_q9);
         printf("Tempo execucao query 10: %f segundos\n", total_q10);
         printf("Tempo execucao todas as queries: %f segundos\n", total);
+        printf("Tempo de processamento dos usuários: %f segundos\n", time_users);       //Processamento
+        printf("Tempo de processamento das reservas: %f segundos\n", time_reservas);    //Processamento
+        printf("Tempo de processamento dos voos: %f segundos\n", time_voos);            //Processamento
+        printf("Tempo de processamento dos passageiros: %f segundos\n", time_passageiros); //Processamento
         fclose(fp);
     }
 
