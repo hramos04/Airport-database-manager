@@ -13,6 +13,24 @@
 #include "time.h"
 #include <sys/resource.h>
 
+
+int comparaOutputs(FILE *expected, FILE *real) {
+    char linha1[1024];
+    char linha2[1024];
+    int i = 0;
+    
+    while (fgets(linha1, 1024, expected) != NULL && fgets(linha2, 1024, real) != NULL) {
+        if (strcmp(linha1, linha2) != 0) {
+            printf("Diferença na linha %d\n", i);
+            printf("Esperado: %s\n", linha1);
+            printf("Obtido: %s\n", linha2);
+            return 0;
+        }
+        i++;
+    }
+    return 1;
+}
+
 int main(int argc, char *argv[]) {
     if (argc < 2 && argv[0]) {
         return 0;
@@ -98,6 +116,10 @@ int main(int argc, char *argv[]) {
     end_passageiros_proc = clock();
     time_passageiros = ((double) ((end_passageiros_p - start_passageiros_p) +(end_passageiros_proc - start_passageiros_proc))) / CLOCKS_PER_SEC;
 
+    printf("Tempo de processamento users: %f segundos\n", time_users);      
+    printf("Tempo de processamento reservas: %f segundos\n", time_reservas);    
+    printf("Tempo de processamento voos: %f segundos\n", time_voos);            
+    printf("Tempo de processamento passageiros: %f segundos\n", time_passageiros); 
 
     if (users || reservas || voos || passageiros) {
         printf("ERRO NO CAMINHO DOS FICHEIROS\n");
@@ -171,13 +193,11 @@ int main(int argc, char *argv[]) {
         printf("Tempo execucao query 9: %f segundos\n", total_q9);
         printf("Tempo execucao query 10: %f segundos\n", total_q10);
         printf("Tempo execucao todas as queries: %f segundos\n", total);
-        printf("Tempo de processamento dos usuários: %f segundos\n", time_users);       //Processamento
-        printf("Tempo de processamento das reservas: %f segundos\n", time_reservas);    //Processamento
-        printf("Tempo de processamento dos voos: %f segundos\n", time_voos);            //Processamento
-        printf("Tempo de processamento dos passageiros: %f segundos\n", time_passageiros); //Processamento
         fclose(fp);
     }
 
+
+    
     // Medir memória máxima do programa
     struct rusage r_usage;
     getrusage(RUSAGE_SELF, &r_usage);
