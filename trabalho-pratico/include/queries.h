@@ -25,6 +25,9 @@
 int calculaIdade(char *birthDate);
 
 
+int comparaOutputs(FILE *expectavel, FILE *real);
+
+
 /*
  * Função: remover_horas
  * ---------------------

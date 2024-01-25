@@ -22,6 +22,22 @@ int calculaIdade(char *birthDate) {
 	return idade;
 }
 
+int comparaOutputs(FILE *expectavel, FILE *real) {
+    char linha1[1024];
+    char linha2[1024];
+    int i = 1;
+    
+    while (fgets(linha1, 1024, expectavel) != NULL && fgets(linha2, 1024, real) != NULL) {
+        if (strcmp(linha1, linha2) != 0) {
+            printf("\nDiferença na linha %d\n", i);
+            printf("Esperado: %s\n", linha1);
+            printf("Obtido: %s\n", linha2);
+            return 0;
+        }
+        i++;
+    }
+    return 1;
+}
 
 void remover_horas(char* datetime, char data[]) {
 	int i=0;

@@ -12,24 +12,8 @@
 #include <locale.h>
 #include "time.h"
 #include <sys/resource.h>
+#include "../include/queries.h"
 
-
-int comparaOutputs(FILE *expected, FILE *real) {
-    char linha1[1024];
-    char linha2[1024];
-    int i = 0;
-    
-    while (fgets(linha1, 1024, expected) != NULL && fgets(linha2, 1024, real) != NULL) {
-        if (strcmp(linha1, linha2) != 0) {
-            printf("Diferença na linha %d\n", i);
-            printf("Esperado: %s\n", linha1);
-            printf("Obtido: %s\n", linha2);
-            return 0;
-        }
-        i++;
-    }
-    return 1;
-}
 
 int main(int argc, char *argv[]) {
     if (argc < 2 && argv[0]) {
@@ -196,6 +180,28 @@ int main(int argc, char *argv[]) {
         fclose(fp);
     }
 
+    int numero_comandos = 100;
+    
+    for (int i = 1; i <= numero_comandos; i++) {
+        char expectavel[1024];
+        char real[1024];
+
+        sprintf(real, "Resultados/command%d_output.txt", i);
+        sprintf(expectavel, "dataset/outputs/command%d_output.txt", i);
+
+        FILE *fp_expectavel = fopen(expectavel, "r");
+        FILE *fp_real = fopen(real, "r");
+
+
+        if (comparaOutputs(fp_expectavel, fp_real) == 1) {
+            printf("O resultado do %s está correto \n", real );
+        } else {
+            printf("O resultado do %s nao é iguail ao esperado\n", real);
+        }
+
+        fclose(fp_expectavel);
+        fclose(fp_real);
+    }
 
     
     // Medir memória máxima do programa
