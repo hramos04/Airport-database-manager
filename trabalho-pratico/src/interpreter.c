@@ -57,7 +57,7 @@ void split(char *line, int *arg_count, char *args[MAX_ARGS]) {
 
 
 
-int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, hash_aeroportos h_aeroportos, FILE *fp_output, int tempo) {
+int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_reservas, hash_hoteis h_hoteis, hash_aeroportos h_aeroportos, FILE *fp_output) {
     int argc = 0;
     char *args[MAX_ARGS];
     split(linha, &argc, args);
@@ -70,9 +70,6 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
     if (linha[i] == 'F') {
         f = 1;
     }
-
-    clock_t start, end;
-    start = clock(); // Início da medição de tempo
 
     if (strcmp(args[0], "1") == 0 || strcmp(args[0], "1F") == 0) {
         q1(h_users, h_voos, h_reservas, args[1], f, fp_output);
@@ -94,12 +91,7 @@ int comando(char *linha, hash_user h_users, hash_voos h_voos, hash_reservas h_re
         q9(h_users, args[1], f, fp_output);
     } else if (strcmp(args[0], "10") == 0 || strcmp(args[0], "10F") == 0) {
         q10(h_users, h_voos, h_reservas, args, argc, f, fp_output);
-    }
-
-    end = clock();
-    if (tempo == 1) {
-        printf("Tempo para executar %s: %f segundos\n", args[0], (float)(end - start) / CLOCKS_PER_SEC);
-    }
+    } 
 
     for (int i = 0; i < argc; i++) {
         free(args[i]);
